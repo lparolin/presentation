@@ -1,0 +1,7 @@
+project:
+  title: "my-presentation"
+  
+
+format:
+  revealjs:
+    theme: simple

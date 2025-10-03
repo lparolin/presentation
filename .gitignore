@@ -1,0 +1,38 @@
+# Quarto output directories
+**/_site/
+**/docs/
+**/_publish/
+**/index_files/
+
+# Quarto intermediate files
+*.knit.md
+*.utf8.md
+*.log
+*.out
+
+# Reveal.js cache (if using local assets)
+/revealjs/
+
+# RStudio or VS Code project files
+.Rproj.user/
+*.Rproj
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Backup or swap files
+*~
+*.swp
+*.bak
+
+# Python or Jupyter artifacts
+__pycache__/
+.ipynb_checkpoints/
+
+# Quarto cache (if using caching)
+.quarto/
+
+# Node modules (if using JS tooling)
+node_modules/

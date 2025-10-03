@@ -1,0 +1,262 @@
+---
+title: "Online Map Validation for Autonomous Driving"
+subtitle: "An application of Probabilistic Graphical Models"
+#title: "Safety-Critical Embedded Systems in Cyber-Physical Context"
+author: "Dr. Luca Parolini"
+format: 
+  revealjs:
+    theme: [default, styles.scss]
+    html: true
+    fig-align: left
+    slide-number: true
+
+    title-slide-attributes:
+      data-background-image: "images/bg_image_splash.png"  # Path to your image
+      data-background-size: cover                   # Ensures full coverage
+      data-background-position: center              # Optional: centers image
+      data-background-opacity: "0.3"
+      data-background-color: "black" 
+
+---
+## My Journey in Safe Embedded Systems and their Applications
+- 🎓 PhD in Electrical & Computer Engineering, Carnegie Mellon University  
+- 🏭 10 :w+ years at BMW AG and GE Global Research  
+- 📚 Focus: Safety-critical embedded systems, autonomous driving, control theory  
+- 🔄 Transition: From applied industrial research to academic impact
+
+
+## Online Map Validation {background-color="black" background-image="./images/map_validation_bmw.png" background-size="cover" background-opacity="0.5" padding-bottom="45px" .title-heading}
+
+### Ensuring Safety in Dynamic Environments
+
+<!-- - Autonomous vehicles rely on high-definition semantic maps -->
+<!-- - Map errors can lead to unsafe decisions or system failures --> 
+<!-- - My research: Real-time validation using sensor fusion and semantic constraints  -->
+<!-- - Goal: Scalable, certifiable, and deployable safety layer -->
+
+::: aside
+In collaboration with F. Drost, A. Fabris, and Dr. S. Schneider
+:::
+
+## Typical Autonomous-Driving System Architecture
+
+::: {.columns}
+::: {.column width="70%"}
+![](images/InfoFlowAutomotive.drawio.svg){fig-align="left" width=100% fig-alt="An example SVG figure"}
+:::
+:::
+
+Maps play a central role in Autonomous Driving, allowing adaptation to upcoming road and lane geometry
+
+The *field of view* (FoV) of maps is **not** affected by traffic conditions or weather
+
+Altough potentially very accurate, maps provide data with unknown and potentially extensive latency
+
+:::{.spacer}
+
+:::
+
+:::{.callout-note .no-title}
+Maps data must be verified for correctness **before** they are used for computing future trajectories
+:::
+
+## Classification of map validation approaches
+
+Depending on the specific application, different approaches to map validation can be considered ^["Online map validation for autonomous driving", F. Drost, A. Fabris, L. *Parolini*, and S. Schneider, 2020]
+
+<table class="fragmented-table margin-top-mid bottom-border numbered-table top-border">
+  <tr>
+    <th>#</th>
+    <th>Approach</th>
+    <th>Details</th>
+    <th>Implication</th>
+  </tr>
+  <tr class="highlightable">
+    <td></td>
+    <td>**Global Map Invalidation**</td>
+    <td>Verifies if a map contain any invalid data</td>
+    <td rowspan="2" stlyle="vertical-align:middle">A map is valid until proven to be wrong</td>
+  </tr>
+  <tr class="highlightable fragment fade-down">
+    <td></td>
+    <td>**Local Map Invalidation**</td>
+    <td>Attempts to identify which areas of a map contain invalid data</td>
+  </tr>
+  <tr class="fragment highlightable fade-down">
+    <td></td>
+    <td>**Map Validation**</td>
+    <td>A map is invalid until proven to be correct</td>
+  </tr>
+  <tr class="fragment fade-down">
+    <td></td>
+    <td>**Map Correction**</td>
+    <td>Sensors data are used to identify areas where map is valid and correct the areas where map is invalid</td>
+    <td colspan="2" class="vcenter">A map is invalid until proven to be correct</td>
+  </tr>
+</table>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".numbered-table tbody").forEach(tbody => {
+      let count = 1;
+      tbody.querySelectorAll("tr").forEach(row => {
+        const cell = row.querySelector("td");
+        if (cell) {
+          cell.textContent = count++;
+        }
+      });
+    });
+  });
+</script>
+
+:::{.spacer}
+
+:::
+::: {.fragment .final-trigger}
+In this work we focus on the classification problem of an area of a map as either *Valid*, or *Invalid* by means of *Probabilistic Graphical Models* (PGM)
+:::
+<!--  <div class="fragment final-trigger" style="visibility: hidden; height: 0;"></div>-->
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    if (typeof Reveal !== "undefined") {
+      // Add class when final trigger is shown
+      Reveal.on('fragmentshown', event => {
+        if (event.fragment.classList.contains('final-trigger')) {
+          const slide = event.fragment.closest('.slide');
+          slide.classList.add('fragments-complete');
+        }
+      });
+
+      // Remove class when any fragment is hidden
+      Reveal.on('fragmenthidden', event => {
+        const slide = event.fragment.closest('.slide');
+        slide.classList.remove('fragments-complete');
+      });
+    }
+  });
+</script>
+
+## Use Probabilistic Graphical Model for Map Validation
+
+At a certain location, a map is either *Valid*, or *Invalid*
+
+- The validity of a map is, however, unknown 
+
+
+At run-time we divide the portion of a map relevant for trajectory planning in different sections.
+
+A random variable representing the validity of the map at that location is allocated to each section.
+
+We use the disrepancy between sensor measurements and expected measurements if the map were valid to infer the probability that the map is valid in a given section
+
+::: {.columns}
+::: {.column width="40%"}
+
+When a map is *Valid*, then a good match between what sensors measure and what they should have measured based on map information
+
+- E.g., Expected accuracy of lane geometry from a camera
+
+:::
+::: {.column width="60%"}
+This relation can be modeled as:
+
+```{mermaid} 
+graph LR
+    A("Section  validity"):::circle --> B("Lane marking match"):::circle
+```
+:::
+:::
+
+
+
+## The need for map validation
+
+![](./images/road_work.jpg){width="100%" height="200px" style="object-fit: cover;" .full-width}
+Sensors for Advanced Driver Assistant Systems often operate in *degraded conditions*, e.g., due to adverse enviromental conditions
+
+- E.g., cameras are affected by poor light and road. Lidar are sensitive to dust and water droplet deposit on the optical module
+
+
+**Maps are sensors** are critical sensors that provide accurate information about geometry and semantic of roads and lanes and whose:
+
+ - field of view (FOV) is not affected by traffic conditions
+ - *data have unknown and potentially extensive latency*, e.g., days, or weeks
+
+
+## Teaching Safety-Critical Thinking  
+### Didactic Strategy & Tools
+
+- Proposed modules:
+  - Embedded Systems & CPS
+  - Autonomous Driving & Safety
+  - Real-Time Software Engineering
+- Teaching methods:
+  - Project-based learning
+  - Simulation labs (ROS2, Carla, GitHub Classroom)
+  - Quarto-based interactive documentation
+
+## High definition maps in Autonomous Driving 
+Some text above the columns 
+
+::: {.columns}
+::: {.column width="40%" .small-text}
+
+Fundamental for path planning
+
+Key elements for safety
+
+High accuracy of geometric and semantic information
+:::
+
+Some other text
+
+::: {.columns}
+::: {.column width="40%"}
+![Maps contain multiple layer of information^[Original image from https://www.eetasia.com/hd-mapping-data-ownership/]](images/multi_layer_hd.png){fig-align="left" height="200"}
+:::
+
+::: {.column width="5%"}
+:::
+::: {.column width="55%" .small-text}
+
+Multi-layer data representation
+
+- Geometric information
+- Semantic informationere we put other 
+:::
+:::
+
+## THD & Applied Research Synergy  
+### Institutional Fit & Complementarity
+
+- THD strengths:
+  - Industry collaboration
+  - CPS labs
+  - Mobility and automation focus
+- My complementarity:
+  - Embedded safety
+  - Real-time systems
+  - Map validation and semantic integrity
+- Potential partnerships:
+  - Automotive OEMs
+  - Robotics startups
+  - Smart infrastructure initiatives
+
+
+## Building Research Visibility  
+### Long-Term Goals & Collaboration
+
+- EU funding (Horizon Europe, ZIM)  
+- Cross-HAW collaboration and joint labs  
+- Open-source contributions and student-led projects  
+- International visibility via conferences and publications  
+- Vision: CPS Safety Lab at THD
+
+## Thank You  
+### Questions & Contact
+
+- 📧 luca.parolini@email.de  
+- 🌐 [GitHub Portfolio](https://github.com/lucaparolini)  
+- 📷 QR code to research portfolio (optional)  
+- Footer: “W2 Interview – TH Deggendorf”

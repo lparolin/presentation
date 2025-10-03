@@ -1,0 +1,198 @@
+// ┌────────────────────────────────────────────┐
+// │ SCSS Skeleton for Reveal.js Custom Styling │
+// └────────────────────────────────────────────┘
+/*-- scss:defaults --*/
+
+$background-light: #FDFCFE; //#FAF9F7;
+//$background-light: #F5F7FA;
+$text-default: #2C2F36;
+$text-highlight1: #A3BFD9;
+$text-highlight2: #D8A7B1;
+$background-takeaway: #DDE6F0;
+$text-takeaway: #3B3F4A;
+$link-color: #5A6D89;
+$light-natural-color: #f5f5f5; // Light neutral color
+$dark-natural-color: #333333;  // Dark neutral color
+$presentation-font-size-root: 24px;
+
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Encode+Sans+Semi+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap');
+$presentation-heading-font: 'Encode Sans Semi Condensed', sans-serif;;
+$font-family-sans-serif: 'Encode Sans Semi Condensed', sans-serif;
+
+:root {
+  --r-block-margin: 3px; // Or any value you prefer
+}
+
+/*-- scss:rules --*/
+$body-bg: $background-light;
+$body-color: $text-default;
+$link-color: $link-color;
+$callout-color-note: $background-takeaway;
+
+$title-page-title-font-size: $presentation-font-size-root * 1.5;
+$title-page-subtitle-font-size: $presentation-font-size-root * 1.2;
+
+$normal-font-size: $presentation-font-size-root;
+$small-font-size: $presentation-font-size-root * 0.8;
+$tiny-font-size: $presentation-font-size-root * 0.6;
+$large-font-size: $presentation-font-size-root * 1.2;
+$huge-font-size: $presentation-font-size-root * 1.5;
+
+@mixin global-tighten-paragraph-before-list($reduced-margin: 0.5rem, $list-top-margin: 0.25rem) {
+  // Firefox-safe fallback: style the list itself
+  p + ul,
+  p + ol {
+    margin-top: $list-top-margin!important;
+  }
+
+  // Modern browsers: style the paragraph if followed by a list
+  p:has(+ ul),
+  p:has(+ ol) {
+    margin-bottom: $reduced-margin!important;
+  }
+}
+
+.margin-top-mid {
+  margin-top: 1.5em!important;
+}
+.reveal .slide {
+  background-color: $background-light;
+}
+
+.reveal img {
+  padding: 5px;
+  background-color: mix(black, $body-bg, 2%);  // Slightly darker than typical slide background
+  margin: 1em auto;           // Center image with spacing
+}
+
+.slide ul,
+.slide ol {
+  font-size: 0.9* $presentation-font-size-root;
+}
+
+#online-map-validation > aside > div > p {
+ color: $light-natural-color;
+}
+
+.spacer {
+  height: 1.5em; // Adjust the height as needed
+}
+
+.reveal {
+  @include global-tighten-paragraph-before-list(0.4rem, 0.2rem);
+}
+
+/* In your Quarto SCSS */
+.flowchart .edgePath path {
+  stroke: #000;
+  stroke-width: 2px;
+  stroke-dasharray: 0;
+}
+
+.small-text {
+  font-size: $small-font-size !important;
+}
+
+h2 {
+  margin-bottom: 30px!important;
+}
+
+h2 + h3 {
+  margin-top: 0!important;
+  margin-bottom: 30px!important;
+
+  // Remove margin from h2 when followed by h3
+  &::before {
+    content: ""!important;
+    display: block!important;
+    margin-bottom: -25px!important; // Adjust based on your design
+  }
+}
+
+.title-heading {
+h2 {
+  font-size: $huge-font-size!important;
+  padding-top: 20vh!important;
+  padding-bottom: 10vh!important;
+}
+}
+
+p.subtitle {
+    font-size: 32px!important;
+    font-weight: 600;
+    padding-top: 2rem;
+}
+#title-slide div.quarto-title-author-name {
+    padding-top: 1rem!important;
+    font-size: 30px!important;
+}
+
+.full-width {
+  width: 100%!important;
+  max-width: 100%!important;
+}
+
+ol.aside-footnote p {
+  font-size: $tiny-font-size!important;
+}
+
+.reveal .callout-title{
+  background-color: $background-takeaway;
+}
+
+.no-title .callout-note  .callout-title{
+  display: none;
+}
+
+.callout-note {
+  background-color: $background-takeaway;
+  color: $text-takeaway;
+  border-left: 8px solid darken($background-takeaway, 10%);
+  padding: 10px;
+  margin: 20px 0;
+}
+
+/* /* Initial state: no border 
+.highlightable {
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.5s ease;
+} 
+*/
+
+/* When all fragments are visible, apply border 
+.reveal .slide .fragment.visible:last-of-type ~ .highlightable {
+  border-color: #444;  // Or your accent color
+}
+*/
+/* .highlightable {
+  background-color: #FCFBFA;  // Your refined warm gray
+} */
+
+.fragments-complete .highlightable {
+//  border-top: 2px solid #444;
+//  border-bottom: 2px solid #444;
+  background-color: #F2EFEB;
+  transition: all 0.3s ease;
+}
+
+.bottom-border{
+  bottom: -5px;             // 5px below the table
+  left: 0;
+  width: 100%;
+  border-bottom: 4px solid #444;
+}
+
+.top-border{
+  top: 5px;             // 5px above the table
+  left: 0;
+  width: 100%;
+  border-top: 4px solid #444;
+}
+.numbered-table td:first-child {
+  font-weight: bold;
+  text-align: left;
+  color: #444;
+  width: 2em;
+}
