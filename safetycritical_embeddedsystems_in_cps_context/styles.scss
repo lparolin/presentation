@@ -4,25 +4,26 @@
 /*-- scss:defaults --*/
 
 $background-light: #FDFCFE; //#FAF9F7;
-//$background-light: #F5F7FA;
 $text-default: #2C2F36;
 $text-highlight1: #A3BFD9;
 $text-highlight2: #D8A7B1;
-$background-takeaway: #DDE6F0;
+$text-light: $background-light;
+$background-takeaway: #dee6ef;
 $text-takeaway: #3B3F4A;
 $link-color: #5A6D89;
 $light-natural-color: #f5f5f5; // Light neutral color
-$dark-natural-color: #333333;  // Dark neutral color
+$dark-natural-color: #333333; // Dark neutral color
 $presentation-font-size-root: 24px;
 
 @import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Encode+Sans+Semi+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap');
-$presentation-heading-font: 'Encode Sans Semi Condensed', sans-serif;;
+$presentation-heading-font: 'Encode Sans Semi Condensed', sans-serif;
+;
 $font-family-sans-serif: 'Encode Sans Semi Condensed', sans-serif;
 
-:root {
+/* :root {
   --r-block-margin: 3px; // Or any value you prefer
-}
+} */
 
 /*-- scss:rules --*/
 $body-bg: $background-light;
@@ -40,40 +41,78 @@ $large-font-size: $presentation-font-size-root * 1.2;
 $huge-font-size: $presentation-font-size-root * 1.5;
 
 @mixin global-tighten-paragraph-before-list($reduced-margin: 0.5rem, $list-top-margin: 0.25rem) {
+
   // Firefox-safe fallback: style the list itself
-  p + ul,
-  p + ol {
-    margin-top: $list-top-margin!important;
+  p+ul,
+  p+ol {
+    margin-top: $list-top-margin !important;
   }
 
   // Modern browsers: style the paragraph if followed by a list
   p:has(+ ul),
   p:has(+ ol) {
-    margin-bottom: $reduced-margin!important;
+    margin-bottom: $reduced-margin !important;
   }
 }
 
-.margin-top-mid {
-  margin-top: 1.5em!important;
+.reveal .slide ul li,
+.reveal .slide ol li {
+  margin-top: 0.1em !important;
 }
-.reveal .slide {
+
+.margin-top-small {
+  margin-top: 1.0em !important;
+}
+
+.margin-top-mid {
+  margin-top: 1.5em !important;
+}
+
+.margin-bottom-small {
+  margin-bottom: 1.0em !important;
+}
+
+.margin-bottom-mid {
+  margin-bottom: 1.5em !important;
+}
+
+.reveal .slide:not(.transparent-background):not(.darken-background) {
   background-color: $background-light;
+}
+
+.reveal .transparent-background {
+  background-color: transparent !important;
 }
 
 .reveal img {
   padding: 5px;
-  background-color: mix(black, $body-bg, 2%);  // Slightly darker than typical slide background
-  margin: 1em auto;           // Center image with spacing
+  background-color: mix(black, $body-bg, 2%); // Slightly darker than typical slide background
+  margin: 1em auto; // Center image with spacing
 }
+
+// .slide {
+//   background-color: $background-light;
+// }
 
 .slide ul,
 .slide ol {
   font-size: 0.9* $presentation-font-size-root;
 }
 
-#online-map-validation > aside > div > p {
- color: $light-natural-color;
+$height-spacer: (
+  xs: 0.5,
+  sm: 1,
+  md: 1.5,
+  lg: 2,
+  xl: 2.5
+);
+
+@each $key, $val in $height-spacer {
+  .spacer-#{$key} {
+    height: #{$val}em !important;
+  }
 }
+
 
 .spacer {
   height: 1.5em; // Adjust the height as needed
@@ -90,109 +129,160 @@ $huge-font-size: $presentation-font-size-root * 1.5;
   stroke-dasharray: 0;
 }
 
+/* Make embedded SVGs (e.g., Graphviz output) responsive and remove excess white space */
+.reveal .slide svg {
+  width: auto !important;
+  /* allow SVG to size to its viewBox/content */
+  height: auto !important;
+  max-width: 100% !important;
+  /* don't overflow slide */
+  display: block;
+  /* remove inline gaps */
+}
+
+/* If Quarto or reveal wrap SVGs in an object or figure, ensure wrappers don't force a fixed size */
+.reveal .slide .figure,
+.reveal .slide .image,
+.reveal .slide .svg-figure {
+  width: auto !important;
+  max-width: 100% !important;
+}
+
+/* Tighter SVG rendering: hide background rects produced by some renderers and preserve viewBox scaling */
+.reveal .slide svg rect[width][height] {
+  fill: none !important;
+}
+
+/* For Graphviz-generated SVGs: make group <g> determine visible bounds where possible */
+.reveal .slide svg>g {
+  transform-origin: 0 0;
+}
+
 .small-text {
   font-size: $small-font-size !important;
 }
 
 h2 {
-  margin-bottom: 30px!important;
+  margin-bottom: 30px !important;
 }
 
-h2 + h3 {
-  margin-top: 0!important;
-  margin-bottom: 30px!important;
+h2+h3 {
+  margin-top: 0 !important;
+  margin-bottom: 30px !important;
 
   // Remove margin from h2 when followed by h3
   &::before {
-    content: ""!important;
-    display: block!important;
-    margin-bottom: -25px!important; // Adjust based on your design
+    content: "" !important;
+    display: block !important;
+    margin-bottom: -25px !important; // Adjust based on your design
   }
 }
 
-.title-heading {
-h2 {
-  font-size: $huge-font-size!important;
-  padding-top: 20vh!important;
-  padding-bottom: 10vh!important;
-}
+.title-slide {
+  h2 {
+    font-size: $huge-font-size !important;
+    padding-top: 20vh !important;
+    padding-bottom: 10vh !important;
+  }
+
+  h3 {
+    font-size: $large-font-size !important;
+    margin-top: 0 !important;
+    padding-bottom: 20vh !important;
+  }
 }
 
 p.subtitle {
-    font-size: 32px!important;
-    font-weight: 600;
-    padding-top: 2rem;
+  font-size: 32px !important;
+  font-weight: 600;
+  padding-top: 2rem;
 }
+
+.transparent-background {
+  background-color: transparent !important;
+}
+
+
 #title-slide div.quarto-title-author-name {
-    padding-top: 1rem!important;
-    font-size: 30px!important;
+  padding-top: 1rem !important;
+  font-size: 30px !important;
 }
 
 .full-width {
-  width: 100%!important;
-  max-width: 100%!important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 ol.aside-footnote p {
-  font-size: $tiny-font-size!important;
+  font-size: $tiny-font-size !important;
 }
 
-.reveal .callout-title{
-  background-color: $background-takeaway;
-}
-
-.no-title .callout-note  .callout-title{
-  display: none;
+.no-title div.callout-title {
+  display: none !important;
 }
 
 .callout-note {
-  background-color: $background-takeaway;
-  color: $text-takeaway;
-  border-left: 8px solid darken($background-takeaway, 10%);
-  padding: 10px;
-  margin: 20px 0;
-}
+  background-color: $background-takeaway !important;
+  color: $text-takeaway !important;
+  padding: 10px !important;
+  margin: 20px 0 !important;
+  border: none !important;
 
-/* /* Initial state: no border 
-.highlightable {
-  border-top: 2px solid transparent;
-  border-bottom: 2px solid transparent;
-  transition: border-color 0.5s ease;
-} 
-*/
-
-/* When all fragments are visible, apply border 
-.reveal .slide .fragment.visible:last-of-type ~ .highlightable {
-  border-color: #444;  // Or your accent color
+  p {
+    font-size: $normal-font-size !important;
+  }
 }
-*/
-/* .highlightable {
-  background-color: #FCFBFA;  // Your refined warm gray
-} */
 
 .fragments-complete .highlightable {
-//  border-top: 2px solid #444;
-//  border-bottom: 2px solid #444;
   background-color: #F2EFEB;
   transition: all 0.3s ease;
 }
 
-.bottom-border{
-  bottom: -5px;             // 5px below the table
+.bottom-border {
+  bottom: -5px; // 5px below the table
   left: 0;
   width: 100%;
   border-bottom: 4px solid #444;
 }
 
-.top-border{
-  top: 5px;             // 5px above the table
+.top-border {
+  top: 5px; // 5px above the table
   left: 0;
   width: 100%;
   border-top: 4px solid #444;
 }
+
 .numbered-table td:first-child {
   font-weight: bold;
   text-align: left;
   color: #444;
   width: 2em;
+}
+
+$vw-widths: 20, 40, 50, 60, 80, 90, 100;
+
+@each $w in $vw-widths {
+  .width-#{$w} {
+    width: #{$w}vw !important;
+  }
+}
+
+.no-margin-top {
+  margin-top: 0 !important;
+}
+
+.top-aligned {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.text-light>* {
+  color: $text-light !important;
+}
+
+.darken-background {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  background-size: cover !important;
 }
