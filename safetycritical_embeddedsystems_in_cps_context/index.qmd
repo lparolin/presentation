@@ -9,8 +9,7 @@ format:
     html: true
     fig-align: left
     slide-number: true
-    include-after-body: custom.js
-
+    auto-animate: true
     title-slide-attributes:
       data-background-image: "images/bg_image_splash.png"  # Path to your image
       data-background-size: cover                   # Ensures full coverage
@@ -39,11 +38,11 @@ preview:
 In collaboration with F. Drost, A. Fabris, and Dr. S. Schneider
 :::
 
-## Typical System Architecture for Autonomous-Driving Vehicle 
+## The role of Maps in Autonomous-Driving Vehicle 
 
 ::: {.columns}
 ::: {.column width="70%"}
-![](images/InfoFlowAutomotive.drawio.svg){fig-align="left" width=100% fig-alt="An example SVG figure"}
+![Typical System Architecture for Autonomous Driving Vehicles.](images/InfoFlowAutomotive.drawio.svg){fig-align="left" width=100% fig-alt="An example SVG figure"}
 :::
 :::
 
@@ -51,14 +50,14 @@ Maps play a central role in Autonomous Driving, allowing trajectory adaptation t
 
 The *field of view* (FoV) of maps is extremely large and it is **not** affected by traffic conditions or weather.
 
+:::{.spacer-xs}
+:::
+
 ::: {.fragment}
-Altough potentially very accurate, maps provide data with unknown and potentially extensive latency.
+Although potentially very accurate, maps provide data with unknown and potentially extensive latency.
 
 Relying on data from an outdated map may lead to uncomfortable, or even unsafe trajectories.
 ::: 
-
-:::{.spacer-xs}
-:::
 
 :::{.callout-note .no-title .fragment .fade-down}
 Maps data must be verified **before** they are used for computing future trajectories.
@@ -107,35 +106,228 @@ Depending on the specific application, different approaches to map validation ca
 In this talk we focus on the problems **1**, **2**, and __3__.
 :::
  
-## Proposed framework for Online Map Validation - The Big Picture
+## Probabilistic Graphical Models - a Short Review
 
-Here the slide with different label systems, Syamese Network, PGM, and Correlation-Based approach.
+Probabilistic Graphical Models rely on Graphs for modelling conditional dependencies between random variables.^[Daphne Koller and Nir Friedman. 2009. [Probabilistic Graphical Models: Principles and Techniques - Adaptive Computation and Machine Learning](https://mitpress.ublish.com/book/probabilistic-graphical-models). The MIT Press.]
 
-## Introduction to Probabilistic Graphical Models
+::: {.example .no-margin-top-first-child}
+**Example:**
 
-What PGM are, what are nodes and edges
-Examples with Rain, Umbrella, and Being Wet
+Suppose we are in a classroom without windows and want to understand if it is raining outside, or not.
+
+We can observe if the professor arrived in the classroom carrying an umbrella and if his/her clothes are wet. 
+
+:::{.fragment}
+
+Based on previous knowledge, we know that:
+
+- The professor tends to carry an umbrella when outside rains;
+- If the clothes are wet and the professors does not carry an umbrella, we can be pretty sure that outside is raining.
+:::
+
+::: {.fragment}
+Based on these observations we can *infer* if outside is raining, or not.
+:::
+
+::: {.fragment .fade-down}
+The information above can be represented by this PGM:
+
+::: {.column width="50%" id="umbrella_problem_src"}
+```{dot}
+digraph WeatherProblem {
+  rankdir=LR;
+  bgcolor="gray95";
+
+  Rain [label="Rain", fontname="Sans-Serif"];
+
+  Rain -> Umbrella;
+  Umbrella -> WetClothes;
+  Rain -> WetClothes;
+
+  Umbrella [shape=box, style=filled, fillcolor=lightblue, label="Umbrella", fontname="Sans-Serif"];
+  WetClothes [shape=box, style=filled, fillcolor=lightblue, label="Wet", fontname="Sans-Serif"];
+}
+
+```
+
+:::
+
+::: {.column width="5%"}
+:::
+
+
+::: {.column width="45%" id="text_pgm1_src"}
+*Vertices* of the graph represent random variables and *edges* represent conditional dependencies among the variables.
+
+The probability of carrying the umbrella depends on the *realization* of the random variable *Rain*.
+:::
+
+:::
+
+
+<!-- ::: {.column width=50% .math-compact .left .fragment .small}
+These are the set of probabilities we need to define:
+
+$$P(\textrm {Umbrella=Yes} | \textrm{Rain=Yes}) = 0.9 $$
+$$P(\textrm {Umbrella=Yes} | \textrm{Rain=No}) = 0.7 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=No}) = 0.01 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=Yes}) = 0.01 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=No}) = 0.99 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
+::: -->
+
+:::
+
+
+## Probabilistic Graphical Models - a Short Review
+
+Probabilistic Graphical Models rely on Graphs for modelling conditional dependencies between random variables.^[Daphne Koller and Nir Friedman. 2009. [Probabilistic Graphical Models: Principles and Techniques - Adaptive Computation and Machine Learning](https://mitpress.ublish.com/book/probabilistic-graphical-models). The MIT Press.]
+
+::: {.example .no-margin-top-first-child}
+**Example:**
+
+::: {.column width="50%"}
+::: {id="umbrella_problem_dst"}
+
+```{dot}
+digraph WeatherProblem {
+  rankdir=LR;
+  bgcolor="gray95";
+
+  Rain [label="Rain", fontname="Sans-Serif"];
+
+  Rain -> Umbrella;
+  Umbrella -> WetClothes;
+  Rain -> WetClothes;
+
+  Umbrella [shape=box, style=filled, fillcolor=lightblue, label="Umbrella", fontname="Sans-Serif"];
+  WetClothes [shape=box, style=filled, fillcolor=lightblue, label="Wet", fontname="Sans-Serif"];
+}
+
+```
+:::
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="43%"}
+::: {style="margin-top:-40px"}
+We consider these a priori and conditional probabilities:
+
+::: {.tiny-text}
+<table class="top-border bottom-border table-left .tiny-text">
+  <tr>
+    <td>$\small P(\textrm{Rain=Yes})$</td>
+    <td>
+      <table class="table-left">
+        <tr>
+          <td>50%</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+  <td>
+    $\small P(\textrm{Umbrella=Yes}|\small\textrm{Rain})$
+  </td>
+  <td>
+    <table class="table-left">
+     <tr>
+       <th>Rain=Yes</th>
+       <th>Rain=No</th>
+     </tr>
+     <tr>
+       <td>90%</td>
+       <td>50%</td>
+     </tr>
+    </table>
+  </td>
+  </tr>
+  <tr>
+  <td>
+  $\small P(\textrm{Wet=Yes}|\\\small\phantom{P(}\textrm{Rain,Umbrella})$
+</td>
+  <td>
+  <table class="table-left">
+  <tr>
+    <th></th>
+    <th>Rain=Yes</th>
+    <th>Rain=No</th>
+  </tr>
+  <tr>
+    <th>Umbrella=Yes</th>
+    <td style="border-top: 1px solid">5%</td>
+    <td style="border-top: 1px solid">0.1%</td>
+  </tr>
+  <tr>
+    <th>Umbrella=No</th>
+    <td>99%</td>
+    <td>0.1%</td>
+  </tr>
+</table>
+</td>
+  </tr>
+  
+</table>
+
+:::
+:::
+:::
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+We can infer the following probability of rain, given our observation of wet clothes and umbrella:
+
+<table class="top-border bottom-border table-left .tiny-text">
+  <tr>
+    <th></th>
+    <th>Umbrella=Yes</th>
+    <th>Umbrella=No</th>
+  </tr>
+  <tr>
+    <th>Wet=Yes</th>
+    <td></td>  
+    <td></td>  
+  </tr>
+  <tr>
+    <th>Wet=No</th>
+    <td></td>  
+    <td></td>  
+  </tr>
+</table>
+ 
+:::
+
+
+:::
+
+<!-- ::: {.column width=50% .math-compact .left .fragment .small}
+These are the set of probabilities we need to define:
+
+$$P(\textrm {Umbrella=Yes} | \textrm{Rain=Yes}) = 0.9 $$
+$$P(\textrm {Umbrella=Yes} | \textrm{Rain=No}) = 0.7 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=No}) = 0.01 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=Yes}) = 0.01 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=No}) = 0.99 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
+::: -->
 
 
 ## Use Probabilistic Graphical Model for Map Validation
 
-At run-time we divide the portion of a map relevant for trajectory planning in different sections.
+At run-time we divide the portion of a map relevant for trajectory planning into multiple sections.
 
 - Every section is associated with a random variable $\mathcal{M}$ representing the validity of the map in that section.
-- Validity variables take value: $V$ (*Valid*), or $I$ (*Invalid*).
-
-**The values taken by the variables $M$ are not directly measurable**
-
-:::{.fragment .fade-down .margin-top-small .margin-bottom-small}
-We can however observe how well sensor data match data from the map. 
-:::
-
+- **The values taken by $\mathcal{M}$ are not directly measurable**.
 
 ::: {.r-stack style="position: relative; height: 100%;"}
-::: {.fragment .fade-down .fade-in-then-out .no-margin-bottom style="position: absolute; top: 0;"}
-We focus on
+::: {.fragment .fade-in-then-out .no-margin-bottom style="position: absolute; top: 0;"}
 
-::: {.columns}
+Our observable variables are the *matches* between measured positions of landmarks and of lanes provided by sensors, and their expected position given by the map.
+
 ::: {.column width="45%" .small-text}
 Lane markings
 ![](images/lane_marking_wide.png){fig-align="left" width=100% fig-alt="Example of lane marking" .no-margin-top}
@@ -149,23 +341,62 @@ Land marks: Traffic lights, building edges, traffic signs.
 ![](images/landmarks.png){fig-align="left" width=100% fig-alt="Example of landmarks" .no-margin-top}
 :::
 
-::: 
 :::
 
 ::: {.fragment .fade-up style="position: absolute; top: 0;"}
-To infer the probability of a section to be valid, we rely on the probability of observing a good match between sensor observation and data from the map.
+We propose the following PGM:
 
-::: {.spacer}
+::: {.column width="100%"}
+::: {.width-30}
+```{dot}
+digraph MapValidity {
+  rankdir=TB;
+  fontname="Helvetica";
+
+  Weather [shape=box, style=filled, fillcolor=lightblue];
+
+  Weather -> Lidar;
+  Weather -> Camera;
+  Weather -> Radar;
+
+  LaneMarkingAccuracy [label="Lane marking accuracy"];
+  MapValidity[shape=box, style=filled, fillcolor=lightgrey, label="Map validity"];
+  LandMarkAccuracy [label="Landmark accuracy"];
+
+  Localization;
+
+  Camera -> LaneMarkingAccuracy;
+  Camera -> LandMarkAccuracy;
+  Radar -> LandMarkAccuracy;
+  Lidar -> LandMarkAccuracy;
+
+  LaneMarkingMatch [shape=box, style=filled, fillcolor=lightblue, label="Lane marking match"];
+  LandMarkMatch [shape=box, style=filled, fillcolor=lightblue, label="Landmark match"];
+
+  LaneMarkingAccuracy -> Localization;
+  MapValidity -> Localization;
+  LandMarkAccuracy -> Localization;
+
+  LaneMarkingAccuracy -> LaneMarkingMatch;
+  MapValidity -> LaneMarkingMatch;
+  Localization -> LaneMarkingMatch;
+
+  LandMarkAccuracy -> LandMarkMatch;
+  MapValidity -> LandMarkMatch;
+  Localization -> LandMarkMatch;
+}
+
+```
+:::
 :::
 
-**Lane and landmarks match** are the observable variables of our model.
+::: {.column width="60%"}
+Here text
+::: 
 
-<!-- $$P[\textrm{Lane marking match} | \mathcal{M}=V],\quad P[\textrm{Lane marking match} | \mathcal{M}=I]$$
-$$P[\textrm{Landmarks match} | \mathcal{M}=V],\quad P[\textrm{Landmarks match} | \mathcal{M}=I]$$
- -->
+:::
+:::
  
-:::
-:::
 
 ## Proposed PGM for Online Map Validation
 
@@ -286,13 +517,346 @@ We also considered the effect of weather on sensor accuracy and the effect of in
     });
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    console.log("JS Functions loaded");
-    addNumbersToTables();
-    fixSvgSizes();
-    addClassWhenFinalTrigger();
-    applyDarkenBackground();
+
+  function animateTransition(srcId, dstId) {
+  const src = document.getElementById(srcId);
+  const dst = document.getElementById(dstId);
+  if (!src || !dst) {
+    console.warn('animateTransition: src or dst not found', srcId, dstId);
+    return;
+  }
+
+  // Remove any previous clone
+  document.querySelectorAll('.transition-clone').forEach(el => el.remove());
+
+  const srcRect = src.getBoundingClientRect();
+  const dstRect = dst.getBoundingClientRect();
+
+  const dx = dstRect.left - srcRect.left;
+  const dy = dstRect.top - srcRect.top;
+  const scaleX = dstRect.width / srcRect.width;
+  const scaleY = dstRect.height / srcRect.height;
+
+  // Create clone
+  const clone = src.cloneNode(true);
+  clone.classList.add('transition-clone');
+  Object.assign(clone.style, {
+    position: 'fixed',
+    left: `${srcRect.left}px`,
+    top: `${srcRect.top}px`,
+    width: `${srcRect.width}px`,
+    height: `${srcRect.height}px`,
+    margin: '0',
+    transform: 'translate(0px, 0px) scale(1, 1)',
+    transition: 'transform 0.6s ease-in-out, opacity 0.3s ease-in',
+    zIndex: '9999',
+    pointerEvents: 'none',
+    opacity: '1',
+    willChange: 'transform, opacity'
   });
+
+  document.body.appendChild(clone);
+
+  // Hide real dst initially
+  dst.style.visibility = 'hidden';
+
+  // Log for diagnostics
+  console.log('Initial:', { srcRect, dstRect });
+
+  // Listen for transform transition end on clone
+  let transformDone = false;
+  clone.addEventListener('transitionend', (e) => {
+    if (e.propertyName === 'transform') {
+      transformDone = true;
+      console.log('transform transition ended; clone bbox:', clone.getBoundingClientRect());
+      // After transform ends, we trigger the fade
+      // But wait a tiny bit (or next frame) so browser is stable
+      requestAnimationFrame(() => {
+        // Fade in dst
+        dst.style.visibility = 'visible';
+        dst.style.opacity = '1';
+        dst.style.transition = 'opacity 0.3s ease-in';
+
+        // Fade out the clone
+        clone.style.opacity = '0';
+      });
+    }
+  });
+
+  // Start the animation
+  requestAnimationFrame(() => {
+    console.log('Applying transform:', `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`);
+    clone.style.transform = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
+  });
+
+  // After fade-out ends, clean up
+  clone.addEventListener('transitionend', (e) => {
+    if (e.propertyName === 'opacity' && transformDone) {
+      console.log('opacity transition ended; removing clone; final clone bbox:', clone.getBoundingClientRect(), 'dst bbox:', dst.getBoundingClientRect());
+      clone.remove();
+    }
+  });
+}
+
+/**
+ * Animate an element moving from srcEl to dstEl,
+ * fading out clone during last 20% of movement,
+ * and fading in destination element smoothly.
+ * 
+ * @param {HTMLElement} srcEl - The source element to clone and animate from.
+ * @param {HTMLElement} dstEl - The destination element to animate to.
+ * @param {Object} [options] - Optional timing settings in ms.
+ * @param {number} [options.duration=600] - Total duration of transform animation.
+ * @param {number} [options.fadeOutStartRatio=0.8] - When to start fading out clone (as ratio of duration).
+ * @param {number} [options.fadeDuration=120] - Duration of clone fade out.
+ * @param {number} [options.dstFadeDuration=200] - Duration for destination fade in.
+ */
+function animateElementTransition(srcId, dstId, options = {}) {
+  const {
+    duration = 500,
+    fadeOutStartRatio = 0.2,
+    fadeDuration = 200,
+    dstFadeDuration = 900,
+  } = options;
+
+  if (!srcId || !dstId) return;
+  const srcEl = document.getElementById(srcId);
+  const dstEl = document.getElementById(dstId);
+  if (!srcEl || !dstEl) {
+    console.warn('animateTransition: src or dst not found', srcId, dstId);
+    return;
+  }
+  // Measure source and destination positions/sizes
+  const srcRect = srcEl.getBoundingClientRect();
+  const dstRect = dstEl.getBoundingClientRect();
+
+  // Hide and set destination opacity 0 initially
+  dstEl.style.visibility = 'hidden';
+  dstEl.style.opacity = '0';
+  dstEl.style.transition = `opacity ${dstFadeDuration}ms ease`;
+
+  // Clone source element
+  const clone = srcEl.cloneNode(true);
+
+  Object.assign(clone.style, {
+    position: 'fixed',
+    top: `${srcRect.top}px`,
+    left: `${srcRect.left}px`,
+    width: `${srcRect.width}px`,
+    height: `${srcRect.height}px`,
+    margin: '0',
+    transformOrigin: 'top left',
+    transition: `transform ${duration}ms ease, opacity ${fadeDuration}ms linear`,
+    zIndex: 9999,
+    pointerEvents: 'none',
+    boxSizing: 'border-box',
+    opacity: '1',
+    background: 'white', // or adjust for SVG/transparent backgrounds
+    willChange: 'transform, opacity',
+  });
+
+  document.body.appendChild(clone);
+  clone.getBoundingClientRect(); // force reflow
+
+  // Compute transform delta and scale
+  const dx = dstRect.left - srcRect.left;
+  const dy = dstRect.top - srcRect.top;
+  const scaleX = dstRect.width / srcRect.width;
+  const scaleY = dstRect.height / srcRect.height;
+
+  // Start transform animation
+  requestAnimationFrame(() => {
+    clone.style.transform = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
+  });
+
+  // Schedule fade out of clone starting at fadeOutStartRatio * duration
+  setTimeout(() => {
+    clone.style.opacity = '0';
+  }, duration * fadeOutStartRatio);
+
+  // Cleanup and reveal destination when fade out ends
+  clone.addEventListener('transitionend', function onTransitionEnd(e) {
+    if (e.propertyName === 'opacity' && clone.style.opacity === '0') {
+      // Show and fade in destination
+      dstEl.style.visibility = 'visible';
+      dstEl.style.opacity = '1';
+
+      clone.removeEventListener('transitionend', onTransitionEnd);
+      clone.remove();
+    }
+  });
+}
+
+
+  function setupRevealTransitions() {
+    const srcElements = Array.from(document.querySelectorAll('[id$="_src"]'));
+
+    srcElements.forEach(src => {
+      const baseId = src.id.replace(/_src$/, '');
+      const dst = document.getElementById(`${baseId}_dst`);
+      if (!dst) return;
+
+      const fragmentAncestor = dst.closest('.fragment');
+
+      const trigger = () => {
+        requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          //animateTransition(`${baseId}_src`, `${baseId}_dst`);
+          animateElementTransition(`${baseId}_src`, `${baseId}_dst`);
+          });
+        });
+      };
+
+      if (fragmentAncestor) {
+        Reveal.addEventListener('fragmentshown', event => {
+          if (event.fragment === fragmentAncestor) {
+            trigger(); // ✅ layout-safe now
+        }
+      });
+      } else {
+        Reveal.addEventListener('slidechanged', event => {
+          if (event.currentSlide.contains(document.getElementById(`${baseId}_dst`))) {
+            trigger(); // ✅ safe now
+          }
+        });
+      }
+  });
+  }
+
+  //////////////////////////////////
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("JS Functions loaded");
+
+  addNumbersToTables();
+  fixSvgSizes();
+  addClassWhenFinalTrigger();
+  applyDarkenBackground();
+  // setupRevealAnimationsSmart();
+  setupRevealTransitions();
+
+  ///////////////////////////////////
+  // (() => {
+  //   const pairs = {}; // baseId -> { srcEl, dstEl, srcRect }
+
+  //   // Find all pairs on page load
+  //   function findPairs() {
+  //     document.querySelectorAll('[id$="_src"]').forEach(srcEl => {
+  //       const baseId = srcEl.id.slice(0, -4);
+  //       const dstEl = document.getElementById(baseId + '_dst');
+  //       if (dstEl) {
+  //         pairs[baseId] = { srcEl, dstEl, srcRect: null };
+  //       }
+  //     });
+  //   }
+
+  //   // Measure src element's position and size (viewport relative)
+  //   function measureSrc(baseId) {
+  //     const pair = pairs[baseId];
+  //     if (!pair) return;
+
+  //     // Only measure if visible
+  //     if (pair.srcEl.offsetParent === null) return;
+
+  //     pair.srcRect = pair.srcEl.getBoundingClientRect();
+  //   }
+
+  //   // Animate from cached srcRect to dst element position
+  //   function animateToDst(baseId) {
+  //     const pair = pairs[baseId];
+  //     if (!pair || !pair.srcRect) return;
+
+  //     const dstRect = pair.dstEl.getBoundingClientRect();
+
+  //     // Hide destination during animation
+  //     pair.dstEl.style.visibility = 'hidden';
+
+  //     // Clone source element
+  //     const clone = pair.srcEl.cloneNode(true);
+
+  //     // Style clone for fixed positioning and no interference
+  //     Object.assign(clone.style, {
+  //       position: 'fixed',
+  //       top: `${pair.srcRect.top}px`,
+  //       left: `${pair.srcRect.left}px`,
+  //       width: `${pair.srcRect.width}px`,
+  //       height: `${pair.srcRect.height}px`,
+  //       margin: '0',
+  //       transformOrigin: 'top left',
+  //       transition: 'transform 0.6s ease, opacity 0.3s ease',
+  //       zIndex: 9999,
+  //       pointerEvents: 'none',
+  //       background: 'white', // Optional: ensure clone looks consistent
+  //       boxSizing: 'border-box',
+  //       opacity: '1',
+  //     });
+
+  //     document.body.appendChild(clone);
+
+  //     // Force repaint before animating
+  //     requestAnimationFrame(() => {
+  //       const dx = dstRect.left - pair.srcRect.left;
+  //       const dy = dstRect.top - pair.srcRect.top;
+  //       const scaleX = dstRect.width / pair.srcRect.width;
+  //       const scaleY = dstRect.height / pair.srcRect.height;
+
+  //       clone.style.transform = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
+  //     });
+
+  //     // Listen for transition end to clean up
+  //     clone.addEventListener('transitionend', (e) => {
+  //       if (e.propertyName === 'transform') {
+  //         // Show destination element
+  //         pair.dstEl.style.visibility = 'visible';
+
+  //         // Fade out the clone
+  //         clone.style.opacity = '0';
+  //       } else if (e.propertyName === 'opacity') {
+  //         // Remove clone after fade out
+  //         clone.remove();
+
+  //         // Clear cached srcRect so animation won't repeat incorrectly
+  //         pair.srcRect = null;
+  //       }
+  //     }, { once: true });
+  //   }
+
+  //   // Listen to slide changes to measure and animate
+  //   Reveal.addEventListener('slidechanged', (event) => {
+  //     const prevSlide = event.previousSlide;
+  //     const currSlide = event.currentSlide;
+
+  //     // Measure any src element on the previous slide (before it hides)
+  //     if (prevSlide) {
+  //       Object.entries(pairs).forEach(([baseId, pair]) => {
+  //         if (prevSlide.contains(pair.srcEl)) {
+  //           measureSrc(baseId);
+  //         }
+  //       });
+  //     }
+
+  //     // Animate any dst element on the new slide
+  //     if (currSlide) {
+  //       Object.entries(pairs).forEach(([baseId, pair]) => {
+  //         if (currSlide.contains(pair.dstEl)) {
+  //           animateToDst(baseId);
+  //         }
+  //       });
+  //     }
+  //   });
+
+  //   // Run on load to find pairs immediately
+  //   findPairs();
+
+  // })();
+  //////////////////////////////////
+});
+
+
+
+
 </script>
 
 

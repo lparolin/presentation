@@ -29,7 +29,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto-8aa184520d073c55808987902e025a42.css">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto-3a1076c4f2d14b1647fd4c4cbf7b6b96.css">
   <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -121,9 +121,6 @@
       margin-right: 0; 
     }
   </style>
-  <script src="index_files/libs/quarto-diagram/mermaid.min.js"></script>
-  <script src="index_files/libs/quarto-diagram/mermaid-init.js"></script>
-  <link href="index_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -142,8 +139,8 @@ Dr.&nbsp;Luca Parolini
 </div>
 
 </section>
-<section id="my-journey-in-safe-embedded-systems-and-their-applications" class="slide level2">
-<h2>My Journey in Safe Embedded Systems and their Applications</h2>
+<section id="a-journey-through-applications-of-safe-embedded-systems" class="slide level2">
+<h2>A Journey through Applications of Safe Embedded Systems</h2>
 <ul>
 <li>🎓 PhD in Electrical &amp; Computer Engineering, Carnegie Mellon University<br>
 </li>
@@ -154,34 +151,37 @@ Dr.&nbsp;Luca Parolini
 <li>🔄 Transition: From applied industrial research to academic impact</li>
 </ul>
 </section>
-<section id="online-map-validation" class="slide level2 title-heading" data-background-color="black" data-background-image="./images/map_validation_bmw.png" data-background-size="cover" data-background-opacity="0.5" data-padding-bottom="45px">
+<section id="online-map-validation" class="slide level2 text-light transparent-background title-slide center" data-background-image="./images/map_validation_bmw_dark.png">
 <h2>Online Map Validation</h2>
-<h3 id="ensuring-safety-in-dynamic-environments">Ensuring Safety in Dynamic Environments</h3>
-<!-- - Autonomous vehicles rely on high-definition semantic maps -->
-<!-- - Map errors can lead to unsafe decisions or system failures -->
-<!-- - My research: Real-time validation using sensor fusion and semantic constraints  -->
-<!-- - Goal: Scalable, certifiable, and deployable safety layer -->
+<h3 id="ensuring-safety-in-dynamicenvironments">Ensuring Safety in DynamicEnvironments</h3>
+<div class="space-xl">
 
-<aside><div>
+</div>
+<div class="text-light">
 <p>In collaboration with F. Drost, A. Fabris, and Dr.&nbsp;S. Schneider</p>
-</div></aside></section>
-<section id="typical-autonomous-driving-system-architecture" class="slide level2">
-<h2>Typical Autonomous-Driving System Architecture</h2>
+</div>
+</section>
+<section id="the-role-of-maps-in-autonomous-driving-vehicle" class="slide level2">
+<h2>The role of Maps in Autonomous-Driving Vehicle</h2>
 <div class="columns">
 <div class="column" style="width:70%;">
 <div class="quarto-figure quarto-figure-left">
 <figure>
-<p><img data-src="images/InfoFlowAutomotive.drawio.svg" class="quarto-figure quarto-figure-left" style="width:100.0%" alt="An example SVG figure"></p>
+<p><img data-src="images/InfoFlowAutomotive.drawio.svg" style="width:100.0%" alt="An example SVG figure"></p>
+<figcaption>Typical System Architecture for Autonomous Driving Vehicles.</figcaption>
 </figure>
 </div>
 </div></div>
-<p>Maps play a central role in Autonomous Driving, allowing adaptation to upcoming road and lane geometry</p>
-<p>The <em>field of view</em> (FoV) of maps is <strong>not</strong> affected by traffic conditions or weather</p>
-<p>Altough potentially very accurate, maps provide data with unknown and potentially extensive latency</p>
-<div class="spacer">
+<p>Maps play a central role in Autonomous Driving, allowing trajectory adaptation to upcoming road and lane geometry.</p>
+<p>The <em>field of view</em> (FoV) of maps is extremely large and it is <strong>not</strong> affected by traffic conditions or weather.</p>
+<div class="spacer-xs">
 
 </div>
-<div class="no-title">
+<div class="fragment">
+<p>Although potentially very accurate, maps provide data with unknown and potentially extensive latency.</p>
+<p>Relying on data from an outdated map may lead to uncomfortable, or even unsafe trajectories.</p>
+</div>
+<div class="no-title fragment fade-down">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -191,15 +191,15 @@ Dr.&nbsp;Luca Parolini
 <p><strong>Note</strong></p>
 </div>
 <div class="callout-content">
-<p>Maps data must be verified for correctness <strong>before</strong> they are used for computing future trajectories</p>
+<p>Maps data must be verified <strong>before</strong> they are used for computing future trajectories.</p>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="classification-of-map-validation-approaches" class="slide level2">
-<h2>Classification of map validation approaches</h2>
-<p>Depending on the specific application, different approaches to map validation can be considered <sup>1</sup></p>
+<section id="multiple-map-validation-approaches" class="slide level2">
+<h2>Multiple Map Validation Approaches</h2>
+<p>Depending on the specific application, different approaches to map validation can be considered. <sup>1</sup></p>
 <table class="fragmented-table margin-top-mid bottom-border numbered-table top-border">
 <tbody><tr>
 <th>
@@ -222,13 +222,13 @@ Implication
 <strong>Global Map Invalidation</strong>
 </td>
 <td>
-Verifies if a map contain any invalid data
+Verifies if a map contain any invalid data. There is no attempt to identify where the map is invalid.
 </td>
-<td rowspan="2" stlyle="vertical-align:middle">
+<td rowspan="2" class="vcenter">
 A map is valid until proven to be wrong
 </td>
 </tr>
-<tr class="highlightable fragment fade-down">
+<tr class="highlightable">
 <td>
 </td>
 <td>
@@ -238,209 +238,1117 @@ A map is valid until proven to be wrong
 Attempts to identify which areas of a map contain invalid data
 </td>
 </tr>
-<tr class="fragment highlightable fade-down">
-<td>
+<tr class="fragment fade-down fragment-index=2">
+<td class="highlightable">
 </td>
-<td>
-<strong>Map Validation</strong>
+<td class="highlightable">
+<strong>Local Map Validation</strong>
 </td>
-<td>
+<td class="vcenter highlightable">
+Every area of a map is invalid until proven to be correct
+</td>
+<td rowspan="2" class="vcenter">
 A map is invalid until proven to be correct
 </td>
 </tr>
-<tr class="fragment fade-down">
+<tr class="fragment fade-down fragment-index=2">
 <td>
 </td>
 <td>
-<strong>Map Correction</strong>
+<strong>Local Map Correction</strong>
 </td>
 <td>
-Sensors data are used to identify areas where map is valid and correct the areas where map is invalid
-</td>
-<td colspan="2" class="vcenter">
-A map is invalid until proven to be correct
+Use sensor data to correct the map where it is marked as invalid
 </td>
 </tr>
 </tbody></table>
+<div class="spacer">
+
+</div>
+<div class="fragment final-trigger">
+<p>In this talk we focus on the problems <strong>1</strong>, <strong>2</strong>, and <strong>3</strong>.</p>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>“Online map validation for autonomous driving”, F. Drost, A. Fabris, L. <em>Parolini</em>, and S. Schneider, 2020</p></li></ol></aside></section>
+<section id="probabilistic-graphical-models---a-short-review" class="slide level2">
+<h2>Probabilistic Graphical Models - a Short Review</h2>
+<p>Probabilistic Graphical Models rely on Graphs for modelling conditional dependencies between random variables.<sup>1</sup></p>
+<div class="example no-margin-top-first-child">
+<p><strong>Example:</strong></p>
+<p>Suppose we are in a classroom without windows and want to understand if it is raining outside, or not.</p>
+<p>We can observe if the professor arrived in the classroom carrying an umbrella and if his/her clothes are wet.</p>
+<div class="fragment">
+<p>Based on previous knowledge, we know that:</p>
+<ul>
+<li>The professor tends to carry an umbrella when outside rains;</li>
+<li>If the clothes are wet and the professors does not carry an umbrella, we can be pretty sure that outside is raining.</li>
+</ul>
+</div>
+<div class="fragment">
+<p>Based on these observations we can <em>infer</em> if outside is raining, or not.</p>
+</div>
+<div class="fragment fade-down">
+<p>The information above can be represented by this PGM:</p>
+<div id="umbrella_problem_src" class="column" style="width:50%;">
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<svg width="960" height="480" viewbox="0.00 0.00 261.42 67.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none; display: block; margin: auto auto auto auto">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 63)">
+<title>WeatherProblem</title>
+<polygon fill="#f2f2f2" stroke="transparent" points="-4,4 -4,-63 257.42,-63 257.42,4 -4,4"></polygon>
+<!-- Rain -->
+<g id="node1" class="node">
+<title>Rain</title>
+<ellipse fill="none" stroke="black" cx="29.28" cy="-18" rx="29.05" ry="18"></ellipse>
+<text text-anchor="middle" x="29.28" y="-13.8" font-family="Sans-Serif" font-size="14.00">Rain</text>
+</g>
+<!-- Umbrella -->
+<g id="node2" class="node">
+<title>Umbrella</title>
+<polygon fill="lightblue" stroke="black" points="163.35,-59 94.62,-59 94.62,-23 163.35,-23 163.35,-59"></polygon>
+<text text-anchor="middle" x="128.99" y="-36.8" font-family="Sans-Serif" font-size="14.00">Umbrella</text>
+</g>
+<!-- Rain&#45;&gt;Umbrella -->
+<g id="edge1" class="edge">
+<title>Rain-&gt;Umbrella</title>
+<path fill="none" stroke="black" d="M56.97,-24.28C65.44,-26.28 75.03,-28.54 84.36,-30.73"></path>
+<polygon fill="black" stroke="black" points="83.79,-34.19 94.32,-33.08 85.39,-27.38 83.79,-34.19"></polygon>
+</g>
+<!-- WetClothes -->
+<g id="node3" class="node">
+<title>WetClothes</title>
+<polygon fill="lightblue" stroke="black" points="253.42,-36 199.42,-36 199.42,0 253.42,0 253.42,-36"></polygon>
+<text text-anchor="middle" x="226.42" y="-13.8" font-family="Sans-Serif" font-size="14.00">Wet</text>
+</g>
+<!-- Rain&#45;&gt;WetClothes -->
+<g id="edge3" class="edge">
+<title>Rain-&gt;WetClothes</title>
+<path fill="none" stroke="black" d="M58.42,-15.87C69.65,-15.12 82.71,-14.37 94.55,-14 125.14,-13.05 132.83,-13.01 163.42,-14 171.77,-14.27 180.75,-14.74 189.21,-15.27"></path>
+<polygon fill="black" stroke="black" points="188.98,-18.76 199.19,-15.93 189.45,-11.78 188.98,-18.76"></polygon>
+</g>
+<!-- Umbrella&#45;&gt;WetClothes -->
+<g id="edge2" class="edge">
+<title>Umbrella-&gt;WetClothes</title>
+<path fill="none" stroke="black" d="M163.36,-32.96C171.69,-30.95 180.67,-28.79 189.13,-26.75"></path>
+<polygon fill="black" stroke="black" points="190.22,-30.08 199.12,-24.34 188.58,-23.28 190.22,-30.08"></polygon>
+</g>
+</g>
+</svg>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:5%;">
+
+</div><div id="text_pgm1_src" class="column" style="width:45%;">
+<p><em>Vertices</em> of the graph represent random variables and <em>edges</em> represent conditional dependencies among the variables.</p>
+<p>The probability of carrying the umbrella depends on the <em>realization</em> of the random variable <em>Rain</em>.</p>
+</div></div>
+<!-- ::: {.column width=50% .math-compact .left .fragment .small}
+These are the set of probabilities we need to define:
+
+$$P(\textrm {Umbrella=Yes} | \textrm{Rain=Yes}) = 0.9 $$
+$$P(\textrm {Umbrella=Yes} | \textrm{Rain=No}) = 0.7 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=No}) = 0.01 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=Yes}) = 0.01 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=No}) = 0.99 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
+::: -->
+</div>
+<aside><ol class="aside-footnotes"><li id="fn2"><p>Daphne Koller and Nir Friedman. 2009. <a href="https://mitpress.ublish.com/book/probabilistic-graphical-models">Probabilistic Graphical Models: Principles and Techniques - Adaptive Computation and Machine Learning</a>. The MIT Press.</p></li></ol></aside></section>
+<section id="probabilistic-graphical-models---a-short-review-1" class="slide level2">
+<h2>Probabilistic Graphical Models - a Short Review</h2>
+<p>Probabilistic Graphical Models rely on Graphs for modelling conditional dependencies between random variables.<sup>1</sup></p>
+<div class="example no-margin-top-first-child">
+<p><strong>Example:</strong></p>
+<div class="column" style="width:50%;">
+<div id="umbrella_problem_dst">
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<svg width="960" height="480" viewbox="0.00 0.00 261.42 67.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none; display: block; margin: auto auto auto auto">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 63)">
+<title>WeatherProblem</title>
+<polygon fill="#f2f2f2" stroke="transparent" points="-4,4 -4,-63 257.42,-63 257.42,4 -4,4"></polygon>
+<!-- Rain -->
+<g id="node1" class="node">
+<title>Rain</title>
+<ellipse fill="none" stroke="black" cx="29.28" cy="-18" rx="29.05" ry="18"></ellipse>
+<text text-anchor="middle" x="29.28" y="-13.8" font-family="Sans-Serif" font-size="14.00">Rain</text>
+</g>
+<!-- Umbrella -->
+<g id="node2" class="node">
+<title>Umbrella</title>
+<polygon fill="lightblue" stroke="black" points="163.35,-59 94.62,-59 94.62,-23 163.35,-23 163.35,-59"></polygon>
+<text text-anchor="middle" x="128.99" y="-36.8" font-family="Sans-Serif" font-size="14.00">Umbrella</text>
+</g>
+<!-- Rain&#45;&gt;Umbrella -->
+<g id="edge1" class="edge">
+<title>Rain-&gt;Umbrella</title>
+<path fill="none" stroke="black" d="M56.97,-24.28C65.44,-26.28 75.03,-28.54 84.36,-30.73"></path>
+<polygon fill="black" stroke="black" points="83.79,-34.19 94.32,-33.08 85.39,-27.38 83.79,-34.19"></polygon>
+</g>
+<!-- WetClothes -->
+<g id="node3" class="node">
+<title>WetClothes</title>
+<polygon fill="lightblue" stroke="black" points="253.42,-36 199.42,-36 199.42,0 253.42,0 253.42,-36"></polygon>
+<text text-anchor="middle" x="226.42" y="-13.8" font-family="Sans-Serif" font-size="14.00">Wet</text>
+</g>
+<!-- Rain&#45;&gt;WetClothes -->
+<g id="edge3" class="edge">
+<title>Rain-&gt;WetClothes</title>
+<path fill="none" stroke="black" d="M58.42,-15.87C69.65,-15.12 82.71,-14.37 94.55,-14 125.14,-13.05 132.83,-13.01 163.42,-14 171.77,-14.27 180.75,-14.74 189.21,-15.27"></path>
+<polygon fill="black" stroke="black" points="188.98,-18.76 199.19,-15.93 189.45,-11.78 188.98,-18.76"></polygon>
+</g>
+<!-- Umbrella&#45;&gt;WetClothes -->
+<g id="edge2" class="edge">
+<title>Umbrella-&gt;WetClothes</title>
+<path fill="none" stroke="black" d="M163.36,-32.96C171.69,-30.95 180.67,-28.79 189.13,-26.75"></path>
+<polygon fill="black" stroke="black" points="190.22,-30.08 199.12,-24.34 188.58,-23.28 190.22,-30.08"></polygon>
+</g>
+</g>
+</svg>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:3%;">
+
+</div><div class="column" style="width:43%;">
+<div style="margin-top:-40px">
+<p>We consider these a priori and conditional probabilities:</p>
+<div class="tiny-text">
+<table class="top-border bottom-border table-left .tiny-text">
+<tbody><tr>
+<td>
+<span class="math inline">\(\small P(\textrm{Rain=Yes})\)</span>
+</td>
+<td>
+<table class="table-left">
+<tbody><tr>
+<td>
+50%
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td>
+<span class="math inline">\(\small P(\textrm{Umbrella=Yes}|\small\textrm{Rain})\)</span>
+</td>
+<td>
+<table class="table-left">
+<tbody><tr>
+<th>
+Rain=Yes
+</th>
+<th>
+Rain=No
+</th>
+</tr>
+<tr>
+<td>
+90%
+</td>
+<td>
+50%
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td>
+<span class="math inline">\(\small P(\textrm{Wet=Yes}|\\\small\phantom{P(}\textrm{Rain,Umbrella})\)</span>
+</td>
+<td>
+<table class="table-left">
+<tbody><tr>
+<th>
+</th>
+<th>
+Rain=Yes
+</th>
+<th>
+Rain=No
+</th>
+</tr>
+<tr>
+<th>
+Umbrella=Yes
+</th>
+<td style="border-top: 1px solid">
+5%
+</td>
+<td style="border-top: 1px solid">
+0.1%
+</td>
+</tr>
+<tr>
+<th>
+Umbrella=No
+</th>
+<td>
+99%
+</td>
+<td>
+0.1%
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div><div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>We can infer the following probability of rain, given our observation of wet clothes and umbrella:</p>
+<table class="top-border bottom-border table-left .tiny-text">
+<tbody><tr>
+<th>
+</th>
+<th>
+Umbrella=Yes
+</th>
+<th>
+Umbrella=No
+</th>
+</tr>
+<tr>
+<th>
+Wet=Yes
+</th>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Wet=No
+</th>
+<td>
+</td>
+<td>
+</td>
+</tr>
+</tbody></table>
+</div>
+</div>
+<!-- ::: {.column width=50% .math-compact .left .fragment .small}
+These are the set of probabilities we need to define:
+
+$$P(\textrm {Umbrella=Yes} | \textrm{Rain=Yes}) = 0.9 $$
+$$P(\textrm {Umbrella=Yes} | \textrm{Rain=No}) = 0.7 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=No}) = 0.01 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=Yes}) = 0.01 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=No}) = 0.99 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
+::: -->
+<aside><ol class="aside-footnotes"><li id="fn3"><p>Daphne Koller and Nir Friedman. 2009. <a href="https://mitpress.ublish.com/book/probabilistic-graphical-models">Probabilistic Graphical Models: Principles and Techniques - Adaptive Computation and Machine Learning</a>. The MIT Press.</p></li></ol></aside></section>
+<section id="use-probabilistic-graphical-model-for-map-validation" class="slide level2">
+<h2>Use Probabilistic Graphical Model for Map Validation</h2>
+<p>At run-time we divide the portion of a map relevant for trajectory planning into multiple sections.</p>
+<ul>
+<li>Every section is associated with a random variable <span class="math inline">\(\mathcal{M}\)</span> representing the validity of the map in that section.</li>
+<li><strong>The values taken by <span class="math inline">\(\mathcal{M}\)</span> are not directly measurable</strong>.</li>
+</ul>
+<div class="r-stack" style="position: relative; height: 100%;">
+<div class="fragment fade-in-then-out no-margin-bottom" style="position: absolute; top: 0;">
+<p>Our observable variables are the <em>matches</em> between measured positions of landmarks and of lanes provided by sensors, and their expected position given by the map.</p>
+<div class="column small-text" style="width:45%;">
+<p>Lane markings <img data-src="images/lane_marking_wide.png" class="no-margin-top quarto-figure quarto-figure-left" style="width:100.0%" alt="Example of lane marking"></p>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column small-text" style="width:45%;">
+<p>Land marks: Traffic lights, building edges, traffic signs. <img data-src="images/landmarks.png" class="no-margin-top quarto-figure quarto-figure-left" style="width:100.0%" alt="Example of landmarks"></p>
+</div></div>
+<div class="fragment fade-up" style="position: absolute; top: 0;">
+<p>We propose the following PGM:</p>
+<div class="column" style="width:100%;">
+<div class="width-30">
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<svg width="960" height="480" viewbox="0.00 0.00 510.09 332.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none; display: block; margin: auto auto auto auto">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 328)">
+<title>MapValidity</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-328 506.09,-328 506.09,4 -4,4"></polygon>
+<!-- Weather -->
+<g id="node1" class="node">
+<title>Weather</title>
+<polygon fill="lightblue" stroke="black" points="404.56,-324 340.74,-324 340.74,-288 404.56,-288 404.56,-324"></polygon>
+<text text-anchor="middle" x="372.65" y="-301.8" font-family="Times,serif" font-size="14.00">Weather</text>
+</g>
+<!-- Lidar -->
+<g id="node2" class="node">
+<title>Lidar</title>
+<ellipse fill="none" stroke="black" cx="456.65" cy="-234" rx="31.9" ry="18"></ellipse>
+<text text-anchor="middle" x="456.65" y="-229.8" font-family="Times,serif" font-size="14.00">Lidar</text>
+</g>
+<!-- Weather&#45;&gt;Lidar -->
+<g id="edge1" class="edge">
+<title>Weather-&gt;Lidar</title>
+<path fill="none" stroke="black" d="M393.41,-287.7C404.94,-278.09 419.36,-266.07 431.52,-255.94"></path>
+<polygon fill="black" stroke="black" points="434.07,-258.37 439.52,-249.28 429.59,-252.99 434.07,-258.37"></polygon>
+</g>
+<!-- Camera -->
+<g id="node3" class="node">
+<title>Camera</title>
+<ellipse fill="none" stroke="black" cx="279.65" cy="-234" rx="41.13" ry="18"></ellipse>
+<text text-anchor="middle" x="279.65" y="-229.8" font-family="Times,serif" font-size="14.00">Camera</text>
+</g>
+<!-- Weather&#45;&gt;Camera -->
+<g id="edge2" class="edge">
+<title>Weather-&gt;Camera</title>
+<path fill="none" stroke="black" d="M349.66,-287.7C336.92,-278.11 320.99,-266.11 307.54,-255.99"></path>
+<polygon fill="black" stroke="black" points="309.63,-253.19 299.54,-249.97 305.42,-258.78 309.63,-253.19"></polygon>
+</g>
+<!-- Radar -->
+<g id="node4" class="node">
+<title>Radar</title>
+<ellipse fill="none" stroke="black" cx="372.65" cy="-234" rx="34.19" ry="18"></ellipse>
+<text text-anchor="middle" x="372.65" y="-229.8" font-family="Times,serif" font-size="14.00">Radar</text>
+</g>
+<!-- Weather&#45;&gt;Radar -->
+<g id="edge3" class="edge">
+<title>Weather-&gt;Radar</title>
+<path fill="none" stroke="black" d="M372.65,-287.7C372.65,-279.98 372.65,-270.71 372.65,-262.11"></path>
+<polygon fill="black" stroke="black" points="376.15,-262.1 372.65,-252.1 369.15,-262.1 376.15,-262.1"></polygon>
+</g>
+<!-- LandMarkAccuracy -->
+<g id="node7" class="node">
+<title>LandMarkAccuracy</title>
+<ellipse fill="none" stroke="black" cx="414.65" cy="-162" rx="87.38" ry="18"></ellipse>
+<text text-anchor="middle" x="414.65" y="-157.8" font-family="Times,serif" font-size="14.00">Landmark accuracy</text>
+</g>
+<!-- Lidar&#45;&gt;LandMarkAccuracy -->
+<g id="edge7" class="edge">
+<title>Lidar-&gt;LandMarkAccuracy</title>
+<path fill="none" stroke="black" d="M446.91,-216.76C441.91,-208.44 435.71,-198.1 430.09,-188.73"></path>
+<polygon fill="black" stroke="black" points="433.07,-186.9 424.92,-180.12 427.07,-190.5 433.07,-186.9"></polygon>
+</g>
+<!-- LaneMarkingAccuracy -->
+<g id="node5" class="node">
+<title>LaneMarkingAccuracy</title>
+<ellipse fill="none" stroke="black" cx="101.65" cy="-162" rx="101.8" ry="18"></ellipse>
+<text text-anchor="middle" x="101.65" y="-157.8" font-family="Times,serif" font-size="14.00">Lane marking accuracy</text>
+</g>
+<!-- Camera&#45;&gt;LaneMarkingAccuracy -->
+<g id="edge4" class="edge">
+<title>Camera-&gt;LaneMarkingAccuracy</title>
+<path fill="none" stroke="black" d="M249.86,-221.28C222.95,-210.7 182.83,-194.92 151.11,-182.45"></path>
+<polygon fill="black" stroke="black" points="152.15,-179.1 141.57,-178.7 149.59,-185.61 152.15,-179.1"></polygon>
+</g>
+<!-- Camera&#45;&gt;LandMarkAccuracy -->
+<g id="edge5" class="edge">
+<title>Camera-&gt;LandMarkAccuracy</title>
+<path fill="none" stroke="black" d="M305.04,-219.83C324.65,-209.67 352.14,-195.42 374.68,-183.73"></path>
+<polygon fill="black" stroke="black" points="376.42,-186.77 383.68,-179.06 373.2,-180.55 376.42,-186.77"></polygon>
+</g>
+<!-- Radar&#45;&gt;LandMarkAccuracy -->
+<g id="edge6" class="edge">
+<title>Radar-&gt;LandMarkAccuracy</title>
+<path fill="none" stroke="black" d="M382.6,-216.41C387.55,-208.16 393.65,-198.01 399.18,-188.78"></path>
+<polygon fill="black" stroke="black" points="402.33,-190.33 404.48,-179.96 396.33,-186.73 402.33,-190.33"></polygon>
+</g>
+<!-- Localization -->
+<g id="node8" class="node">
+<title>Localization</title>
+<ellipse fill="none" stroke="black" cx="265.65" cy="-90" rx="59.1" ry="18"></ellipse>
+<text text-anchor="middle" x="265.65" y="-85.8" font-family="Times,serif" font-size="14.00">Localization</text>
+</g>
+<!-- LaneMarkingAccuracy&#45;&gt;Localization -->
+<g id="edge8" class="edge">
+<title>LaneMarkingAccuracy-&gt;Localization</title>
+<path fill="none" stroke="black" d="M138.86,-145.12C164.03,-134.37 197.32,-120.17 223.47,-109.01"></path>
+<polygon fill="black" stroke="black" points="224.93,-112.19 232.75,-105.04 222.18,-105.75 224.93,-112.19"></polygon>
+</g>
+<!-- LaneMarkingMatch -->
+<g id="node9" class="node">
+<title>LaneMarkingMatch</title>
+<polygon fill="lightblue" stroke="black" points="244.49,-36 112.81,-36 112.81,0 244.49,0 244.49,-36"></polygon>
+<text text-anchor="middle" x="178.65" y="-13.8" font-family="Times,serif" font-size="14.00">Lane marking match</text>
+</g>
+<!-- LaneMarkingAccuracy&#45;&gt;LaneMarkingMatch -->
+<g id="edge11" class="edge">
+<title>LaneMarkingAccuracy-&gt;LaneMarkingMatch</title>
+<path fill="none" stroke="black" d="M110.94,-143.87C124.24,-119.35 148.81,-74.03 164.41,-45.26"></path>
+<polygon fill="black" stroke="black" points="167.64,-46.65 169.33,-36.19 161.49,-43.31 167.64,-46.65"></polygon>
+</g>
+<!-- MapValidity -->
+<g id="node6" class="node">
+<title>MapValidity</title>
+<polygon fill="lightgrey" stroke="black" points="309.59,-180 221.72,-180 221.72,-144 309.59,-144 309.59,-180"></polygon>
+<text text-anchor="middle" x="265.65" y="-157.8" font-family="Times,serif" font-size="14.00">Map validity</text>
+</g>
+<!-- MapValidity&#45;&gt;Localization -->
+<g id="edge9" class="edge">
+<title>MapValidity-&gt;Localization</title>
+<path fill="none" stroke="black" d="M265.65,-143.7C265.65,-135.98 265.65,-126.71 265.65,-118.11"></path>
+<polygon fill="black" stroke="black" points="269.15,-118.1 265.65,-108.1 262.15,-118.1 269.15,-118.1"></polygon>
+</g>
+<!-- MapValidity&#45;&gt;LaneMarkingMatch -->
+<g id="edge12" class="edge">
+<title>MapValidity-&gt;LaneMarkingMatch</title>
+<path fill="none" stroke="black" d="M235.15,-143.99C221.69,-134.98 206.87,-122.71 197.65,-108 186.01,-89.42 181.41,-64.83 179.63,-46.21"></path>
+<polygon fill="black" stroke="black" points="183.11,-45.74 178.88,-36.02 176.13,-46.25 183.11,-45.74"></polygon>
+</g>
+<!-- LandMarkMatch -->
+<g id="node10" class="node">
+<title>LandMarkMatch</title>
+<polygon fill="lightblue" stroke="black" points="408.39,-36 296.91,-36 296.91,0 408.39,0 408.39,-36"></polygon>
+<text text-anchor="middle" x="352.65" y="-13.8" font-family="Times,serif" font-size="14.00">Landmark match</text>
+</g>
+<!-- MapValidity&#45;&gt;LandMarkMatch -->
+<g id="edge15" class="edge">
+<title>MapValidity-&gt;LandMarkMatch</title>
+<path fill="none" stroke="black" d="M296.15,-143.99C309.61,-134.98 324.43,-122.71 333.65,-108 345.29,-89.42 349.89,-64.83 351.67,-46.21"></path>
+<polygon fill="black" stroke="black" points="355.17,-46.25 352.42,-36.02 348.19,-45.74 355.17,-46.25"></polygon>
+</g>
+<!-- LandMarkAccuracy&#45;&gt;Localization -->
+<g id="edge10" class="edge">
+<title>LandMarkAccuracy-&gt;Localization</title>
+<path fill="none" stroke="black" d="M381.21,-145.29C358.79,-134.76 329.15,-120.83 305.51,-109.72"></path>
+<polygon fill="black" stroke="black" points="306.98,-106.55 296.44,-105.46 304,-112.88 306.98,-106.55"></polygon>
+</g>
+<!-- LandMarkAccuracy&#45;&gt;LandMarkMatch -->
+<g id="edge14" class="edge">
+<title>LandMarkAccuracy-&gt;LandMarkMatch</title>
+<path fill="none" stroke="black" d="M407.17,-143.87C396.51,-119.46 376.85,-74.43 364.28,-45.64"></path>
+<polygon fill="black" stroke="black" points="367.36,-43.95 360.16,-36.19 360.95,-46.75 367.36,-43.95"></polygon>
+</g>
+<!-- Localization&#45;&gt;LaneMarkingMatch -->
+<g id="edge13" class="edge">
+<title>Localization-&gt;LaneMarkingMatch</title>
+<path fill="none" stroke="black" d="M245.47,-72.76C234.27,-63.75 220.14,-52.39 207.77,-42.43"></path>
+<polygon fill="black" stroke="black" points="209.92,-39.67 199.93,-36.12 205.53,-45.12 209.92,-39.67"></polygon>
+</g>
+<!-- Localization&#45;&gt;LandMarkMatch -->
+<g id="edge16" class="edge">
+<title>Localization-&gt;LandMarkMatch</title>
+<path fill="none" stroke="black" d="M285.83,-72.76C297.03,-63.75 311.16,-52.39 323.54,-42.43"></path>
+<polygon fill="black" stroke="black" points="325.77,-45.12 331.37,-36.12 321.38,-39.67 325.77,-45.12"></polygon>
+</g>
+</g>
+</svg>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:60%;">
+<p>Here text</p>
+</div></div>
+</div>
+</section>
+<section id="proposed-pgm-for-online-map-validation" class="slide level2">
+<h2>Proposed PGM for Online Map Validation</h2>
+<p>Based on expert judgment, we consider a more refined model of cause-effects which account also for:</p>
+<ul>
+<li>Weather affect on accuracy of sensor measurements;</li>
+<li>Error correlation from camera in miss-detecting lane geometry and positions of landmarks;</li>
+<li>Localization errors due to invalid map, or sensors errors.</li>
+</ul>
+<div class="fragment">
+<p>We consider the following model</p>
+<div class="width-40">
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<svg width="960" height="480" viewbox="0.00 0.00 510.09 332.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none; display: block; margin: auto auto auto auto">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 328)">
+<title>MapValidity</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-328 506.09,-328 506.09,4 -4,4"></polygon>
+<!-- Weather -->
+<g id="node1" class="node">
+<title>Weather</title>
+<polygon fill="lightblue" stroke="black" points="404.56,-324 340.74,-324 340.74,-288 404.56,-288 404.56,-324"></polygon>
+<text text-anchor="middle" x="372.65" y="-301.8" font-family="Times,serif" font-size="14.00">Weather</text>
+</g>
+<!-- Lidar -->
+<g id="node2" class="node">
+<title>Lidar</title>
+<ellipse fill="none" stroke="black" cx="456.65" cy="-234" rx="31.9" ry="18"></ellipse>
+<text text-anchor="middle" x="456.65" y="-229.8" font-family="Times,serif" font-size="14.00">Lidar</text>
+</g>
+<!-- Weather&#45;&gt;Lidar -->
+<g id="edge1" class="edge">
+<title>Weather-&gt;Lidar</title>
+<path fill="none" stroke="black" d="M393.41,-287.7C404.94,-278.09 419.36,-266.07 431.52,-255.94"></path>
+<polygon fill="black" stroke="black" points="434.07,-258.37 439.52,-249.28 429.59,-252.99 434.07,-258.37"></polygon>
+</g>
+<!-- Camera -->
+<g id="node3" class="node">
+<title>Camera</title>
+<ellipse fill="none" stroke="black" cx="279.65" cy="-234" rx="41.13" ry="18"></ellipse>
+<text text-anchor="middle" x="279.65" y="-229.8" font-family="Times,serif" font-size="14.00">Camera</text>
+</g>
+<!-- Weather&#45;&gt;Camera -->
+<g id="edge2" class="edge">
+<title>Weather-&gt;Camera</title>
+<path fill="none" stroke="black" d="M349.66,-287.7C336.92,-278.11 320.99,-266.11 307.54,-255.99"></path>
+<polygon fill="black" stroke="black" points="309.63,-253.19 299.54,-249.97 305.42,-258.78 309.63,-253.19"></polygon>
+</g>
+<!-- Radar -->
+<g id="node4" class="node">
+<title>Radar</title>
+<ellipse fill="none" stroke="black" cx="372.65" cy="-234" rx="34.19" ry="18"></ellipse>
+<text text-anchor="middle" x="372.65" y="-229.8" font-family="Times,serif" font-size="14.00">Radar</text>
+</g>
+<!-- Weather&#45;&gt;Radar -->
+<g id="edge3" class="edge">
+<title>Weather-&gt;Radar</title>
+<path fill="none" stroke="black" d="M372.65,-287.7C372.65,-279.98 372.65,-270.71 372.65,-262.11"></path>
+<polygon fill="black" stroke="black" points="376.15,-262.1 372.65,-252.1 369.15,-262.1 376.15,-262.1"></polygon>
+</g>
+<!-- LandMarkAccuracy -->
+<g id="node7" class="node">
+<title>LandMarkAccuracy</title>
+<ellipse fill="none" stroke="black" cx="414.65" cy="-162" rx="87.38" ry="18"></ellipse>
+<text text-anchor="middle" x="414.65" y="-157.8" font-family="Times,serif" font-size="14.00">Landmark accuracy</text>
+</g>
+<!-- Lidar&#45;&gt;LandMarkAccuracy -->
+<g id="edge7" class="edge">
+<title>Lidar-&gt;LandMarkAccuracy</title>
+<path fill="none" stroke="black" d="M446.91,-216.76C441.91,-208.44 435.71,-198.1 430.09,-188.73"></path>
+<polygon fill="black" stroke="black" points="433.07,-186.9 424.92,-180.12 427.07,-190.5 433.07,-186.9"></polygon>
+</g>
+<!-- LaneMarkingAccuracy -->
+<g id="node5" class="node">
+<title>LaneMarkingAccuracy</title>
+<ellipse fill="none" stroke="black" cx="101.65" cy="-162" rx="101.8" ry="18"></ellipse>
+<text text-anchor="middle" x="101.65" y="-157.8" font-family="Times,serif" font-size="14.00">Lane marking accuracy</text>
+</g>
+<!-- Camera&#45;&gt;LaneMarkingAccuracy -->
+<g id="edge4" class="edge">
+<title>Camera-&gt;LaneMarkingAccuracy</title>
+<path fill="none" stroke="black" d="M249.86,-221.28C222.95,-210.7 182.83,-194.92 151.11,-182.45"></path>
+<polygon fill="black" stroke="black" points="152.15,-179.1 141.57,-178.7 149.59,-185.61 152.15,-179.1"></polygon>
+</g>
+<!-- Camera&#45;&gt;LandMarkAccuracy -->
+<g id="edge5" class="edge">
+<title>Camera-&gt;LandMarkAccuracy</title>
+<path fill="none" stroke="black" d="M305.04,-219.83C324.65,-209.67 352.14,-195.42 374.68,-183.73"></path>
+<polygon fill="black" stroke="black" points="376.42,-186.77 383.68,-179.06 373.2,-180.55 376.42,-186.77"></polygon>
+</g>
+<!-- Radar&#45;&gt;LandMarkAccuracy -->
+<g id="edge6" class="edge">
+<title>Radar-&gt;LandMarkAccuracy</title>
+<path fill="none" stroke="black" d="M382.6,-216.41C387.55,-208.16 393.65,-198.01 399.18,-188.78"></path>
+<polygon fill="black" stroke="black" points="402.33,-190.33 404.48,-179.96 396.33,-186.73 402.33,-190.33"></polygon>
+</g>
+<!-- Localization -->
+<g id="node8" class="node">
+<title>Localization</title>
+<ellipse fill="none" stroke="black" cx="265.65" cy="-90" rx="59.1" ry="18"></ellipse>
+<text text-anchor="middle" x="265.65" y="-85.8" font-family="Times,serif" font-size="14.00">Localization</text>
+</g>
+<!-- LaneMarkingAccuracy&#45;&gt;Localization -->
+<g id="edge8" class="edge">
+<title>LaneMarkingAccuracy-&gt;Localization</title>
+<path fill="none" stroke="black" d="M138.86,-145.12C164.03,-134.37 197.32,-120.17 223.47,-109.01"></path>
+<polygon fill="black" stroke="black" points="224.93,-112.19 232.75,-105.04 222.18,-105.75 224.93,-112.19"></polygon>
+</g>
+<!-- LaneMarkingMatch -->
+<g id="node9" class="node">
+<title>LaneMarkingMatch</title>
+<polygon fill="lightblue" stroke="black" points="244.49,-36 112.81,-36 112.81,0 244.49,0 244.49,-36"></polygon>
+<text text-anchor="middle" x="178.65" y="-13.8" font-family="Times,serif" font-size="14.00">Lane marking match</text>
+</g>
+<!-- LaneMarkingAccuracy&#45;&gt;LaneMarkingMatch -->
+<g id="edge11" class="edge">
+<title>LaneMarkingAccuracy-&gt;LaneMarkingMatch</title>
+<path fill="none" stroke="black" d="M110.94,-143.87C124.24,-119.35 148.81,-74.03 164.41,-45.26"></path>
+<polygon fill="black" stroke="black" points="167.64,-46.65 169.33,-36.19 161.49,-43.31 167.64,-46.65"></polygon>
+</g>
+<!-- MapValidity -->
+<g id="node6" class="node">
+<title>MapValidity</title>
+<polygon fill="lightgrey" stroke="black" points="309.59,-180 221.72,-180 221.72,-144 309.59,-144 309.59,-180"></polygon>
+<text text-anchor="middle" x="265.65" y="-157.8" font-family="Times,serif" font-size="14.00">Map validity</text>
+</g>
+<!-- MapValidity&#45;&gt;Localization -->
+<g id="edge9" class="edge">
+<title>MapValidity-&gt;Localization</title>
+<path fill="none" stroke="black" d="M265.65,-143.7C265.65,-135.98 265.65,-126.71 265.65,-118.11"></path>
+<polygon fill="black" stroke="black" points="269.15,-118.1 265.65,-108.1 262.15,-118.1 269.15,-118.1"></polygon>
+</g>
+<!-- MapValidity&#45;&gt;LaneMarkingMatch -->
+<g id="edge12" class="edge">
+<title>MapValidity-&gt;LaneMarkingMatch</title>
+<path fill="none" stroke="black" d="M235.15,-143.99C221.69,-134.98 206.87,-122.71 197.65,-108 186.01,-89.42 181.41,-64.83 179.63,-46.21"></path>
+<polygon fill="black" stroke="black" points="183.11,-45.74 178.88,-36.02 176.13,-46.25 183.11,-45.74"></polygon>
+</g>
+<!-- LandMarkMatch -->
+<g id="node10" class="node">
+<title>LandMarkMatch</title>
+<polygon fill="lightblue" stroke="black" points="408.39,-36 296.91,-36 296.91,0 408.39,0 408.39,-36"></polygon>
+<text text-anchor="middle" x="352.65" y="-13.8" font-family="Times,serif" font-size="14.00">Landmark match</text>
+</g>
+<!-- MapValidity&#45;&gt;LandMarkMatch -->
+<g id="edge15" class="edge">
+<title>MapValidity-&gt;LandMarkMatch</title>
+<path fill="none" stroke="black" d="M296.15,-143.99C309.61,-134.98 324.43,-122.71 333.65,-108 345.29,-89.42 349.89,-64.83 351.67,-46.21"></path>
+<polygon fill="black" stroke="black" points="355.17,-46.25 352.42,-36.02 348.19,-45.74 355.17,-46.25"></polygon>
+</g>
+<!-- LandMarkAccuracy&#45;&gt;Localization -->
+<g id="edge10" class="edge">
+<title>LandMarkAccuracy-&gt;Localization</title>
+<path fill="none" stroke="black" d="M381.21,-145.29C358.79,-134.76 329.15,-120.83 305.51,-109.72"></path>
+<polygon fill="black" stroke="black" points="306.98,-106.55 296.44,-105.46 304,-112.88 306.98,-106.55"></polygon>
+</g>
+<!-- LandMarkAccuracy&#45;&gt;LandMarkMatch -->
+<g id="edge14" class="edge">
+<title>LandMarkAccuracy-&gt;LandMarkMatch</title>
+<path fill="none" stroke="black" d="M407.17,-143.87C396.51,-119.46 376.85,-74.43 364.28,-45.64"></path>
+<polygon fill="black" stroke="black" points="367.36,-43.95 360.16,-36.19 360.95,-46.75 367.36,-43.95"></polygon>
+</g>
+<!-- Localization&#45;&gt;LaneMarkingMatch -->
+<g id="edge13" class="edge">
+<title>Localization-&gt;LaneMarkingMatch</title>
+<path fill="none" stroke="black" d="M245.47,-72.76C234.27,-63.75 220.14,-52.39 207.77,-42.43"></path>
+<polygon fill="black" stroke="black" points="209.92,-39.67 199.93,-36.12 205.53,-45.12 209.92,-39.67"></polygon>
+</g>
+<!-- Localization&#45;&gt;LandMarkMatch -->
+<g id="edge16" class="edge">
+<title>Localization-&gt;LandMarkMatch</title>
+<path fill="none" stroke="black" d="M285.83,-72.76C297.03,-63.75 311.16,-52.39 323.54,-42.43"></path>
+<polygon fill="black" stroke="black" points="325.77,-45.12 331.37,-36.12 321.38,-39.67 325.77,-45.12"></polygon>
+</g>
+</g>
+</svg>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="selection-of-nodes-affecting-match-of-lanes-and-landmark" class="slide level2">
+<h2>Selection of nodes affecting match of lanes and landmark</h2>
+<p>In the paper we decided to <em>observe</em> if lane marking and landmarks had a good match between data from the map and sensor data.</p>
+<p>We also considered the effect of weather on sensor accuracy and the effect of incorrect localization in the probability of having poor matches in lanes and landmarks.</p>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".numbered-table tbody").forEach(tbody => {
+  function addNumbersToTables() {
+    document.querySelectorAll(".numbered-table tbody").forEach((tbody) => {
       let count = 1;
-      tbody.querySelectorAll("tr").forEach(row => {
+      tbody.querySelectorAll("tr").forEach((row) => {
         const cell = row.querySelector("td");
         if (cell) {
           cell.textContent = count++;
         }
       });
     });
-  });
-</script>
-<div class="spacer">
+  }
 
-</div>
-<div class="fragment final-trigger">
-<p>In this work we focus on the classification problem of an area of a map as either <em>Valid</em>, or <em>Invalid</em> by means of <em>Probabilistic Graphical Models</em> (PGM)</p>
-</div>
-<!--  <div class="fragment final-trigger" style="visibility: hidden; height: 0;"></div>-->
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
+  function addClassWhenFinalTrigger(class_to_add = "fragments-complete") {
     if (typeof Reveal !== "undefined") {
       // Add class when final trigger is shown
-      Reveal.on('fragmentshown', event => {
-        if (event.fragment.classList.contains('final-trigger')) {
-          const slide = event.fragment.closest('.slide');
-          slide.classList.add('fragments-complete');
+      Reveal.on("fragmentshown", (event) => {
+        if (event.fragment.classList.contains("final-trigger")) {
+          const slide = event.fragment.closest(".slide");
+          slide.classList.add(class_to_add);
         }
       });
 
       // Remove class when any fragment is hidden
-      Reveal.on('fragmenthidden', event => {
-        const slide = event.fragment.closest('.slide');
-        slide.classList.remove('fragments-complete');
+      Reveal.on("fragmenthidden", (event) => {
+        const slide = event.fragment.closest(".slide");
+        slide.classList.remove(class_to_add);
+      });
+    }
+  }
+
+  function fixSvgSizes() {
+    document.querySelectorAll("svg").forEach((svg) => {
+      const g = svg.querySelector("g");
+      if (!g) return;
+
+      const bbox = g.getBBox();
+      const offsetX = -bbox.x;
+      const offsetY = -bbox.y;
+
+      // Set viewBox to start at 0,0
+      svg.setAttribute("viewBox", `0 0 ${bbox.width} ${bbox.height}`);
+      svg.removeAttribute("width");
+      svg.removeAttribute("height");
+      svg.style.width = "100%";
+      svg.style.height = "auto";
+
+      // Apply transform to shift the <g> into the new origin
+      g.setAttribute("transform", `translate(${offsetX}, ${offsetY})`);
+    });
+  }
+
+  function applyDarkenBackground() {
+    document.querySelectorAll('.reveal .slides').forEach(slide => {
+      if (slide.querySelector('.darken-background')) {
+        slide.classList.add('has-darken-background');
+      }
+    });
+  }
+
+
+  function animateTransition(srcId, dstId) {
+  const src = document.getElementById(srcId);
+  const dst = document.getElementById(dstId);
+  if (!src || !dst) {
+    console.warn('animateTransition: src or dst not found', srcId, dstId);
+    return;
+  }
+
+  // Remove any previous clone
+  document.querySelectorAll('.transition-clone').forEach(el => el.remove());
+
+  const srcRect = src.getBoundingClientRect();
+  const dstRect = dst.getBoundingClientRect();
+
+  const dx = dstRect.left - srcRect.left;
+  const dy = dstRect.top - srcRect.top;
+  const scaleX = dstRect.width / srcRect.width;
+  const scaleY = dstRect.height / srcRect.height;
+
+  // Create clone
+  const clone = src.cloneNode(true);
+  clone.classList.add('transition-clone');
+  Object.assign(clone.style, {
+    position: 'fixed',
+    left: `${srcRect.left}px`,
+    top: `${srcRect.top}px`,
+    width: `${srcRect.width}px`,
+    height: `${srcRect.height}px`,
+    margin: '0',
+    transform: 'translate(0px, 0px) scale(1, 1)',
+    transition: 'transform 0.6s ease-in-out, opacity 0.3s ease-in',
+    zIndex: '9999',
+    pointerEvents: 'none',
+    opacity: '1',
+    willChange: 'transform, opacity'
+  });
+
+  document.body.appendChild(clone);
+
+  // Hide real dst initially
+  dst.style.visibility = 'hidden';
+
+  // Log for diagnostics
+  console.log('Initial:', { srcRect, dstRect });
+
+  // Listen for transform transition end on clone
+  let transformDone = false;
+  clone.addEventListener('transitionend', (e) => {
+    if (e.propertyName === 'transform') {
+      transformDone = true;
+      console.log('transform transition ended; clone bbox:', clone.getBoundingClientRect());
+      // After transform ends, we trigger the fade
+      // But wait a tiny bit (or next frame) so browser is stable
+      requestAnimationFrame(() => {
+        // Fade in dst
+        dst.style.visibility = 'visible';
+        dst.style.opacity = '1';
+        dst.style.transition = 'opacity 0.3s ease-in';
+
+        // Fade out the clone
+        clone.style.opacity = '0';
       });
     }
   });
+
+  // Start the animation
+  requestAnimationFrame(() => {
+    console.log('Applying transform:', `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`);
+    clone.style.transform = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
+  });
+
+  // After fade-out ends, clean up
+  clone.addEventListener('transitionend', (e) => {
+    if (e.propertyName === 'opacity' && transformDone) {
+      console.log('opacity transition ended; removing clone; final clone bbox:', clone.getBoundingClientRect(), 'dst bbox:', dst.getBoundingClientRect());
+      clone.remove();
+    }
+  });
+}
+
+/**
+ * Animate an element moving from srcEl to dstEl,
+ * fading out clone during last 20% of movement,
+ * and fading in destination element smoothly.
+ * 
+ * @param {HTMLElement} srcEl - The source element to clone and animate from.
+ * @param {HTMLElement} dstEl - The destination element to animate to.
+ * @param {Object} [options] - Optional timing settings in ms.
+ * @param {number} [options.duration=600] - Total duration of transform animation.
+ * @param {number} [options.fadeOutStartRatio=0.8] - When to start fading out clone (as ratio of duration).
+ * @param {number} [options.fadeDuration=120] - Duration of clone fade out.
+ * @param {number} [options.dstFadeDuration=200] - Duration for destination fade in.
+ */
+function animateElementTransition(srcId, dstId, options = {}) {
+  const {
+    duration = 500,
+    fadeOutStartRatio = 0.2,
+    fadeDuration = 200,
+    dstFadeDuration = 900,
+  } = options;
+
+  if (!srcId || !dstId) return;
+  const srcEl = document.getElementById(srcId);
+  const dstEl = document.getElementById(dstId);
+  if (!srcEl || !dstEl) {
+    console.warn('animateTransition: src or dst not found', srcId, dstId);
+    return;
+  }
+  // Measure source and destination positions/sizes
+  const srcRect = srcEl.getBoundingClientRect();
+  const dstRect = dstEl.getBoundingClientRect();
+
+  // Hide and set destination opacity 0 initially
+  dstEl.style.visibility = 'hidden';
+  dstEl.style.opacity = '0';
+  dstEl.style.transition = `opacity ${dstFadeDuration}ms ease`;
+
+  // Clone source element
+  const clone = srcEl.cloneNode(true);
+
+  Object.assign(clone.style, {
+    position: 'fixed',
+    top: `${srcRect.top}px`,
+    left: `${srcRect.left}px`,
+    width: `${srcRect.width}px`,
+    height: `${srcRect.height}px`,
+    margin: '0',
+    transformOrigin: 'top left',
+    transition: `transform ${duration}ms ease, opacity ${fadeDuration}ms linear`,
+    zIndex: 9999,
+    pointerEvents: 'none',
+    boxSizing: 'border-box',
+    opacity: '1',
+    background: 'white', // or adjust for SVG/transparent backgrounds
+    willChange: 'transform, opacity',
+  });
+
+  document.body.appendChild(clone);
+  clone.getBoundingClientRect(); // force reflow
+
+  // Compute transform delta and scale
+  const dx = dstRect.left - srcRect.left;
+  const dy = dstRect.top - srcRect.top;
+  const scaleX = dstRect.width / srcRect.width;
+  const scaleY = dstRect.height / srcRect.height;
+
+  // Start transform animation
+  requestAnimationFrame(() => {
+    clone.style.transform = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
+  });
+
+  // Schedule fade out of clone starting at fadeOutStartRatio * duration
+  setTimeout(() => {
+    clone.style.opacity = '0';
+  }, duration * fadeOutStartRatio);
+
+  // Cleanup and reveal destination when fade out ends
+  clone.addEventListener('transitionend', function onTransitionEnd(e) {
+    if (e.propertyName === 'opacity' && clone.style.opacity === '0') {
+      // Show and fade in destination
+      dstEl.style.visibility = 'visible';
+      dstEl.style.opacity = '1';
+
+      clone.removeEventListener('transitionend', onTransitionEnd);
+      clone.remove();
+    }
+  });
+}
+
+
+  function setupRevealTransitions() {
+    const srcElements = Array.from(document.querySelectorAll('[id$="_src"]'));
+
+    srcElements.forEach(src => {
+      const baseId = src.id.replace(/_src$/, '');
+      const dst = document.getElementById(`${baseId}_dst`);
+      if (!dst) return;
+
+      const fragmentAncestor = dst.closest('.fragment');
+
+      const trigger = () => {
+        requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          //animateTransition(`${baseId}_src`, `${baseId}_dst`);
+          animateElementTransition(`${baseId}_src`, `${baseId}_dst`);
+          });
+        });
+      };
+
+      if (fragmentAncestor) {
+        Reveal.addEventListener('fragmentshown', event => {
+          if (event.fragment === fragmentAncestor) {
+            trigger(); // ✅ layout-safe now
+        }
+      });
+      } else {
+        Reveal.addEventListener('slidechanged', event => {
+          if (event.currentSlide.contains(document.getElementById(`${baseId}_dst`))) {
+            trigger(); // ✅ safe now
+          }
+        });
+      }
+  });
+  }
+
+  //////////////////////////////////
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("JS Functions loaded");
+
+  addNumbersToTables();
+  fixSvgSizes();
+  addClassWhenFinalTrigger();
+  applyDarkenBackground();
+  // setupRevealAnimationsSmart();
+  setupRevealTransitions();
+
+  ///////////////////////////////////
+  // (() => {
+  //   const pairs = {}; // baseId -> { srcEl, dstEl, srcRect }
+
+  //   // Find all pairs on page load
+  //   function findPairs() {
+  //     document.querySelectorAll('[id$="_src"]').forEach(srcEl => {
+  //       const baseId = srcEl.id.slice(0, -4);
+  //       const dstEl = document.getElementById(baseId + '_dst');
+  //       if (dstEl) {
+  //         pairs[baseId] = { srcEl, dstEl, srcRect: null };
+  //       }
+  //     });
+  //   }
+
+  //   // Measure src element's position and size (viewport relative)
+  //   function measureSrc(baseId) {
+  //     const pair = pairs[baseId];
+  //     if (!pair) return;
+
+  //     // Only measure if visible
+  //     if (pair.srcEl.offsetParent === null) return;
+
+  //     pair.srcRect = pair.srcEl.getBoundingClientRect();
+  //   }
+
+  //   // Animate from cached srcRect to dst element position
+  //   function animateToDst(baseId) {
+  //     const pair = pairs[baseId];
+  //     if (!pair || !pair.srcRect) return;
+
+  //     const dstRect = pair.dstEl.getBoundingClientRect();
+
+  //     // Hide destination during animation
+  //     pair.dstEl.style.visibility = 'hidden';
+
+  //     // Clone source element
+  //     const clone = pair.srcEl.cloneNode(true);
+
+  //     // Style clone for fixed positioning and no interference
+  //     Object.assign(clone.style, {
+  //       position: 'fixed',
+  //       top: `${pair.srcRect.top}px`,
+  //       left: `${pair.srcRect.left}px`,
+  //       width: `${pair.srcRect.width}px`,
+  //       height: `${pair.srcRect.height}px`,
+  //       margin: '0',
+  //       transformOrigin: 'top left',
+  //       transition: 'transform 0.6s ease, opacity 0.3s ease',
+  //       zIndex: 9999,
+  //       pointerEvents: 'none',
+  //       background: 'white', // Optional: ensure clone looks consistent
+  //       boxSizing: 'border-box',
+  //       opacity: '1',
+  //     });
+
+  //     document.body.appendChild(clone);
+
+  //     // Force repaint before animating
+  //     requestAnimationFrame(() => {
+  //       const dx = dstRect.left - pair.srcRect.left;
+  //       const dy = dstRect.top - pair.srcRect.top;
+  //       const scaleX = dstRect.width / pair.srcRect.width;
+  //       const scaleY = dstRect.height / pair.srcRect.height;
+
+  //       clone.style.transform = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
+  //     });
+
+  //     // Listen for transition end to clean up
+  //     clone.addEventListener('transitionend', (e) => {
+  //       if (e.propertyName === 'transform') {
+  //         // Show destination element
+  //         pair.dstEl.style.visibility = 'visible';
+
+  //         // Fade out the clone
+  //         clone.style.opacity = '0';
+  //       } else if (e.propertyName === 'opacity') {
+  //         // Remove clone after fade out
+  //         clone.remove();
+
+  //         // Clear cached srcRect so animation won't repeat incorrectly
+  //         pair.srcRect = null;
+  //       }
+  //     }, { once: true });
+  //   }
+
+  //   // Listen to slide changes to measure and animate
+  //   Reveal.addEventListener('slidechanged', (event) => {
+  //     const prevSlide = event.previousSlide;
+  //     const currSlide = event.currentSlide;
+
+  //     // Measure any src element on the previous slide (before it hides)
+  //     if (prevSlide) {
+  //       Object.entries(pairs).forEach(([baseId, pair]) => {
+  //         if (prevSlide.contains(pair.srcEl)) {
+  //           measureSrc(baseId);
+  //         }
+  //       });
+  //     }
+
+  //     // Animate any dst element on the new slide
+  //     if (currSlide) {
+  //       Object.entries(pairs).forEach(([baseId, pair]) => {
+  //         if (currSlide.contains(pair.dstEl)) {
+  //           animateToDst(baseId);
+  //         }
+  //       });
+  //     }
+  //   });
+
+  //   // Run on load to find pairs immediately
+  //   findPairs();
+
+  // })();
+  //////////////////////////////////
+});
+
+
+
+
 </script>
-<aside><ol class="aside-footnotes"><li id="fn1"><p>“Online map validation for autonomous driving”, F. Drost, A. Fabris, L. <em>Parolini</em>, and S. Schneider, 2020</p></li></ol></aside></section>
-<section id="use-probabilistic-graphical-model-for-map-validation" class="slide level2">
-<h2>Use Probabilistic Graphical Model for Map Validation</h2>
-<p>At a certain location, a map is either <em>Valid</em>, or <em>Invalid</em></p>
-<ul>
-<li>The validity of a map is, however, unknown</li>
-</ul>
-<p>At run-time we divide the portion of a map relevant for trajectory planning in different sections.</p>
-<p>A random variable representing the validity of the map at that location is allocated to each section.</p>
-<p>We use the disrepancy between sensor measurements and expected measurements if the map were valid to infer the probability that the map is valid in a given section</p>
-<div class="columns">
-<div class="column" style="width:40%;">
-<p>When a map is <em>Valid</em>, then a good match between what sensors measure and what they should have measured based on map information</p>
-<ul>
-<li>E.g., Expected accuracy of lane geometry from a camera</li>
-</ul>
-</div><div class="column" style="width:60%;">
-<p>This relation can be modeled as:</p>
-<div class="cell" data-reveal="true" data-layout-align="left">
-<div class="cell-output-display">
-<div>
-<p></p><figure class=""><p></p>
-<div>
-<pre class="mermaid mermaid-js">graph LR
-    A("Section  validity"):::circle --&gt; B("Lane marking match"):::circle
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</div></div>
-</section>
-<section id="the-need-for-map-validation" class="slide level2">
-<h2>The need for map validation</h2>
-<p><img data-src="./images/road_work.jpg" class="full-width" style="object-fit: cover;;width:100.0%" height="200"> Sensors for Advanced Driver Assistant Systems often operate in <em>degraded conditions</em>, e.g., due to adverse enviromental conditions</p>
-<ul>
-<li>E.g., cameras are affected by poor light and road. Lidar are sensitive to dust and water droplet deposit on the optical module</li>
-</ul>
-<p><strong>Maps are sensors</strong> are critical sensors that provide accurate information about geometry and semantic of roads and lanes and whose:</p>
-<ul>
-<li>field of view (FOV) is not affected by traffic conditions</li>
-<li><em>data have unknown and potentially extensive latency</em>, e.g., days, or weeks</li>
-</ul>
-</section>
-<section id="teaching-safety-critical-thinking" class="slide level2">
-<h2>Teaching Safety-Critical Thinking</h2>
-<h3 id="didactic-strategy-tools">Didactic Strategy &amp; Tools</h3>
-<ul>
-<li>Proposed modules:
-<ul>
-<li>Embedded Systems &amp; CPS</li>
-<li>Autonomous Driving &amp; Safety</li>
-<li>Real-Time Software Engineering</li>
-</ul></li>
-<li>Teaching methods:
-<ul>
-<li>Project-based learning</li>
-<li>Simulation labs (ROS2, Carla, GitHub Classroom)</li>
-<li>Quarto-based interactive documentation</li>
-</ul></li>
-</ul>
-</section>
-<section id="high-definition-maps-in-autonomous-driving" class="slide level2">
-<h2>High definition maps in Autonomous Driving</h2>
-<p>Some text above the columns</p>
-<div class="columns">
-<div class="column small-text" style="width:40%;">
-<p>Fundamental for path planning</p>
-<p>Key elements for safety</p>
-<p>High accuracy of geometric and semantic information</p>
-</div><p>Some other text</p><div class="columns">
-<div class="column" style="width:40%;">
-<div class="quarto-figure quarto-figure-left">
-<figure>
-<p><img data-src="images/multi_layer_hd.png" height="200"></p>
-<figcaption>Maps contain multiple layer of information<sup>1</sup></figcaption>
-</figure>
-</div>
-</div><div class="column" style="width:5%;">
-
-</div><div class="column small-text" style="width:55%;">
-<p>Multi-layer data representation</p>
-<ul>
-<li>Geometric information</li>
-<li>Semantic informationere we put other</li>
-</ul>
-</div></div><section id="thd-applied-research-synergy" class="slide level2">
-<h2>THD &amp; Applied Research Synergy</h2>
-<h3 id="institutional-fit-complementarity">Institutional Fit &amp; Complementarity</h3>
-<ul>
-<li>THD strengths:
-<ul>
-<li>Industry collaboration</li>
-<li>CPS labs</li>
-<li>Mobility and automation focus</li>
-</ul></li>
-<li>My complementarity:
-<ul>
-<li>Embedded safety</li>
-<li>Real-time systems</li>
-<li>Map validation and semantic integrity</li>
-</ul></li>
-<li>Potential partnerships:
-<ul>
-<li>Automotive OEMs</li>
-<li>Robotics startups</li>
-<li>Smart infrastructure initiatives</li>
-</ul></li>
-</ul>
-</section><section id="building-research-visibility" class="slide level2">
-<h2>Building Research Visibility</h2>
-<h3 id="long-term-goals-collaboration">Long-Term Goals &amp; Collaboration</h3>
-<ul>
-<li>EU funding (Horizon Europe, ZIM)<br>
-</li>
-<li>Cross-HAW collaboration and joint labs<br>
-</li>
-<li>Open-source contributions and student-led projects<br>
-</li>
-<li>International visibility via conferences and publications<br>
-</li>
-<li>Vision: CPS Safety Lab at THD</li>
-</ul>
-</section><section id="thank-you" class="slide level2">
-<h2>Thank You</h2>
-<h3 id="questions-contact">Questions &amp; Contact</h3>
-<ul>
-<li>📧 luca.parolini@email.de<br>
-</li>
-<li>🌐 <a href="https://github.com/lucaparolini">GitHub Portfolio</a><br>
-</li>
-<li>📷 QR code to research portfolio (optional)<br>
-</li>
-<li>Footer: “W2 Interview – TH Deggendorf”</li>
-</ul>
 
 </section>
-</div>
-<aside><ol class="aside-footnotes"><li id="fn2"><p>Original image from https://www.eetasia.com/hd-mapping-data-ownership/</p></li></ol></aside></section>
 
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">

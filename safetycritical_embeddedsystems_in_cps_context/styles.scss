@@ -15,6 +15,8 @@ $light-natural-color: #f5f5f5; // Light neutral color
 $dark-natural-color: #333333; // Dark neutral color
 $presentation-font-size-root: 24px;
 
+
+
 @import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Encode+Sans+Semi+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap');
 $presentation-heading-font: 'Encode Sans Semi Condensed', sans-serif;
@@ -40,6 +42,10 @@ $tiny-font-size: $presentation-font-size-root * 0.6;
 $large-font-size: $presentation-font-size-root * 1.2;
 $huge-font-size: $presentation-font-size-root * 1.5;
 
+// Derived colors
+$img-background-color: mix(black, $body-bg, 2%); // Slightly darker than typical slide background
+$example-background-color: mix(black, $body-bg, 2%); // Slightly darker than typical slide background
+
 @mixin global-tighten-paragraph-before-list($reduced-margin: 0.5rem, $list-top-margin: 0.25rem) {
 
   // Firefox-safe fallback: style the list itself
@@ -53,6 +59,20 @@ $huge-font-size: $presentation-font-size-root * 1.5;
   p:has(+ ol) {
     margin-bottom: $reduced-margin !important;
   }
+}
+
+/* style.css */
+.math {
+  font-family: 'Arial', sans-serif !important;
+}
+
+.katex,
+.katex-mathml {
+  font-family: 'Arial', sans-serif !important;
+}
+
+.math-compact .MathJax_Display {
+  margin: 0 !important;
 }
 
 .reveal .slide ul li,
@@ -86,14 +106,39 @@ $huge-font-size: $presentation-font-size-root * 1.5;
 
 .reveal img {
   padding: 5px;
-  background-color: mix(black, $body-bg, 2%); // Slightly darker than typical slide background
+  // background-color: mix(black, $body-bg, 2%); // Slightly darker than typical slide background
+  background-color: $img-background-color;
   margin: 1em auto; // Center image with spacing
 }
 
-// .slide {
-//   background-color: $background-light;
-// }
+.reveal .example {
+  background-color: $example-background-color !important;
+  border-left: 8px solid darken($example-background-color, 20%) !important;
+  padding: 1px 10px 10px 10px !important; // top right bottom left
+  margin: 1em 0 !important;
+  font-size: $small-font-size !important;
 
+  li {
+    font-size: $small-font-size !important;
+  }
+}
+
+/* .r-frame {
+  text-shadow: none;
+  transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.fragment {
+  filter: none;
+  opacity: 1;
+}
+
+.reveal>.slides>section>section {
+  transform-style: flat;
+}
+
+*/
 .slide ul,
 .slide ol {
   font-size: 0.9* $presentation-font-size-root;
@@ -162,6 +207,10 @@ $height-spacer: (
   font-size: $small-font-size !important;
 }
 
+.tiny-text {
+  font-size: $tiny-font-size !important;
+}
+
 h2 {
   margin-bottom: 30px !important;
 }
@@ -213,8 +262,12 @@ p.subtitle {
   max-width: 100% !important;
 }
 
-ol.aside-footnote p {
-  font-size: $tiny-font-size !important;
+ol.aside-footnotes {
+
+  li,
+  p {
+    font-size: $tiny-font-size !important;
+  }
 }
 
 .no-title div.callout-title {
@@ -241,15 +294,20 @@ ol.aside-footnote p {
 .bottom-border {
   bottom: -5px; // 5px below the table
   left: 0;
-  width: 100%;
+  // width: 100%;
   border-bottom: 4px solid #444;
 }
 
 .top-border {
   top: 5px; // 5px above the table
   left: 0;
-  width: 100%;
+  // width: 100%;
   border-top: 4px solid #444;
+}
+
+.table-left {
+  margin-left: 0 !important;
+  margin-right: auto !important;
 }
 
 .numbered-table td:first-child {
@@ -271,6 +329,12 @@ $vw-widths: 20, 40, 50, 60, 80, 90, 100;
   margin-top: 0 !important;
 }
 
+.no-margin-top-first-child {
+  >*:first-child {
+    margin-top: 0 !important;
+  }
+}
+
 .top-aligned {
   display: flex;
   flex-direction: column;
@@ -285,4 +349,9 @@ $vw-widths: 20, 40, 50, 60, 80, 90, 100;
 .darken-background {
   background-color: rgba(0, 0, 0, 0.4) !important;
   background-size: cover !important;
+}
+
+.transition-clone * {
+  animation: none !important;
+  transition: none !important;
 }
