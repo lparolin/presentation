@@ -1,0 +1,335 @@
+---
+title: "Debugging von Embedded Software in der Praxis"
+author: "Dr. Luca Parolini"
+format:
+  revealjs:
+    theme: [default, styles.scss]
+    html: true
+    fig-align: left
+    slide-number: true
+    auto-animate: true
+    callout-icon: false
+    title-slide-attributes:
+      data-background-image: "Figuren/First_Computer_Bug_1945.jpg" # Path to your image
+      data-background-size: cover # Ensures full coverage
+      data-background-position: center # Optional: centers image
+      data-background-opacity: "0.3"
+      data-background-color: "black"
+
+preview:
+  watch-inputs: true
+---
+
+## Von Bugs zu Debugging {auto-animate=true}
+
+Die historische Wurzel des Begriffs „Bug“ im Zusammenhang mit technischen Fehlern reicht bis ins 19. Jahrhundert zurück.
+
+::: {.incremental}
+
+- 1878: Thomas Edison beschreibt „kleine Fehler“ in seinen Erfindungen als _Bugs_.[^edison]
+- 1947: Mark II Aiken Relay Calculator – berühmter „Bug“ (Motte im Relais).[^mark2]
+
+:::
+
+:::{.spacer-sm}
+:::
+
+:::{.fragment .fade-left}
+:::{.columns}
+:::{.column width="40%"}
+![**Motte im Relais**[^motte]](Figuren/First_Computer_Bug_1945.jpg){fig-alt="Motte im Relais" width="90%"}
+:::
+:::{.column width="60%"}
+Motte zwischen den Kontakten am Relais Nr. 70, Panel F, des Mark II Aiken Relay Calculator gefunden, während er an der Harvard University getestet wurde, am 9. September 1947. Das Relais wurde entfernt und die Motte in das Logbuch eingeklebt.
+
+Der Begriff „Bug“ etabliert sich im Bereich der Computerscience.
+:::
+:::
+:::
+
+[^edison]: Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.
+[^mark2]: Grace Hopper, _The First Bug_, 1986.
+[^motte]: Courtesy of the Naval Surface Warfare Center, Dahlgren, VA., 1988., Public Domain. [Link](https://de.wikipedia.org/wiki/Debuggen#/media/Datei:First_Computer_Bug,_1945.jpg)
+
+## Von Bugs zu Debugging {auto-animate=true}
+
+Die historische Wurzel des Begriffs „Bug“ im Zusammenhang mit technischen Fehlern reicht bis ins 19. Jahrhundert zurück.
+
+- 1878: Thomas Edison beschreibt „kleine Fehler“ in seinen Erfindungen als _Bugs_.[^edison]
+- 1947: Mark II Aiken Relay Calculator – berühmter „Bug“ (Motte im Relais).[^mark2]
+
+::: {.callout-note}
+
+# Debugging ist nicht gleich Troubleshooting
+
+> „Debugging bedeutet in der Regel herauszufinden, warum ein Entwurf nicht wie geplant funktioniert. Troubleshooting hingegen bedeutet herauszufinden, was an einer bestimmten Kopie eines Produkts defekt ist, wenn das Produktdesign an sich als korrekt gilt.“ — Agans (2023)[^agans]
+
+::: {.tiny}
+
+> _"Debugging usually means figuring out why a design doesn't work as planned. Troubleshooting, on the other hand, means figuring out what is wrong with a particular copy of a product when the product design itself is considered correct."_
+
+:::
+:::
+
+[^agans]: Agans, David J. _Debugging: The 9 indispensable rules for finding even the most elusive software and hardware problems_. HarperChristian+ ORM, 2023.
+
+## Debugging und Kommunikationsfehler in Embedded Software
+
+### Anzahl der beteiligten Gruppen erschwert die Defektanalyse
+
+:::{.spacer-sm}
+:::
+
+::: {.columns}
+:::{.column width="33%"}
+![**Thermostat (Smart Home)**](Figuren/Thermostat_square.png){fig-alt="Heizkörper-Thermostat" width="100%"}
+
+::: {.small-text .fragment}
+
+- **Geschätzte Gruppen:** <3
+- **Komplexität:** Niedrig
+
+:::
+:::
+
+:::{.column width="33%"}
+![**Vollautomatik Kaffeemaschine**](Figuren/KaffeMachine_square.png){fig-alt="Vollautomatik Kaffeemaschine" width="100%"}
+
+::: {.small-text .fragment}
+
+- **Geschätzte Gruppen:** 5-10
+- **Komplexität:** Mittel
+
+:::
+:::
+
+:::{.column width="33%"}
+![**Fahrassistenzsysteme**](Figuren/Auto_square.png){fig-alt="Fahrerassistenzsysteme" width="100%"}
+
+::: {.small-text .fragment}
+
+- **Geschätzte Gruppen:** >20
+- **Komplexität:** Hoch
+
+:::
+:::
+
+:::
+
+::: {.fragment .callout-note appearance="simple" .small-text}
+**Risiko von Kommunikationsfehler wächst mit der Zahl der beteiligten Gruppen.**
+:::
+
+::: {.slide-footnote}
+Alle Figuren sind mit Microsoft Copilot generiert.
+:::
+
+## Die Soll-Funktion ergibt sich aus den Anforderungen
+
+### Die Testfällen beschrieben aber sie explicit
+
+::: {.columns}
+:::{.column width="70%"}
+![**Das V-Modell als Entwicklungsmodell**](Figuren/V-Modell.png){fig-alt="V-Model without axes" width="100%"}
+
+:::
+
+::: {.column width="30%" .mid-space}
+
+- Jede Ebene ableitet detailliertere Anforderungen für die nächste Ebene sowie passende _Testfälle_.
+- Anforderungen beschrieben das Soll-Verhalten für mehrere Input Bedingungen.
+- Während eine Testphase, ist die Soll-Verhalten nur anhand von einem Test case für das _System Unter Test_ (SUT) spezifiziert.
+- Test cases spezifizieren das Soll-Verhalten für ein spezifische, sehr detaillierten Fall
+
+:::
+:::
+
+::: {.callout-note appearance="simple" .small-text}
+Fehler können sowohl in der Spezifikation der Anforderungen als auch in der Ableitung der Testfälle entstehen.
+:::
+
+::: {.slide-footnote}
+Bild von Michael Pätzold, S. Seyfert, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/de/).
+:::
+
+## Anforderungs‑Testfall‑Diskrepanz
+
+### Kamera‑Degradation in autonomen Fahrzeugen
+
+- **Produktziel** :Das Fahrzeug muss bei guten Wetterbedingungen sicher fahren können.
+
+  - ↳ **Anforderung S.1:** Das System muss aktivierbar sein, wenn _geeignete Wetterbedingungen_ erfüllt sind.
+  - ↳ **Anforderung S.2:** Das System muss sich sicher deaktivieren, wenn geeignete Wetterbedingungen _nicht_ erfüllt sind.
+
+  ::: {.fragment}
+
+  - ...
+  - **Anforderung S.102:** Das System muss sich sicher deaktivieren, wenn _die Kamera ungeeignete Wetterbedingungen erkennt_.
+
+    - ↳ **Kamera-Anforderung K.1:** Die Kamera muss ungeeignete Wetterbedingungen _erkennen_ können.
+      - Beispiele: Blendung durch Sonnenlicht, Regentropfen auf den Linsenelementen
+
+  :::
+
+::: {.slide-footnote}
+Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.
+:::
+
+## Anforderungs‑Testfall‑Diskrepanz {auto-animate=true}
+
+### Kamera‑Degradation in autonomen Fahrzeugen
+
+- [**Produktziel** :Das Fahrzeug muss bei guten Wetterbedingungen sicher fahren können.]{style="color: dimgray;"}
+
+  - ↳ **Anforderung S.1: _Das System muss aktivierbar sein, wenn geeignete Wetterbedingungen erfüllt sind._**
+  - [↳ **Anforderung S.2:** Das System muss sich sicher deaktivieren, wenn geeignete Wetterbedingungen _nicht_ erfüllt sind.]{style="color: dimgray;"}
+
+  - [...]{style="color: dimgray;"}
+  - [**Anforderung S.102:** Das System muss sich sicher deaktivieren, wenn _die Kamera ungeeignete Wetterbedingungen erkennt_.]{style="color: dimgray;"}
+
+    - [↳ **Kamera-Anforderung K.1:** Die Kamera muss ungeeignete Wetterbedingungen _erkennen_ können.]{style="color: dimgray;"}
+      - [Beispiele: Blendung durch Sonnenlicht, Regentropfen auf den Linsenelementen]{style="color: dimgray;"}
+
+In Laufe eine spätere Testphase, wird ein Defekt entdeckt:
+
+::: {data-id="test-fall-example" .small-text}
+
+| Test ID      | Vorbedingungen                            | Soll-Verhalten                                                  | Ist-Verhalten                                                                                                                                     | SW-Version | HW-Version |
+| ------------ | ----------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ---------- |
+| **S.1 - 01** | _Ideales Wetter_: Tag, Sonne, kaum Wolken | Autonomes Fahren ist aktivierbar und läuft ohne Unterbrechungen | Fahrzeug fährt korrekt bei freier Fahrt, bleibt jedoch stehen, sobald eine Stausituation entsteht. → **Autonomes Fahren nicht mehr aktivierbar!** | 1.1        | C          |
+
+:::
+
+::: {.slide-footnote}
+Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.
+:::
+
+## Anforderungs‑Testfall‑Diskrepanz {auto-animate=true}
+
+### Kamera‑Degradation in autonomen Fahrzeugen
+
+::: {data-id="test-fall-example" .tiny-text}
+
+| Test ID      | Vorbedingungen                          | Soll-Verhalten                                                  | Ist-Verhalten                                                                                                                                     | SW-Version | HW-Version |
+| ------------ | --------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ---------- |
+| **S.1 - 01** | Ideales Wetter: Tag, Sonne, kaum Wolken | Autonomes Fahren ist aktivierbar und läuft ohne Unterbrechungen | Fahrzeug fährt korrekt bei freier Fahrt, bleibt jedoch stehen, sobald eine Stausituation entsteht. → **Autonomes Fahren nicht mehr aktivierbar!** | 1.1        | C          |
+
+:::
+
+::: {.spacer-sm}
+:::
+
+::: {.columns}
+:::{.column width="30%"}
+![Fahrerperspektive](Figuren/Stau_Fahrerperspective.png){fig-alt="Fahrerperspektive: ideale Wetterbedienungen" width="70%"}
+
+:::
+
+:::{.column width="30%" .fragment}
+![Kameraperspektive](Figuren/Stau_Kameraperspektive.png){fig-alt="Kameraperspektive: Blendung durch Sonnenlicht" width="70%"}
+
+:::
+
+:::{.column width="40%" .fragment}
+
+- Für die Kamera sind die Wetterbedingungen _nicht_ geeignet, auch wenn von der Fahrerperspektive, Wetterbedienung ideal sind.
+
+  - **Konzept Fehler:** Die Anforderung S.2 und K.1-01 beziehen sich auf unterschiedliche Definitionen von "geeigneten Wetterbedingungen".
+
+- Kommunikationsfehler zwischen Produkt und Kamera Teams.
+
+::: {.spacer-sm}
+:::
+
+:::
+
+:::
+
+::: {.callout-note appearance="simple" .small-text .fragment}
+Erster Schritt bei der Analyse eines Defekts ist die Überprüfung, ob tatsächlich ein Defekt vorliegt.
+:::
+
+## Add me
+
+- Jede System muss sein Input monitorieren und off-line analysieren können
+- Logging und Tracing sind kritisch
+- Werkzeuge und Techniken um das System Verhalten zu beobachten
+- Beispiel: Monitoring von Kaffee Temperatur in einer Kaffeemaschine
+- Wie können wir das Verhalten beobachten ohne das System zu beeinflussen?
+  - Nie printf befehle in Embedded Systems benutzen!!
+  - Log Dateien mit Zeitstempel und Kontextinformationen
+  - Trace Analyse Werkzeuge
+  - Autmotive ist DLT (Diagnostic Log and Trace) Standard
+- Hardware Debugging Werkzeuge
+  - JTAG, SWD, etc..
+  - Logic Analyzer
+  - In-Circuit Emulatoren
+- Software Debugging Werkzeuge
+  - GDB, LLDB, etc..
+  - IDE integrierte Debugger
+  - Spezielle Debugging Werkzeuge für Embedded Systems
+- Debugging Techniken
+  - Breakpoints und Watchpoints
+  - Step-by-Step Ausführung
+  - Speicher- und Register-Inspektion
+  - Code Coverage Analyse
+  - Performance Profiling
+  - Timing Analyse
+  - Kommunikationsprotokoll Analyse
+- Zusammenarbeit im Team
+
+  - Gemeinsame Debugging Sitzungen
+
+  - Nie ein Fehler simulieren, Die Fehler müssen stimuliert werden!!
+  - Problem: Nicht alle Fehler sind reproduzierbar da nicht alle Input Bedingungen kontrollierbar sind und Status Informationen fehlen können
+  - Beispiel: Intermittierende Fehler durch elektromagnetische Störungen
+  - Debugging ist ein iterativer Prozess
+  - Hypothese generieren, testen, verfeinern
+  - Geduld und Ausdauer sind entscheidend
+
+## Defekt Bestätigt: Wie man Root-cause findet
+
+## Temp
+
+```{dot}
+digraph Defektanalyse {
+    rankdir=TB;
+    node [shape=rectangle, fontname="Helvetica"];
+
+    // Start- und Endknoten
+    start [shape=circle, style=filled, fillcolor=black, width=0.2, label=""];
+    end   [shape=circle, style=filled, fillcolor=black, peripheries=2, width=0.25, label=""];
+
+    // Entscheidung
+    start -> A;
+    A [label="Defekt entdeckt"];
+    A -> B;
+    B [shape=diamond, label="Defekt besteht?"];
+
+    // Linker Pfad (Nein) als vertikale Spalte
+    subgraph cluster_left {
+        rankdir=TB;
+        style=invis;
+        C [label="Testfall/Konzept prüfen"];
+        D [label="Dokumentation"];
+        C -> D -> end;
+    }
+    B -> C [label="Nein"];
+
+    // Rechter Pfad (Ja) als vertikale Spalte
+    subgraph cluster_right {
+        rankdir=TB;
+        style=invis;
+        E [label="System verstehen"];
+        F [label="Fehler stimulieren"];
+        G [label="System instrumentieren"];
+        H [label="SW-Änderung identifizieren"];
+        I [label="System erneut testen"];
+        J [label="Dokumentation"];
+        E -> F -> G -> H -> I -> J -> end;
+    }
+    B -> E [label="Ja"];
+}
+```
+
+## Debugging in Embedded Systems: Wichtige Überlegungen

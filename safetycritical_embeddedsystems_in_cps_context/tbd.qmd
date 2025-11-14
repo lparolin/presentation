@@ -1,0 +1,91 @@
+
+## The need for map validation
+
+![](./images/road_work.jpg){width="100%" height="200px" style="object-fit: cover;" .full-width}
+Sensors for Advanced Driver Assistant Systems often operate in *degraded conditions*, e.g., due to adverse enviromental conditions
+
+- E.g., cameras are affected by poor light and road. Lidar are sensitive to dust and water droplet deposit on the optical module
+
+
+**Maps are sensors** are critical sensors that provide accurate information about geometry and semantic of roads and lanes and whose:
+
+ - field of view (FOV) is not affected by traffic conditions
+ - *data have unknown and potentially extensive latency*, e.g., days, or weeks
+
+
+## Teaching Safety-Critical Thinking  
+### Didactic Strategy & Tools
+
+- Proposed modules:
+  - Embedded Systems & CPS
+  - Autonomous Driving & Safety
+  - Real-Time Software Engineering
+- Teaching methods:
+  - Project-based learning
+  - Simulation labs (ROS2, Carla, GitHub Classroom)
+  - Quarto-based interactive documentation
+
+## High definition maps in Autonomous Driving 
+Some text above the columns 
+
+::: {.columns}
+::: {.column width="40%" .small-text}
+
+Fundamental for path planning
+
+Key elements for safety
+
+High accuracy of geometric and semantic information
+:::
+
+Some other text
+
+::: {.columns}
+::: {.column width="40%"}
+![Maps contain multiple layer of information^[Original image from https://www.eetasia.com/hd-mapping-data-ownership/]](images/multi_layer_hd.png){fig-align="left" height="200"}
+:::
+
+::: {.column width="5%"}
+:::
+::: {.column width="55%" .small-text}
+
+Multi-layer data representation
+
+- Geometric information
+- Semantic informationere we put other 
+:::
+:::
+
+## THD & Applied Research Synergy  
+### Institutional Fit & Complementarity
+
+- THD strengths:
+  - Industry collaboration
+  - CPS labs
+  - Mobility and automation focus
+- My complementarity:
+  - Embedded safety
+  - Real-time systems
+  - Map validation and semantic integrity
+- Potential partnerships:
+  - Automotive OEMs
+  - Robotics startups
+  - Smart infrastructure initiatives
+
+
+## Building Research Visibility  
+### Long-Term Goals & Collaboration
+
+- EU funding (Horizon Europe, ZIM)  
+- Cross-HAW collaboration and joint labs  
+- Open-source contributions and student-led projects  
+- International visibility via conferences and publications  
+- Vision: CPS Safety Lab at THD
+
+## Thank You  
+### Questions & Contact
+
+- 📧 luca.parolini@email.de  
+- 🌐 [GitHub Portfolio](https://github.com/lucaparolini)  
+- 📷 QR code to research portfolio (optional)  
+- Footer: “W2 Interview – TH Deggendorf”

@@ -1,0 +1,6 @@
+project:
+  title: "Debugging von Embedded Software in der Praxis"
+
+format:
+  revealjs:
+    theme: simple
