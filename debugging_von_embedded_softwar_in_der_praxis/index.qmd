@@ -22,7 +22,7 @@ preview:
 
 ## Von Bugs zu Debugging {auto-animate=true}
 
-Die historische Wurzel des Begriffs „Bug“ im Zusammenhang mit technischen Fehlern reicht bis ins 19. Jahrhundert zurück.
+Der Begriff „Bug“ im Zusammenhang mit technischen Fehlern reicht bis ins 19. Jahrhundert zurück.
 
 ::: {.incremental}
 
@@ -53,16 +53,16 @@ Der Begriff „Bug“ etabliert sich im Bereich der Computerscience.
 
 ## Von Bugs zu Debugging {auto-animate=true}
 
-Die historische Wurzel des Begriffs „Bug“ im Zusammenhang mit technischen Fehlern reicht bis ins 19. Jahrhundert zurück.
+Der Begriff „Bug“ im Zusammenhang mit technischen Fehlern reicht bis ins 19. Jahrhundert zurück.
 
 - 1878: Thomas Edison beschreibt „kleine Fehler“ in seinen Erfindungen als _Bugs_.[^edison]
 - 1947: Mark II Aiken Relay Calculator – berühmter „Bug“ (Motte im Relais).[^mark2]
 
-::: {.callout-note}
+::: {.callout-note .fade-left}
 
 # Debugging ist nicht gleich Troubleshooting
 
-> „Debugging bedeutet in der Regel herauszufinden, warum ein Entwurf nicht wie geplant funktioniert. Troubleshooting hingegen bedeutet herauszufinden, was an einer bestimmten Kopie eines Produkts defekt ist, wenn das Produktdesign an sich als korrekt gilt.“ — Agans (2023)[^agans]
+> „Debugging bedeutet in der Regel herauszufinden, warum ein Entwurf nicht wie geplant funktioniert. Troubleshooting (Fehlerbehebung) hingegen bedeutet herauszufinden, was an einer bestimmten Kopie eines Produkts defekt ist, wenn das Produktdesign an sich als korrekt gilt.“ — Agans (2023)[^agans]
 
 ::: {.tiny}
 
@@ -72,6 +72,244 @@ Die historische Wurzel des Begriffs „Bug“ im Zusammenhang mit technischen Fe
 :::
 
 [^agans]: Agans, David J. _Debugging: The 9 indispensable rules for finding even the most elusive software and hardware problems_. HarperChristian+ ORM, 2023.
+
+## Vielfältigkeit eingebetteter Systeme
+
+### von Sensoren bis zu Triebwerken
+
+Eingebettete Systeme sind in ihrer Architektur, Funktionalität und Anwendung stark unterschiedlich.
+
+- Standards und Vorschriften variieren deutlich je nach Branche
+- Sicherheits- und Datenschutzanforderungen benötigen zusätzliche Entwicklung- und Testprozesse
+
+:::{.columns}
+:::{.column width="60%"}
+
+![](Figuren/BeispieleEmbeddedSystems.png){fig-alt="Beispiele eingebetteter Systeme" width="90%"}
+:::
+
+:::{.column width="40%" .incremental .mid-space}
+
+Einige Gemeinsamkeiten bestehen jedoch:
+
+- Ressourcenbeschränkungen (Speicher, Rechenleistung)
+- Echtzeitanforderungen
+- Starke Hardware-Software-Integration
+- Zusammenarbeit zwischen verschiedenen Teams und Disziplinen
+- **Debugging erfordert Eingriffe in Hardware- und Software-Elemente**
+
+:::
+:::
+
+::: {.slide-footnote}
+Abbildung ist mit Adobe Firefly generiert.
+:::
+
+## Das V‑Modell – eine vereinfachte Darstellung {auto-animate=true}
+
+::: {.spacer-sm}
+:::
+
+::: {.r-stack}
+![](Figuren/V_Modell_Teil1.png){.fragment width="100%"}
+
+![](Figuren/V_Modell_Teil2.png){.fragment width="100%"}
+
+![](Figuren/V_Modell.png){.fragment width="100%"}
+
+:::
+
+::: {.slide-footnote}
+Boehm, B. W. (1979). _Guidelines for Verifying and Validating Software Requirements and Design Specifications._ In Proceedings of the European Conference on Applied Software Engineering
+:::
+
+## Das V‑Modell – eine vereinfachte Darstellung {auto-animate=true}
+
+::: {.fragment fragment-index=3}
+**Fehler entstehen sowohl in Anforderungen als auch in abgeleiteten Testfällen.**
+:::
+
+::: {.spacer-sm}
+:::
+
+::: {.columns}
+:::{.column width="60%"}
+![](Figuren/V_Modell.png){fig-alt="V-Model without axes" width="100%"}
+
+:::
+
+::: {.column width="40%" .small-text}
+::: {.spacer-sm}
+:::
+
+- Zwei Hauptphasen: **Entwurf/Implementierung** und **Test/Validierung**
+- Teams arbeiten oft auf unterschiedlichen Ebenen
+
+::: {.fragment fragment-index=2}
+
+- Anforderungen werden **iterativ** verfeinert, Testfälle daraus abgeleitet
+- Anforderungen definieren das **Soll‑Verhalten**, Testfälle prüfen es
+- In der Testphase ist das Soll‑Verhalten nur durch Testfälle beschrieben
+
+:::
+:::
+:::
+
+::: {.spacer-sm}
+:::
+
+::: {.callout-note appearance="simple" .fragment fragment-index=4 .fade-up}
+Späte Fehler sind am teuersten und am schwierigsten zu beheben.
+:::
+
+::: {.slide-footnote}
+Boehm, B. W. (1979). _Guidelines for Verifying and Validating Software Requirements and Design Specifications._ In Proceedings of the European Conference on Applied Software Engineering
+:::
+
+## Ziel ist es, die Notwendigkeit von Debugging zu reduzieren {auto-animate=true}
+
+Präventivemaßnahmen müssen in den Entwicklungsprozess von Software eingebaut werden, z.B.:
+
+- Prozessmaßnahmen:
+
+  ::: {.fragment}
+
+  - Code Reviews / Peer Reviews
+  - Testautomatisierung (Continuous Integration / Continuous Deployment - CI/CD)
+  - Test-Driven Development (TDD)
+
+  :::
+
+- Technische Maßnahmen:
+
+  ::: {.fragment}
+
+  - Statische Code-Analyse
+  - Code‑Coverage‑Analyse (z. B. Line‑ und Branch‑Coverage)
+
+  :::
+
+::: {.fragment}
+
+**Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine**
+
+::: {.columns}
+
+:::{.column width="90%"}
+
+```{.cpp code-line-numbers="|4" .r-fit-text}
+uint16_t computeHeatingTime(const uint8_t initialTemp,
+                            const uint8_t finalTemp)
+{
+    const uint8_t conversion_factor = 1; // seconds per degree Celsius
+    const uint8_t deltaT = finalTemp - initialTemp;
+    const uint16_t time_sec = conversion_factor * deltaT;
+    return time_sec;
+}
+```
+
+:::
+:::
+
+:::
+
+## Ziel ist es, die Notwendigkeit von Debugging zu reduzieren {auto-animate=true}
+
+**Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine**
+
+::: {.columns}
+
+:::{.column width="80%"}
+
+```{.cpp code-line-numbers="4" .r-fit-text}
+uint16_t computeHeatingTime(const uint8_t initialTemp,
+                            const uint8_t finalTemp)
+{
+    const uint8_t conversion_factor = 1; // seconds per degree Celsius
+    const uint8_t deltaT = finalTemp - initialTemp;
+    const uint16_t time_sec = conversion_factor * deltaT;
+    return time_sec;
+}
+```
+
+:::
+:::
+
+:::{.fragment}
+Bei `finalTemp=95` und `initialTemp=96` ergibt sich **time_sec=255** – das entspricht **4 Minuten und 15 Sekunden**.
+:::
+
+:::{.spacer-md}
+:::
+
+::: {.callout-note appearance="simple" .fragment}
+**Solche Fehler müssen bereits in der Entwicklungsphase entdeckt werden!**
+:::
+
+::: {.notes}
+Weitere Präventivmaßnahmen
+Code Reviews / Peer Reviews → Frühes Auffinden von Fehlern durch das Vier‑Augen‑Prinzip; fördert auch Wissensaustausch im Team.
+
+Pair Programming → Zwei Entwickler arbeiten gleichzeitig am selben Code; reduziert Tippfehler und Denkfehler.
+
+Formale Methoden / Modellprüfung → Mathematische Verifikation von Algorithmen und Zustandsautomaten; besonders relevant in sicherheitskritischen Systemen.
+
+Defensive Programmierung → Eingaben validieren, Fehlerfälle explizit behandeln, Assertions einsetzen → verhindert „stille“ Fehler.
+
+Coding Standards (MISRA‑C, CERT‑C, AUTOSAR) → Einheitliche Regeln für Sprache und Stil; vermeiden typische Fehlerquellen in Embedded Systems.
+
+Continuous Monitoring / Logging → Laufzeitüberwachung und strukturierte Logs helfen, Fehler früh zu erkennen und reproduzierbar zu machen.
+
+Simulation & Hardware‑in‑the‑Loop Tests (HIL) → Testen mit realistischen Umgebungen, bevor Hardware verfügbar ist; reduziert Überraschungen beim Integrations‑Debugging.
+
+Fuzz Testing → Zufällige oder fehlerhafte Eingaben automatisch generieren, um Robustheit zu prüfen.
+:::
+
+## Manchmal muss man in die Tiefe des Mikrocontrollers schauen {auto-animate=true}
+
+- Moderne Mikrocontroller besitzen fast immer **dedizierte Debugging-Hardware**
+  → Zugriff auf Register, Speicher und CPU-Kontrolle
+- Typische Werkzeuge: **JTAG + OpenOCD (Open On‑Chip Debugger) + GDB**
+
+:::{.incremental}
+
+- Debugging erfordert oft **Debug-Flags im C-Code**
+  → kann Performance und Ablauf gegenüber `-O2` verändern
+- Zeitliche Probleme sind dann nicht immer sichtbar,
+  da die reale Code-Performance abweicht
+
+:::
+
+:::{.columns}
+:::{.column width="50%"}
+![Verbindung über JTAG^[Bildquelle: Erich Styger, „FTDI JTAG Connection“, MCU on Eclipse Blog, 2019. URL: [link](https://mcuoneclipse.com/wp-content/uploads/2019/10/ftdi-jtag-connection.png)]](Figuren/ftdi-jtag-connection_small.png){width="100%"}
+:::
+
+:::{.column width="50%"}
+![Debugging mit GDB^[Bildquelle: Espressif Systems, „VS Code ESP-IDF Extension – GDB Commands“, offizielle Dokumentation. URL: [link](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/_images/gdb_commands.png)]](Figuren/gdb_commands_small.png){width="100%"}
+:::
+
+:::
+
+## Find a title here
+
+Debugging ist daher ein notwendiger Schritt, um Tests zu validieren, Defekte zu verstehen und das System nachhaltig zu verbessern.“
+
+- Debugging vs. Testing – Unterschied und Rolle im Entwicklungsprozess
+- Kosten von Fehlern – warum Prävention wichtig ist
+- Verifikation des Defekts – Testreport und Reproduzierbarkeit
+- System verstehen – HW, SW, Timing als mögliche Ursachen
+- Debugging-Werkzeuge
+  - JTAG, UART
+  - Trace & Logging (DLT, RTEdbg, SystemView)
+  - Debug-Build vs. Optimized Build
+- Timing-Probleme – die schwierigsten Fehler
+- Prävention statt Heilung
+  - Test Driven Development (TDD)
+  - Code Coverage
+  - Static Code Analysis
+- Fehlerbehebung & Absicherung – Regressionstests, Anforderungen ergänzen
+- Dokumentation & Lessons Learned
 
 ## Debugging und Kommunikationsfehler in Embedded Software
 
@@ -247,6 +485,10 @@ Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwe
 
 ::: {.callout-note appearance="simple" .small-text .fragment}
 Erster Schritt bei der Analyse eines Defekts ist die Überprüfung, ob tatsächlich ein Defekt vorliegt.
+:::
+
+::: {.slide-footnote}
+Alle Figuren sind mit Microsoft Copilot generiert.
 :::
 
 ## Add me
