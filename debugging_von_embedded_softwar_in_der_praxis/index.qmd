@@ -22,7 +22,7 @@ preview:
 
 ## Von Bugs zu Debugging {auto-animate=true}
 
-Der Begriff „Bug“ im Zusammenhang mit technischen Fehlern reicht bis ins 19. Jahrhundert zurück.
+Die Verwendung des Begriffs ‚Bug‘ für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.
 
 ::: {.incremental}
 
@@ -31,7 +31,7 @@ Der Begriff „Bug“ im Zusammenhang mit technischen Fehlern reicht bis ins 19.
 
 :::
 
-:::{.spacer-sm}
+:::{.spacer-lg}
 :::
 
 :::{.fragment .fade-left}
@@ -53,22 +53,24 @@ Der Begriff „Bug“ etabliert sich im Bereich der Computerscience.
 
 ## Von Bugs zu Debugging {auto-animate=true}
 
-Der Begriff „Bug“ im Zusammenhang mit technischen Fehlern reicht bis ins 19. Jahrhundert zurück.
+Die Verwendung des Begriffs ‚Bug‘ für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.
 
 - 1878: Thomas Edison beschreibt „kleine Fehler“ in seinen Erfindungen als _Bugs_.[^edison]
 - 1947: Mark II Aiken Relay Calculator – berühmter „Bug“ (Motte im Relais).[^mark2]
 
-::: {.callout-note .fade-left}
-
-# Debugging ist nicht gleich Troubleshooting
-
-> „Debugging bedeutet in der Regel herauszufinden, warum ein Entwurf nicht wie geplant funktioniert. Troubleshooting (Fehlerbehebung) hingegen bedeutet herauszufinden, was an einer bestimmten Kopie eines Produkts defekt ist, wenn das Produktdesign an sich als korrekt gilt.“ — Agans (2023)[^agans]
-
-::: {.tiny}
-
-> _"Debugging usually means figuring out why a design doesn't work as planned. Troubleshooting, on the other hand, means figuring out what is wrong with a particular copy of a product when the product design itself is considered correct."_
-
+:::{.spacer-sm}
 :::
+
+**Beobachtbarkeit des Defekts**
+
+- Ein zentrales Thema dieser Vorlesung ist die _Beobachtbarkeit_ von Defekten.
+- Effektives Debugging setzt voraus, dass ein Defekt **wiederholt stimuliert** und sichtbar gemacht werden kann.
+- In eingebetteten Systemen ist dies jedoch häufig schwierig oder gar unmöglich
+  - Fast immer sind mehrere Einflussfaktoren (z. B. elektrische Störungen, zeitliche Randbedingungen, Umgebungsbedingungen) nicht unter unserer Kontrolle und oft auch nicht zuverlässig messbar.
+- Ohne Beobachtbarkeit gibt es keine Reproduzierbarkeit, und ohne Reproduzierbarkeit ist Software‑Debugging unmöglich.
+
+::: {.callout-note appearance="simple" .fade-left}
+Um Software zu debuggen, ist es höchst erforderlich **den Fehler immer wieder erzwingen!**[^agans]
 :::
 
 [^agans]: Agans, David J. _Debugging: The 9 indispensable rules for finding even the most elusive software and hardware problems_. HarperChristian+ ORM, 2023.
@@ -95,8 +97,7 @@ Einige Gemeinsamkeiten bestehen jedoch:
 - Ressourcenbeschränkungen (Speicher, Rechenleistung)
 - Echtzeitanforderungen
 - Starke Hardware-Software-Integration
-- Zusammenarbeit zwischen verschiedenen Teams und Disziplinen
-- **Debugging erfordert Eingriffe in Hardware- und Software-Elemente**
+- Die Entwicklung erfordert **Zusammenarbeit zwischen verschiedenen Teams und Disziplinen**
 
 :::
 :::
@@ -105,17 +106,19 @@ Einige Gemeinsamkeiten bestehen jedoch:
 Abbildung ist mit Adobe Firefly generiert.
 :::
 
-## Das V‑Modell – eine vereinfachte Darstellung {auto-animate=true}
+## Das V‑Modell {auto-animate=true}
 
-::: {.spacer-sm}
-:::
+### Anforderungen, Tests und Kommunikationsrisiken zwischen Teams
+
+- Das V‑Modell entstand Ende der 1970er Jahre als Erweiterung des Wasserfallmodells,  
+  vorgeschlagen von Barry W. Boehm (1979), um Verifikation und Validierung systematisch zu verankern.
 
 ::: {.r-stack}
-![](Figuren/V_Modell_Teil1.png){.fragment width="100%"}
+![Das V‑Modell – eine vereinfachte Darstellung](Figuren/V_modell_Teil1.svg){.fragment width="100%"}
 
-![](Figuren/V_Modell_Teil2.png){.fragment width="100%"}
+![Das V‑Modell – eine vereinfachte Darstellung](Figuren/V_modell_Teil2.svg){.fragment width="100%"}
 
-![](Figuren/V_Modell.png){.fragment width="100%"}
+![Das V‑Modell – eine vereinfachte Darstellung](Figuren/V_modell.svg){.fragment width="100%"}
 
 :::
 
@@ -123,50 +126,157 @@ Abbildung ist mit Adobe Firefly generiert.
 Boehm, B. W. (1979). _Guidelines for Verifying and Validating Software Requirements and Design Specifications._ In Proceedings of the European Conference on Applied Software Engineering
 :::
 
-## Das V‑Modell – eine vereinfachte Darstellung {auto-animate=true}
+:::{.notes}
 
-::: {.fragment fragment-index=3}
-**Fehler entstehen sowohl in Anforderungen als auch in abgeleiteten Testfällen.**
+Barry W. Boehm
+
+- Geboren 1935, gestorben 2022.
+- Professor an der University of Southern California (USC).
+- Arbeitete zuvor u. a. bei RAND Corporation und TRW.
+- Bekannt für grundlegende Beiträge zur Softwareentwicklung, u. a.:
+- Spiralmodell (1986) – ein iteratives Vorgehensmodell.
+- COCOMO‑Modell (Constructive Cost Model) – zur Aufwandsschätzung von Softwareprojekten.
+- V‑Modell (1979) – als Erweiterung des Wasserfallmodells.
+
+:::
+
+## Das V‑Modell {auto-animate=true}
+
+### Anforderungen, Tests und Teamkommunikation
+
+::: {.spacer-sm}
+:::
+
+::: {.columns}
+:::{.column width="45%"}
+![](Figuren/V_modell.svg){fig-alt="V-Model without axes" width="100%"}
+:::
+
+::: {.column width="55%" .small-text}
+::: {.spacer-sm}
+:::
+
+- Anforderungen werden iterativ verfeinert, Testfälle daraus abgeleitet
+- Anforderungen definieren das **Soll‑Verhalten**, Testfälle prüfen es
+- In der Testphase ist das Soll‑Verhalten ausschließlich durch die Testfälle beschrieben
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment fragment-index=2}
+
+- **Unterschiedliche Teams** arbeiten häufig auf verschiedenen Ebenen des V‑Modells
+- Entwurfsteams sind typischerweise nicht identisch mit den Teams, die Tests und Verifikation durchführen
+- **Kommunikationsfehler** können dazu führen, dass Anforderungen oder Testfälle falsch abgeleitet werden
+- Solche Fehler werden oft erst in der Testphase erkannt
+
+:::
+:::
+:::
+
+:::{.spacer-sm}
+:::
+
+::: {.fragment}
+
+- Software‑Debugging erfolgt häufig als Reaktion auf einen Defekt.
+- Defekte entstehen in der Test- und Validierungsphase wenn das **Ist-Verhalten** nicht das **Soll-Verhalten** entspricht.
+
+:::
+
+## Kommunikationsfehler als Defektursache {auto-animate=true}
+
+Wir wollen ein Adaptive Geschwindigkeitregelung (ACC) entwickeln und die vordere Kamera ist ein Kernsensor.
+
+::: {.fragment}
+
+- **Anforderung P.1:** ACC muss aktivierbar sein, wenn alle Sensoren einen nominalen Zustand melden (keine Degradation).
+- **Anforderung P.2:** ACC muss sich sicher deaktivieren, wenn eine, oder mehrere Sensoren eine Degradation melden.
+
+::: {.fragment}
+
+- ...
+  - ↳ **Kamera-Anforderung K.1:** Die Kamera muss eine Degradation melden, wenn ungeeignete Wetterbedingungen erkannt werden.
+    - Beispiele: Regentropfen auf den Linsenelementen, Blendung durch Sonnenlicht
+
+:::
+
+:::
+
+::: {.slide-footnote}
+Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.
+:::
+
+## Kommunikationsfehler als Defektursache {auto-animate=true}
+
+- **Anforderung P.1:** ACC muss aktivierbar sein, wenn alle Sensoren einen nominalen Zustand melden (keine Degradation).
+- [**Anforderung P.2:** ACC muss sich sicher deaktivieren, wenn eine, oder mehrere Sensoren eine Degradation melden.]{style="color: dimgray;"}
+- ...
+  - [↳ **Kamera-Anforderung K.1:** Die Kamera muss eine Degradation melden, wenn ungeeignete Wetterbedingungen erkannt werden.]{style="color: dimgray;"}
+    - [Beispiele: Regentropfen auf den Linsenelementen, Blendung durch Sonnenlicht]{style="color: dimgray;"}
+
+Im Laufe einer späteren Testphase, wird so ein Testreport herstellt:
+
+::: {data-id="test-fall-example" .small-text}
+
+| Test ID      | Vorbedingungen                            | Soll-Verhalten                                     | Ist-Verhalten                                                                                                                        | SW-Version | HW-Version |
+| ------------ | ----------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ---------- | ---------- |
+| **P.1 - 01** | _Ideales Wetter_: Tag, Sonne, kaum Wolken | ACC ist aktivierbar und läuft ohne Unterbrechungen | Fahrzeug fährt korrekt bei freier Fahrt, bleibt jedoch stehen, sobald eine Stausituation entsteht. → **ACC nicht mehr aktivierbar!** | 1.1        | C          |
+
+:::
+
+::: {.slide-footnote}
+Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.
+:::
+
+## Kommunikationsfehler als Defektursache {auto-animate=true}
+
+::: {data-id="test-fall-example" .tiny-text}
+
+| Test ID      | Vorbedingungen                          | Soll-Verhalten                                     | Ist-Verhalten                                                                                                                        | SW-Version | HW-Version |
+| ------------ | --------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ---------- | ---------- |
+| **P.1 - 01** | Ideales Wetter: Tag, Sonne, kaum Wolken | ACC ist aktivierbar und läuft ohne Unterbrechungen | Fahrzeug fährt korrekt bei freier Fahrt, bleibt jedoch stehen, sobald eine Stausituation entsteht. → **ACC nicht mehr aktivierbar!** | 1.1        | C          |
+
 :::
 
 ::: {.spacer-sm}
 :::
 
 ::: {.columns}
-:::{.column width="60%"}
-![](Figuren/V_Modell.png){fig-alt="V-Model without axes" width="100%"}
+:::{.column width="30%"}
+![Fahrerperspektive](Figuren/Stau_Fahrerperspective.png){fig-alt="Fahrerperspektive: ideale Wetterbedingungen" width="70%"}
 
 :::
 
-::: {.column width="40%" .small-text}
-::: {.spacer-sm}
-:::
-
-- Zwei Hauptphasen: **Entwurf/Implementierung** und **Test/Validierung**
-- Teams arbeiten oft auf unterschiedlichen Ebenen
-
-::: {.fragment fragment-index=2}
-
-- Anforderungen werden **iterativ** verfeinert, Testfälle daraus abgeleitet
-- Anforderungen definieren das **Soll‑Verhalten**, Testfälle prüfen es
-- In der Testphase ist das Soll‑Verhalten nur durch Testfälle beschrieben
+:::{.column width="30%" .fragment}
+![Kameraperspektive](Figuren/Stau_Kameraperspektive.png){fig-alt="Kameraperspektive: Blendung durch Sonnenlicht" width="70%"}
 
 :::
-:::
-:::
+
+:::{.column width="40%" .fragment .mid-space}
+
+- Für die Kamera sind diese Wetterbedingungen _nicht_ geeignet, auch wenn von der Fahrerperspektive, Wetterbedienung ideal sind.
+
+- **Kommunikationsfehler:** Die Anforderungen waren korrekt spezifiziert. Die Testbedingungen waren jedoch nicht konsistent mit den Anforderungen und führten zu einem fehlerhaften Testfall.
 
 ::: {.spacer-sm}
 :::
 
-::: {.callout-note appearance="simple" .fragment fragment-index=4 .fade-up}
-Späte Fehler sind am teuersten und am schwierigsten zu beheben.
+:::
+
+:::
+
+::: {.callout-note appearance="simple" .small-text .fragment}
+Erster Schritt bei der Analyse eines Defekts ist die Überprüfung, ob tatsächlich ein Defekt vorliegt.
 :::
 
 ::: {.slide-footnote}
-Boehm, B. W. (1979). _Guidelines for Verifying and Validating Software Requirements and Design Specifications._ In Proceedings of the European Conference on Applied Software Engineering
+Alle Figuren sind mit Microsoft Copilot generiert.
 :::
 
-## Ziel ist es, die Notwendigkeit von Debugging zu reduzieren {auto-animate=true}
+## Präventivemaßnahmen sind in der Praxis unverzichtbar {auto-animate=true}
+
+### Ziel ist es, die Notwendigkeit von Debugging zu reduzieren
 
 Präventivemaßnahmen müssen in den Entwicklungsprozess von Software eingebaut werden, z.B.:
 
@@ -186,6 +296,7 @@ Präventivemaßnahmen müssen in den Entwicklungsprozess von Software eingebaut 
 
   - Statische Code-Analyse
   - Code‑Coverage‑Analyse (z. B. Line‑ und Branch‑Coverage)
+  - Design by Contract (Vertragsbasierte Programmierung)
 
   :::
 
@@ -193,11 +304,7 @@ Präventivemaßnahmen müssen in den Entwicklungsprozess von Software eingebaut 
 
 **Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine**
 
-::: {.columns}
-
-:::{.column width="90%"}
-
-```{.cpp code-line-numbers="|4" .r-fit-text}
+```{.cpp }
 uint16_t computeHeatingTime(const uint8_t initialTemp,
                             const uint8_t finalTemp)
 {
@@ -209,19 +316,27 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 ```
 
 :::
-:::
+
+:::{.notes}
+
+- Prozessmaßnahmen:
+  - Code Reviews / Peer Reviews
+  - Testautomatisierung (Continuous Integration / Continuous Deployment - CI/CD)
+  - Test-Driven Development (TDD)
+- Technische Maßnahmen:
+  - Statische Code-Analyse
+  - Code‑Coverage‑Analyse (z. B. Line‑ und Branch‑Coverage)
+  - Design by Contract (Vertragsbasierte Programmierung)
 
 :::
 
-## Ziel ist es, die Notwendigkeit von Debugging zu reduzieren {auto-animate=true}
+## Präventivemaßnahmen sind in der Praxis unverzichtbar {auto-animate=true}
+
+### Ziel ist es, die Notwendigkeit von Debugging zu reduzieren
 
 **Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine**
 
-::: {.columns}
-
-:::{.column width="80%"}
-
-```{.cpp code-line-numbers="4" .r-fit-text}
+```{.cpp code-line-numbers="5"}
 uint16_t computeHeatingTime(const uint8_t initialTemp,
                             const uint8_t finalTemp)
 {
@@ -232,11 +347,13 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 }
 ```
 
-:::
-:::
+Was passiert, wenn `initalTemp` großer als `finalTemp` ist?
 
 :::{.fragment}
-Bei `finalTemp=95` und `initialTemp=96` ergibt sich **time_sec=255** – das entspricht **4 Minuten und 15 Sekunden**.
+
+- Bei `finalTemp=95` und `initialTemp=96` ergibt sich **time_sec=255**
+- Das entspricht **4 Minuten und 15 Sekunden!**
+
 :::
 
 :::{.spacer-md}
@@ -268,15 +385,14 @@ Fuzz Testing → Zufällige oder fehlerhafte Eingaben automatisch generieren, um
 ## Manchmal muss man in die Tiefe des Mikrocontrollers schauen {auto-animate=true}
 
 - Moderne Mikrocontroller besitzen fast immer **dedizierte Debugging-Hardware**
-  → Zugriff auf Register, Speicher und CPU-Kontrolle
-- Typische Werkzeuge: **JTAG + OpenOCD (Open On‑Chip Debugger) + GDB**
+  - Das ermöglicht Zugriff auf Register, Speicher und CPU-Kontrolle
+- Typische Werkzeuge: JTAG (Joint Test Action Group)^[IEEE 1149.1 – Standard Test Access Port and Boundary-Scan Architecture (IEEE, 2013)] + OpenOCD (Open On‑Chip Debugger) + GDB (GNU Debugger)
 
 :::{.incremental}
 
-- Debugging erfordert oft **Debug-Flags im C-Code**
-  → kann Performance und Ablauf gegenüber `-O2` verändern
-- Zeitliche Probleme sind dann nicht immer sichtbar,
-  da die reale Code-Performance abweicht
+- Debugging erfordert die Verwendung von Debug‑Flags **Debug-Flags**
+  - Das kann Performance und Ablauf gegenüber Optimierungs‑Flags wie `-O2` verändern
+- **Zeitliche Probleme sind dann nicht immer sichtbar**, da die reale Code-Performance abweicht
 
 :::
 
@@ -368,7 +484,8 @@ Alle Figuren sind mit Microsoft Copilot generiert.
 
 ::: {.columns}
 :::{.column width="70%"}
-![**Das V-Modell als Entwicklungsmodell**](Figuren/V-Modell.png){fig-alt="V-Model without axes" width="100%"}
+
+<!-- ![**Das V-Modell als Entwicklungsmodell**](Figuren/V-Modell.png){fig-alt="V-Model without axes" width="100%"} -->
 
 :::
 
@@ -388,107 +505,6 @@ Fehler können sowohl in der Spezifikation der Anforderungen als auch in der Abl
 
 ::: {.slide-footnote}
 Bild von Michael Pätzold, S. Seyfert, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/de/).
-:::
-
-## Anforderungs‑Testfall‑Diskrepanz
-
-### Kamera‑Degradation in autonomen Fahrzeugen
-
-- **Produktziel** :Das Fahrzeug muss bei guten Wetterbedingungen sicher fahren können.
-
-  - ↳ **Anforderung S.1:** Das System muss aktivierbar sein, wenn _geeignete Wetterbedingungen_ erfüllt sind.
-  - ↳ **Anforderung S.2:** Das System muss sich sicher deaktivieren, wenn geeignete Wetterbedingungen _nicht_ erfüllt sind.
-
-  ::: {.fragment}
-
-  - ...
-  - **Anforderung S.102:** Das System muss sich sicher deaktivieren, wenn _die Kamera ungeeignete Wetterbedingungen erkennt_.
-
-    - ↳ **Kamera-Anforderung K.1:** Die Kamera muss ungeeignete Wetterbedingungen _erkennen_ können.
-      - Beispiele: Blendung durch Sonnenlicht, Regentropfen auf den Linsenelementen
-
-  :::
-
-::: {.slide-footnote}
-Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.
-:::
-
-## Anforderungs‑Testfall‑Diskrepanz {auto-animate=true}
-
-### Kamera‑Degradation in autonomen Fahrzeugen
-
-- [**Produktziel** :Das Fahrzeug muss bei guten Wetterbedingungen sicher fahren können.]{style="color: dimgray;"}
-
-  - ↳ **Anforderung S.1: _Das System muss aktivierbar sein, wenn geeignete Wetterbedingungen erfüllt sind._**
-  - [↳ **Anforderung S.2:** Das System muss sich sicher deaktivieren, wenn geeignete Wetterbedingungen _nicht_ erfüllt sind.]{style="color: dimgray;"}
-
-  - [...]{style="color: dimgray;"}
-  - [**Anforderung S.102:** Das System muss sich sicher deaktivieren, wenn _die Kamera ungeeignete Wetterbedingungen erkennt_.]{style="color: dimgray;"}
-
-    - [↳ **Kamera-Anforderung K.1:** Die Kamera muss ungeeignete Wetterbedingungen _erkennen_ können.]{style="color: dimgray;"}
-      - [Beispiele: Blendung durch Sonnenlicht, Regentropfen auf den Linsenelementen]{style="color: dimgray;"}
-
-In Laufe eine spätere Testphase, wird ein Defekt entdeckt:
-
-::: {data-id="test-fall-example" .small-text}
-
-| Test ID      | Vorbedingungen                            | Soll-Verhalten                                                  | Ist-Verhalten                                                                                                                                     | SW-Version | HW-Version |
-| ------------ | ----------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ---------- |
-| **S.1 - 01** | _Ideales Wetter_: Tag, Sonne, kaum Wolken | Autonomes Fahren ist aktivierbar und läuft ohne Unterbrechungen | Fahrzeug fährt korrekt bei freier Fahrt, bleibt jedoch stehen, sobald eine Stausituation entsteht. → **Autonomes Fahren nicht mehr aktivierbar!** | 1.1        | C          |
-
-:::
-
-::: {.slide-footnote}
-Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.
-:::
-
-## Anforderungs‑Testfall‑Diskrepanz {auto-animate=true}
-
-### Kamera‑Degradation in autonomen Fahrzeugen
-
-::: {data-id="test-fall-example" .tiny-text}
-
-| Test ID      | Vorbedingungen                          | Soll-Verhalten                                                  | Ist-Verhalten                                                                                                                                     | SW-Version | HW-Version |
-| ------------ | --------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ---------- |
-| **S.1 - 01** | Ideales Wetter: Tag, Sonne, kaum Wolken | Autonomes Fahren ist aktivierbar und läuft ohne Unterbrechungen | Fahrzeug fährt korrekt bei freier Fahrt, bleibt jedoch stehen, sobald eine Stausituation entsteht. → **Autonomes Fahren nicht mehr aktivierbar!** | 1.1        | C          |
-
-:::
-
-::: {.spacer-sm}
-:::
-
-::: {.columns}
-:::{.column width="30%"}
-![Fahrerperspektive](Figuren/Stau_Fahrerperspective.png){fig-alt="Fahrerperspektive: ideale Wetterbedienungen" width="70%"}
-
-:::
-
-:::{.column width="30%" .fragment}
-![Kameraperspektive](Figuren/Stau_Kameraperspektive.png){fig-alt="Kameraperspektive: Blendung durch Sonnenlicht" width="70%"}
-
-:::
-
-:::{.column width="40%" .fragment}
-
-- Für die Kamera sind die Wetterbedingungen _nicht_ geeignet, auch wenn von der Fahrerperspektive, Wetterbedienung ideal sind.
-
-  - **Konzept Fehler:** Die Anforderung S.2 und K.1-01 beziehen sich auf unterschiedliche Definitionen von "geeigneten Wetterbedingungen".
-
-- Kommunikationsfehler zwischen Produkt und Kamera Teams.
-
-::: {.spacer-sm}
-:::
-
-:::
-
-:::
-
-::: {.callout-note appearance="simple" .small-text .fragment}
-Erster Schritt bei der Analyse eines Defekts ist die Überprüfung, ob tatsächlich ein Defekt vorliegt.
-:::
-
-::: {.slide-footnote}
-Alle Figuren sind mit Microsoft Copilot generiert.
 :::
 
 ## Add me
