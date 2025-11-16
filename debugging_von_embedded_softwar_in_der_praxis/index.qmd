@@ -22,7 +22,9 @@ preview:
 
 ## Von Bugs zu Debugging {auto-animate=true}
 
-Die Verwendung des Begriffs ‚Bug‘ für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.
+### Historischer Überblick
+
+Der Begriff ‚Bug‘ für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.
 
 ::: {.incremental}
 
@@ -31,18 +33,14 @@ Die Verwendung des Begriffs ‚Bug‘ für technische Fehler lässt sich bis ins
 
 :::
 
-:::{.spacer-lg}
-:::
-
 :::{.fragment .fade-left}
 :::{.columns}
-:::{.column width="40%"}
-![**Motte im Relais**[^motte]](Figuren/First_Computer_Bug_1945.jpg){fig-alt="Motte im Relais" width="90%"}
-:::
 :::{.column width="60%"}
-Motte zwischen den Kontakten am Relais Nr. 70, Panel F, des Mark II Aiken Relay Calculator gefunden, während er an der Harvard University getestet wurde, am 9. September 1947. Das Relais wurde entfernt und die Motte in das Logbuch eingeklebt.
+![](Figuren/First_Computer_Bug_1947_smaller.png){fig-alt="Motte im Relais" width="100%"}
+:::
+:::{.column width="40%"}
+Motte zwischen den Kontakten am Relais Nr. 70, Panel F, des Mark II Aiken Relay Calculator (Harvard University, 1947).[^motte]
 
-Der Begriff „Bug“ etabliert sich im Bereich der Computerscience.
 :::
 :::
 :::
@@ -53,27 +51,65 @@ Der Begriff „Bug“ etabliert sich im Bereich der Computerscience.
 
 ## Von Bugs zu Debugging {auto-animate=true}
 
-Die Verwendung des Begriffs ‚Bug‘ für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.
+### Debugging ist nicht gleicht Troubleshooting
+
+Der Begriff ‚Bug‘ für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.
 
 - 1878: Thomas Edison beschreibt „kleine Fehler“ in seinen Erfindungen als _Bugs_.[^edison]
 - 1947: Mark II Aiken Relay Calculator – berühmter „Bug“ (Motte im Relais).[^mark2]
 
-:::{.spacer-sm}
+:::{.spacer-lg}
 :::
-
-**Beobachtbarkeit des Defekts**
-
-- Ein zentrales Thema dieser Vorlesung ist die _Beobachtbarkeit_ von Defekten.
-- Effektives Debugging setzt voraus, dass ein Defekt **wiederholt stimuliert** und sichtbar gemacht werden kann.
-- In eingebetteten Systemen ist dies jedoch häufig schwierig oder gar unmöglich
-  - Fast immer sind mehrere Einflussfaktoren (z. B. elektrische Störungen, zeitliche Randbedingungen, Umgebungsbedingungen) nicht unter unserer Kontrolle und oft auch nicht zuverlässig messbar.
-- Ohne Beobachtbarkeit gibt es keine Reproduzierbarkeit, und ohne Reproduzierbarkeit ist Software‑Debugging unmöglich.
 
 ::: {.callout-note appearance="simple" .fade-left}
-Um Software zu debuggen, ist es höchst erforderlich **den Fehler immer wieder erzwingen!**[^agans]
+
+> _Debugging bedeutet in der Regel herauszufinden, warum ein Entwurf nicht wie geplant funktioniert. Troubleshooting hingegen bedeutet herauszufinden, was an einer bestimmten Instanz eines Produkts defekt ist, wenn das Produktdesign an sich als korrekt gilt._ (nach Agans, 2002)
+
+::: {.small-text}
+
+> Debugging usually means figuring out why a design doesn't work as planned. Troubleshooting usually means figuring out what's broken in a particular copy of a product when the product's design is known to be good.(Agans, 2002)[^agans]
+
+:::
 :::
 
-[^agans]: Agans, David J. _Debugging: The 9 indispensable rules for finding even the most elusive software and hardware problems_. HarperChristian+ ORM, 2023.
+[^edison]: Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.
+[^mark2]: Grace Hopper, _The First Bug_, 1986.
+[^agans]: David, J. Agans. "The 9 indispensable rules for finding even the most elusive software and hardware problems." (2002).
+
+## Reproduzierbarkeit des Defekts
+
+Ein zentrales Thema beim Debugging eingebetteter Software ist die _Reproduzierbarkeit_ von Defekts.
+
+::: {.mid-space}
+
+- Effektives Debugging setzt voraus, dass ein Defekt **wiederholt ausgelöst** und sichtbar gemacht werden kann.
+
+  - Von entscheidender Wichtigkeit: Fehler müssen immer **stimuliert** werden und niemals nur simuliert.
+
+- Vorteile der Reproduzierbarkeit:
+  - Fehler lässt sich wieder sichtbar machen
+  - Ursachenanalyse wird möglich
+  - Fix kann überprüft werden
+
+:::
+
+::: {.fragment}
+
+In eingebetteten Systemen ist dies jedoch häufig schwierig wenn nicht unmöglich
+
+- Fast immer sind mehrere Einflussfaktoren (z. B. zeitliche Randbedingungen, Umgebungsbedingungen) nicht unter unserer Kontrolle und oft auch nicht zuverlässig messbar.
+
+:::
+
+::: {.spacer-md}
+:::
+
+::: {.fragment}
+:::{.callout-note appearance="simple"}
+
+**Ohne Reproduzierbarkeit ist Software‑Debugging praktisch unmöglich.**
+:::
+:::
 
 ## Vielfältigkeit eingebetteter Systeme
 
@@ -97,7 +133,7 @@ Einige Gemeinsamkeiten bestehen jedoch:
 - Ressourcenbeschränkungen (Speicher, Rechenleistung)
 - Echtzeitanforderungen
 - Starke Hardware-Software-Integration
-- Die Entwicklung erfordert **Zusammenarbeit zwischen verschiedenen Teams und Disziplinen**
+- Die gesamte Entwicklung erfordert **Zusammenarbeit zwischen verschiedenen Teams und Disziplinen**
 
 :::
 :::
@@ -106,11 +142,324 @@ Einige Gemeinsamkeiten bestehen jedoch:
 Abbildung ist mit Adobe Firefly generiert.
 :::
 
+## Wenn man in die Tiefe des Mikrocontrollers schauen muss {auto-animate=true}
+
+Manchmal ist es notwendig, Inhalte von Registern oder Speicher eines Mikrocontrollers auszulesen oder gezielt zu verändern.
+
+- Viele moderne **32‑Bit‑Mikrocontroller** besitzen dedizierte **On‑Chip Debug‑Interfaces** (z. B. JTAG oder SWD)
+  - Ermöglicht direkten Zugriff auf Register, Speicher und CPU‑Kontrolle
+  <!-- - Typische Werkzeuge:
+  - **JTAG (Joint Test Action Group)**^[IEEE 1149.1 – Standard Test Access Port and Boundary-Scan Architecture (IEEE, 2013)]
+  - **SWD (Serial Wire Debug)** – abgespeckte Variante für ARM Cortex‑M
+  - **OpenOCD (Open On‑Chip Debugger)** + **GDB (GNU Debugger)** im Open‑Source‑Umfeld
+  - Kommerzielle Alternativen: **Segger J‑Link**, **Lauterbach TRACE32**, Hersteller‑IDEs (z. B. STM32CubeIDE, NXP MCUXpresso) -->
+- On‑Chip Debug-Interfaces erlauben Daten auszulesen, Speicher und Register zu verändern und der Programmfluss zu beeinflussen
+  - Breakpoints erlauben es, den Code gezielt anzuhalten und zu überwachen
+
+:::{.columns}
+:::{.column width="50%"}
+![Verbindung über JTAG^[Bildquelle: Erich Styger, „FTDI JTAG Connection“, MCU on Eclipse Blog, 2019. URL: [link](https://mcuoneclipse.com/wp-content/uploads/2019/10/ftdi-jtag-connection.png)]](Figuren/ftdi-jtag-connection_small.png){width="100%"}
+:::
+
+:::{.column width="50%"}
+![Debugging mit GDB^[Bildquelle: Espressif Systems, „VS Code ESP-IDF Extension – GDB Commands“, offizielle Dokumentation. URL: [link](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/_images/gdb_commands.png)]](Figuren/gdb_commands_small.png){width="100%"}
+:::
+
+:::
+
+## Wenn man in die Tiefe des Mikrocontrollers schauen muss {auto-animate=true}
+
+Manchmal ist es notwendig, Inhalte von Registern oder Speicher eines Mikrocontrollers auszulesen oder gezielt zu verändern.
+
+:::{.mid-space}
+
+- Viele moderne **32‑Bit‑Mikrocontroller** besitzen dedizierte **On‑Chip Debug‑Interfaces** (z. B. JTAG oder SWD)
+  - Ermöglicht direkten Zugriff auf Register, Speicher und CPU‑Kontrolle
+  <!-- - Typische Werkzeuge:
+  - **JTAG (Joint Test Action Group)**^[IEEE 1149.1 – Standard Test Access Port and Boundary-Scan Architecture (IEEE, 2013)]
+  - **SWD (Serial Wire Debug)** – abgespeckte Variante für ARM Cortex‑M
+  - **OpenOCD (Open On‑Chip Debugger)** + **GDB (GNU Debugger)** im Open‑Source‑Umfeld
+  - Kommerzielle Alternativen: **Segger J‑Link**, **Lauterbach TRACE32**, Hersteller‑IDEs (z. B. STM32CubeIDE, NXP MCUXpresso) -->
+- On‑Chip Debug-Interfaces erlauben Daten auszulesen, Speicher und Register zu verändern und der Programmfluss zu beeinflussen
+  - Breakpoints erlauben es, den Code gezielt anzuhalten und zu überwachen
+
+:::
+
+::: {.space-xl}
+:::
+
+::: {.space-xl}
+:::
+:::{.mid-space .incremental}
+
+- Debugging erfordert oft die Verwendung spezieller **Debug-Flags**
+  - Diese deaktivieren Optimierungen und verändern Ablauf sowie Performance gegenüber optimierten Build
+
+:::
+
+::: {.space-lg}
+:::
+
+::: {.space-lg}
+:::
+
+:::{.fragment}
+
+:::{.callout-note appearance="simple"}
+
+**Zeitliche Probleme bleiben im Debug‑Build häufig verborgen**, da die reale Code-Performance im optimierten Build abweicht.
+
+:::
+:::
+
+## Timing-Probleme sichtbar machen {auto-animate=true}
+
+### Beispiel: Elektromotorregler
+
+Wir haben einen Regler für einen Elektromotor entwickelt.
+
+- Die Reglerfunktion ist jede **15 ms** aufgerufen und hat ein maximales Timing‑Budget von **2 ms**.
+- Wir möchten überprüfen wie lange unsere Funktion wirklich braucht um alle die Berechnungen abzuschließen.
+
+::: {.columns}
+:::{.column width="60%"}
+
+**Naiver Ansatz: printf**
+
+```c{code-line-numbers="|3,6"}
+bool applyControlRule(const InputParameter* motor_state)
+{
+    printf("applyControlRule - Start: %ld ms\n", get_time_ms());
+    bool is_rule_successfully_applied = true;
+    // ... hier sind die eigentliche Regelung aufgerufen ...
+    printf("applyControlRule - End: %ld ms\n", get_time_ms());
+    return is_rule_successfully_applied;
+}
+```
+
+:::
+
+:::{.column width="40%"}
+Ausgabe:
+
+```shell
+applyControlRule - Start: 1000 ms
+applyControlRule - End: 1006 ms
+...
+applyControlRule - Start: 1015 ms
+applyControlRule - End: 1023 ms
+...
+```
+
+:::
+:::
+
+:::{.callout-note appearance="simple" title="Niemals printf im Echtzeitpfad verwenden!"}
+
+- `printf` ist **blockierend** – jede Ausgabe kann mehrere Millisekunden beanspruchen.
+- Die Laufzeit hängt von **Nachrichtenlänge und Formatierung** ab und ist deswegen nicht deterministisch.
+
+- Das **Zeitverhalten** wird dadurch erheblich beeinträchtigt und Deadlines können verfehlt werden.
+
+:::
+
+## Timing-Probleme sichtbar machen {auto-animate=true}
+
+### Beispiel: Elektromotorregler
+
+::: {.columns}
+:::{.column width="60%"}
+
+**Besser Ansatz: Pin-Toggling**
+
+```c{code-line-numbers="3,6"}
+bool applyControlRule(const InputParameter* motor_state)
+{
+    gpio_set(GPIO_PIN_DEBUG, true);
+    bool is_rule_successfully_applied = true;
+    // ... hier sind die eigentliche Regelung aufgerufen ...
+    gpio_set(GPIO_PIN_DEBUG, false);
+    return is_rule_successfully_applied;
+}
+```
+
+:::
+
+:::{.column width="40%"}
+Messungen:
+![](Figuren/Timing_Diagram.svg){width=100%}
+
+:::
+:::
+
+:::{.spacer-sm}
+:::
+
+::: {.fragment}
+**Vergleich Pin-Toggling gegen printf Ansatz:**
+
+- Vorteile:
+
+  - **Deutlich höhere Genauigkeit** der Laufzeitmessung
+  - **Reproduzierbarkeit** der Ergebnisse über viele Zyklen hinweg
+  - **Minimale Beeinflussung** der Echtzeit (Overhead im Nanosekunden-/Mikrosekundenbereich)
+
+- Einschränkungen:
+
+  - **Begrenzte Ausgabe**: nur wenige Informationen können über Pins dargestellt werden
+
+- Vorgeschlagene Alternative: **Logger und Trace‑Tools**
+  - Ermöglichen strukturierte, präzise und echtzeitfähige Messungen.
+
+:::
+
+## Timing-Probleme sichtbar machen {auto-animate=true}
+
+### Beispiel: Elektromotorregler
+
+- Pin-Toggling zeigt nur Start/Ende
+- Für detaillierte Analyse: **Trace-Library**
+
+### Vorteile
+
+- Zeitstempel für Start/Stop und Subfunktionen
+- Live-Trace oder Offline-Analyse
+- Minimaler Overhead
+
+### Tooling-Beispiele
+
+- ARM SWO (Serial Wire Output)
+- ARM ETM (Embedded Trace Macrocell)
+- SEGGER SystemView
+- Percepio Tracealyzer
+- AUTOSAR DLT (Diagnostic Log and Trace)
+
+### Standardisierte Logs
+
+- Zeitstempel in jedem Eintrag
+- Log-Level: ERROR, WARNING, INFO, DEBUG
+- Aktivierung per Compile-Flags oder Runtime-Konfiguration
+- Effiziente Analyse durch strukturierte Logs (CSV, JSON)
+
+::: {.callout-note appearance="simple"}
+Nur durch präzises Trace und standardisierte Logs lassen sich Timing-Probleme sichtbar machen.
+:::
+
+## Präventivemaßnahmen sind in der Praxis unverzichtbar {auto-animate=true}
+
+### Ziel ist es, die Notwendigkeit von Debugging zu reduzieren
+
+Präventivemaßnahmen müssen in den Entwicklungsprozess von Software eingebaut werden, z.B.:
+
+- Prozessmaßnahmen:
+
+  ::: {.fragment}
+
+  - Code Reviews / Peer Reviews
+  - Testautomatisierung (Continuous Integration / Continuous Deployment - CI/CD)
+  - Test-Driven Development (TDD)
+
+  :::
+
+- Technische Maßnahmen:
+
+  ::: {.fragment}
+
+  - Statische Code-Analyse
+  - Code‑Coverage‑Analyse (z. B. Line‑ und Branch‑Coverage)
+  - Design by Contract (Vertragsbasierte Programmierung)
+
+  :::
+
+::: {.fragment}
+
+**Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine**
+
+```cpp
+uint16_t computeHeatingTime(const uint8_t initialTemp,
+                            const uint8_t finalTemp)
+{
+    const uint8_t conversion_factor = 1; // seconds per degree Celsius
+    const uint8_t deltaT = finalTemp - initialTemp;
+    const uint16_t time_sec = conversion_factor * deltaT;
+    return time_sec;
+}
+```
+
+````
+
+:::
+
+:::{.notes}
+
+- Prozessmaßnahmen:
+  - Code Reviews / Peer Reviews
+  - Testautomatisierung (Continuous Integration / Continuous Deployment - CI/CD)
+  - Test-Driven Development (TDD)
+- Technische Maßnahmen:
+  - Statische Code-Analyse
+  - Code‑Coverage‑Analyse (z. B. Line‑ und Branch‑Coverage)
+  - Design by Contract (Vertragsbasierte Programmierung)
+
+:::
+
+## Präventivemaßnahmen sind in der Praxis unverzichtbar {auto-animate=true}
+
+### Ziel ist es, die Notwendigkeit von Debugging zu reduzieren
+
+**Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine**
+
+```{.cpp code-line-numbers="5"}
+uint16_t computeHeatingTime(const uint8_t initialTemp,
+                            const uint8_t finalTemp)
+{
+    const uint8_t conversion_factor = 1; // seconds per degree Celsius
+    const uint8_t deltaT = finalTemp - initialTemp;
+    const uint16_t time_sec = conversion_factor * deltaT;
+    return time_sec;
+}
+```
+
+Was passiert, wenn `initalTemp` großer als `finalTemp` ist?
+
+:::{.fragment}
+
+- Bei `finalTemp=95` und `initialTemp=96` ergibt sich **time_sec=255**
+- Das entspricht **4 Minuten und 15 Sekunden!**
+
+:::
+
+:::{.spacer-md}
+:::
+
+::: {.callout-note appearance="simple" .fragment}
+**Solche Fehler müssen bereits in der Entwicklungsphase entdeckt werden!**
+:::
+
+::: {.notes}
+Weitere Präventivmaßnahmen
+Code Reviews / Peer Reviews → Frühes Auffinden von Fehlern durch das Vier‑Augen‑Prinzip; fördert auch Wissensaustausch im Team.
+
+Pair Programming → Zwei Entwickler arbeiten gleichzeitig am selben Code; reduziert Tippfehler und Denkfehler.
+
+Formale Methoden / Modellprüfung → Mathematische Verifikation von Algorithmen und Zustandsautomaten; besonders relevant in sicherheitskritischen Systemen.
+
+Defensive Programmierung → Eingaben validieren, Fehlerfälle explizit behandeln, Assertions einsetzen → verhindert „stille“ Fehler.
+
+Coding Standards (MISRA‑C, CERT‑C, AUTOSAR) → Einheitliche Regeln für Sprache und Stil; vermeiden typische Fehlerquellen in Embedded Systems.
+
+Continuous Monitoring / Logging → Laufzeitüberwachung und strukturierte Logs helfen, Fehler früh zu erkennen und reproduzierbar zu machen.
+
+Simulation & Hardware‑in‑the‑Loop Tests (HIL) → Testen mit realistischen Umgebungen, bevor Hardware verfügbar ist; reduziert Überraschungen beim Integrations‑Debugging.
+
+Fuzz Testing → Zufällige oder fehlerhafte Eingaben automatisch generieren, um Robustheit zu prüfen.
+:::
+
 ## Das V‑Modell {auto-animate=true}
 
 ### Anforderungen, Tests und Kommunikationsrisiken zwischen Teams
 
-- Das V‑Modell entstand Ende der 1970er Jahre als Erweiterung des Wasserfallmodells,  
+- Das V‑Modell entstand Ende der 1970er Jahre als Erweiterung des Wasserfallmodells,
   vorgeschlagen von Barry W. Boehm (1979), um Verifikation und Validierung systematisch zu verankern.
 
 ::: {.r-stack}
@@ -186,12 +535,12 @@ Barry W. Boehm
 
 ## Kommunikationsfehler als Defektursache {auto-animate=true}
 
-Wir wollen ein Adaptive Geschwindigkeitregelung (ACC) entwickeln und die vordere Kamera ist ein Kernsensor.
+Wir wollen ein Spurhaltewarnsystem (_Lane departure warning system_) (LDWS) entwickeln und die vordere Kamera ist ein Kernsensor.
 
 ::: {.fragment}
 
-- **Anforderung P.1:** ACC muss aktivierbar sein, wenn alle Sensoren einen nominalen Zustand melden (keine Degradation).
-- **Anforderung P.2:** ACC muss sich sicher deaktivieren, wenn eine, oder mehrere Sensoren eine Degradation melden.
+- **Anforderung P.1:** LDWS muss aktive sein, wenn die Kamera einen nominalen Zustand meldet (keine Degradation).
+- **Anforderung P.2:** LDWS muss sich sicher deaktivieren, wenn die Kamera eine Degradation meldet.
 
 ::: {.fragment}
 
@@ -209,8 +558,8 @@ Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwe
 
 ## Kommunikationsfehler als Defektursache {auto-animate=true}
 
-- **Anforderung P.1:** ACC muss aktivierbar sein, wenn alle Sensoren einen nominalen Zustand melden (keine Degradation).
-- [**Anforderung P.2:** ACC muss sich sicher deaktivieren, wenn eine, oder mehrere Sensoren eine Degradation melden.]{style="color: dimgray;"}
+- **Anforderung P.1:** LDWS muss aktive sein, wenn die Kamera einen nominalen Zustand meldet (keine Degradation).
+- [**Anforderung P.2:** LDWS muss sich sicher deaktivieren, wenn die Kamera eine Degradation meldet.]{style="color: dimgray;"}
 - ...
   - [↳ **Kamera-Anforderung K.1:** Die Kamera muss eine Degradation melden, wenn ungeeignete Wetterbedingungen erkannt werden.]{style="color: dimgray;"}
     - [Beispiele: Regentropfen auf den Linsenelementen, Blendung durch Sonnenlicht]{style="color: dimgray;"}
@@ -219,9 +568,9 @@ Im Laufe einer späteren Testphase, wird so ein Testreport herstellt:
 
 ::: {data-id="test-fall-example" .small-text}
 
-| Test ID      | Vorbedingungen                            | Soll-Verhalten                                     | Ist-Verhalten                                                                                                                        | SW-Version | HW-Version |
-| ------------ | ----------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ---------- | ---------- |
-| **P.1 - 01** | _Ideales Wetter_: Tag, Sonne, kaum Wolken | ACC ist aktivierbar und läuft ohne Unterbrechungen | Fahrzeug fährt korrekt bei freier Fahrt, bleibt jedoch stehen, sobald eine Stausituation entsteht. → **ACC nicht mehr aktivierbar!** | 1.1        | C          |
+| Test ID      | Vorbedingungen                            | Soll-Verhalten | Ist-Verhalten                                                                                           | SW-Version | HW-Version |
+| ------------ | ----------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------- | ---------- | ---------- |
+| **P.1 - 01** | _Ideales Wetter_: Tag, Sonne, kaum Wolken | LDWS ist aktiv | LDWS ist aktiv bei freier Fahrt, deaktiviert jedoch sich in eine Stausituation. → **LDWS nicht aktiv!** | 1.1        | C          |
 
 :::
 
@@ -233,9 +582,9 @@ Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwe
 
 ::: {data-id="test-fall-example" .tiny-text}
 
-| Test ID      | Vorbedingungen                          | Soll-Verhalten                                     | Ist-Verhalten                                                                                                                        | SW-Version | HW-Version |
-| ------------ | --------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ---------- | ---------- |
-| **P.1 - 01** | Ideales Wetter: Tag, Sonne, kaum Wolken | ACC ist aktivierbar und läuft ohne Unterbrechungen | Fahrzeug fährt korrekt bei freier Fahrt, bleibt jedoch stehen, sobald eine Stausituation entsteht. → **ACC nicht mehr aktivierbar!** | 1.1        | C          |
+| Test ID      | Vorbedingungen                          | Soll-Verhalten | Ist-Verhalten                                                                                           | SW-Version | HW-Version |
+| ------------ | --------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------- | ---------- | ---------- |
+| **P.1 - 01** | Ideales Wetter: Tag, Sonne, kaum Wolken | LDWS ist aktiv | LDWS ist aktiv bei freier Fahrt, deaktiviert jedoch sich in eine Stausituation. → **LDWS nicht aktiv!** | 1.1        | C          |
 
 :::
 
@@ -272,139 +621,6 @@ Erster Schritt bei der Analyse eines Defekts ist die Überprüfung, ob tatsächl
 
 ::: {.slide-footnote}
 Alle Figuren sind mit Microsoft Copilot generiert.
-:::
-
-## Präventivemaßnahmen sind in der Praxis unverzichtbar {auto-animate=true}
-
-### Ziel ist es, die Notwendigkeit von Debugging zu reduzieren
-
-Präventivemaßnahmen müssen in den Entwicklungsprozess von Software eingebaut werden, z.B.:
-
-- Prozessmaßnahmen:
-
-  ::: {.fragment}
-
-  - Code Reviews / Peer Reviews
-  - Testautomatisierung (Continuous Integration / Continuous Deployment - CI/CD)
-  - Test-Driven Development (TDD)
-
-  :::
-
-- Technische Maßnahmen:
-
-  ::: {.fragment}
-
-  - Statische Code-Analyse
-  - Code‑Coverage‑Analyse (z. B. Line‑ und Branch‑Coverage)
-  - Design by Contract (Vertragsbasierte Programmierung)
-
-  :::
-
-::: {.fragment}
-
-**Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine**
-
-```{.cpp }
-uint16_t computeHeatingTime(const uint8_t initialTemp,
-                            const uint8_t finalTemp)
-{
-    const uint8_t conversion_factor = 1; // seconds per degree Celsius
-    const uint8_t deltaT = finalTemp - initialTemp;
-    const uint16_t time_sec = conversion_factor * deltaT;
-    return time_sec;
-}
-```
-
-:::
-
-:::{.notes}
-
-- Prozessmaßnahmen:
-  - Code Reviews / Peer Reviews
-  - Testautomatisierung (Continuous Integration / Continuous Deployment - CI/CD)
-  - Test-Driven Development (TDD)
-- Technische Maßnahmen:
-  - Statische Code-Analyse
-  - Code‑Coverage‑Analyse (z. B. Line‑ und Branch‑Coverage)
-  - Design by Contract (Vertragsbasierte Programmierung)
-
-:::
-
-## Präventivemaßnahmen sind in der Praxis unverzichtbar {auto-animate=true}
-
-### Ziel ist es, die Notwendigkeit von Debugging zu reduzieren
-
-**Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine**
-
-```{.cpp code-line-numbers="5"}
-uint16_t computeHeatingTime(const uint8_t initialTemp,
-                            const uint8_t finalTemp)
-{
-    const uint8_t conversion_factor = 1; // seconds per degree Celsius
-    const uint8_t deltaT = finalTemp - initialTemp;
-    const uint16_t time_sec = conversion_factor * deltaT;
-    return time_sec;
-}
-```
-
-Was passiert, wenn `initalTemp` großer als `finalTemp` ist?
-
-:::{.fragment}
-
-- Bei `finalTemp=95` und `initialTemp=96` ergibt sich **time_sec=255**
-- Das entspricht **4 Minuten und 15 Sekunden!**
-
-:::
-
-:::{.spacer-md}
-:::
-
-::: {.callout-note appearance="simple" .fragment}
-**Solche Fehler müssen bereits in der Entwicklungsphase entdeckt werden!**
-:::
-
-::: {.notes}
-Weitere Präventivmaßnahmen
-Code Reviews / Peer Reviews → Frühes Auffinden von Fehlern durch das Vier‑Augen‑Prinzip; fördert auch Wissensaustausch im Team.
-
-Pair Programming → Zwei Entwickler arbeiten gleichzeitig am selben Code; reduziert Tippfehler und Denkfehler.
-
-Formale Methoden / Modellprüfung → Mathematische Verifikation von Algorithmen und Zustandsautomaten; besonders relevant in sicherheitskritischen Systemen.
-
-Defensive Programmierung → Eingaben validieren, Fehlerfälle explizit behandeln, Assertions einsetzen → verhindert „stille“ Fehler.
-
-Coding Standards (MISRA‑C, CERT‑C, AUTOSAR) → Einheitliche Regeln für Sprache und Stil; vermeiden typische Fehlerquellen in Embedded Systems.
-
-Continuous Monitoring / Logging → Laufzeitüberwachung und strukturierte Logs helfen, Fehler früh zu erkennen und reproduzierbar zu machen.
-
-Simulation & Hardware‑in‑the‑Loop Tests (HIL) → Testen mit realistischen Umgebungen, bevor Hardware verfügbar ist; reduziert Überraschungen beim Integrations‑Debugging.
-
-Fuzz Testing → Zufällige oder fehlerhafte Eingaben automatisch generieren, um Robustheit zu prüfen.
-:::
-
-## Manchmal muss man in die Tiefe des Mikrocontrollers schauen {auto-animate=true}
-
-- Moderne Mikrocontroller besitzen fast immer **dedizierte Debugging-Hardware**
-  - Das ermöglicht Zugriff auf Register, Speicher und CPU-Kontrolle
-- Typische Werkzeuge: JTAG (Joint Test Action Group)^[IEEE 1149.1 – Standard Test Access Port and Boundary-Scan Architecture (IEEE, 2013)] + OpenOCD (Open On‑Chip Debugger) + GDB (GNU Debugger)
-
-:::{.incremental}
-
-- Debugging erfordert die Verwendung von Debug‑Flags **Debug-Flags**
-  - Das kann Performance und Ablauf gegenüber Optimierungs‑Flags wie `-O2` verändern
-- **Zeitliche Probleme sind dann nicht immer sichtbar**, da die reale Code-Performance abweicht
-
-:::
-
-:::{.columns}
-:::{.column width="50%"}
-![Verbindung über JTAG^[Bildquelle: Erich Styger, „FTDI JTAG Connection“, MCU on Eclipse Blog, 2019. URL: [link](https://mcuoneclipse.com/wp-content/uploads/2019/10/ftdi-jtag-connection.png)]](Figuren/ftdi-jtag-connection_small.png){width="100%"}
-:::
-
-:::{.column width="50%"}
-![Debugging mit GDB^[Bildquelle: Espressif Systems, „VS Code ESP-IDF Extension – GDB Commands“, offizielle Dokumentation. URL: [link](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/_images/gdb_commands.png)]](Figuren/gdb_commands_small.png){width="100%"}
-:::
-
 :::
 
 ## Find a title here
@@ -591,3 +807,4 @@ digraph Defektanalyse {
 ```
 
 ## Debugging in Embedded Systems: Wichtige Überlegungen
+````

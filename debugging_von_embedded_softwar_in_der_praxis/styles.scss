@@ -206,6 +206,11 @@ $height-spacer: (
   font-size: $small-font-size !important;
 }
 
+div.small-text blockquote p {
+  font-size: $small-font-size !important;
+}
+
+
 .small-text ul,
 .small-text li {
   font-size: inherit !important;
