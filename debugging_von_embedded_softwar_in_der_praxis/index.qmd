@@ -99,10 +99,10 @@ Einige Gemeinsamkeiten bestehen jedoch:
 - Ressourcenbeschränkungen (Speicher, Rechenleistung)
 - Echtzeitanforderungen
 - Die gesamte Entwicklung erfordert **Zusammenarbeit zwischen verschiedenen Teams** und Disziplinen
-- **Besondere Schwierigkeit beim SW Debugging**
+<!-- - **Besondere Schwierigkeit beim SW Debugging**
   - Eingeschränkte Beobachtbarkeit von internen Zuständen
   - Fehler treten oft nur unter spezifischen Echtzeitbedingungen auf
-  - Hardwarezugriff ist begrenzt oder erfordert Spezialwerkzeuge
+  - Hardwarezugriff ist begrenzt oder erfordert Spezialwerkzeuge -->
 
 :::
 :::
@@ -278,7 +278,7 @@ Jeder Aufruf von printf kann mehrere Millisekunden beanspruchen
 
 **Besser Ansatz: Pin-Toggling**
 
-```c{code-line-numbers="3,6"}
+```c{code-line-numbers="5,7"}
 bool applyControlRule(const InputParameter* motor_state)
 {
     bool is_rule_successfully_computed = false;
@@ -306,57 +306,23 @@ Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms** und liegt damit innerh
 :::{.spacer-sm}
 :::
 
-::: {.fragment}
-Diese Art von zeitlichen Messungen ermöglicht im Vergleich zum printf‑Ansatz:
+::: {.fragment .small-text}
 
-- **Deutlich höhere Genauigkeit** der Laufzeitmessung
-- **Reproduzierbarkeit** der Ergebnisse über viele Zyklen hinweg
-- **Minimale Beeinflussung** der Echtzeit (Overhead im Nanosekunden-/Mikrosekundenbereich)
+- Diese Art von zeitlichen Messungen ermöglicht im Vergleich zum printf‑Ansatz:
 
-:::
-
-## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
-
-### Beispiel: Elektromotorregler
-
-::: {.columns}
-:::{.column width="60%"}
-
-**Besser Ansatz: Pin-Toggling**
-
-```c{code-line-numbers="3,6"}
-bool applyControlRule(const InputParameter* motor_state)
-{
-    gpio_set(GPIO_PIN_DEBUG, true);
-    bool is_rule_successfully_applied = true;
-    // ... hier sind die eigentliche Regelung aufgerufen ...
-    gpio_set(GPIO_PIN_DEBUG, false);
-    return is_rule_successfully_applied;
-}
-```
+  - **Deutlich höhere Genauigkeit** der Laufzeitmessung
+  - **Reproduzierbarkeit** der Ergebnisse über viele Zyklen hinweg
+  - **Minimale Beeinflussung** der Echtzeit (Overhead im Nanosekunden-/Mikrosekundenbereich)
 
 :::
 
-:::{.column width="40%"}
-Messungen:
-![](Figuren/Timing_Diagram.svg){width=100%}
-
-::: {.small-text}
-Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms** und liegt damit innerhalb des maximalen Time‑Budgets von 2 ms.
-:::
-
-:::
-:::
-
-:::{.spacer-sm}
-:::
-
+::: {.fragment .small-text}
 Der Ansatz hat aber auch Einschränkungen:
 
-- Nur begrenzte Ausgaben sind möglich, da sich **über Pins nur wenige Informationen darstellen lassen**.
+- Nur begrenzte Ausgaben sind möglich. Vorgeschlagene Alternative: **Logger und Trace‑Tools**
+  - z.B., Diagnostic Log and Trace in Automotive[^Diagnostic Log and Trace [DLT](https://www.autosar.org/fileadmin/standards/R20-11/CP/AUTOSAR_SWS_DiagnosticLogAndTrace.pdf)]
 
-- Vorgeschlagene Alternative: **Logger und Trace‑Tools**
-  - Ermöglichen strukturierte, präzise und echtzeitfähige Messungen.
+:::
 
 ## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {auto-animate=true}
 
