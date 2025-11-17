@@ -399,7 +399,7 @@ bool applyControlRule(const InputParameter* motor_state)
 ### Beispiel: Elektromotorregler
 
 ::: {.columns}
-:::{.column width="60%"}
+:::{.column width="55%"}
 :::{data-id="timing_analysis"}
 
 **Ansatz 2: printf**
@@ -419,7 +419,7 @@ bool applyControlRule(const InputParameter* motor_state)
 :::
 :::
 
-:::{.column width="40%"}
+:::{.column width="45%"}
 
 :::{.fragment}
 **Ausgabe:**
@@ -455,7 +455,7 @@ applyControlRule - End: 1023 ms
 
 :::
 
-## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {auto-animate=true}
+## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {auto-animate=true .center}
 
 ### Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine
 
@@ -474,15 +474,20 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 
 :::
 
-:::{.fragment}
-Was passiert, wenn `initalTemp` großer als `finalTemp` ist?
-
-:::{.fragment}
-
-- Bei `finalTemp=95` und `initialTemp=96` ergibt sich **time_sec=255**
-- Das entspricht **4 Minuten und 15 Sekunden!**
-
+:::{.spacer-md}
 :::
+
+:::{.fragment}
+
+- Was passiert, wenn `initalTemp=96` und `finalTemp=95`?
+
+  :::{.fragment}
+
+  - Bei `initialTemp=96` und `finalTemp=95` ergibt sich `time_sec=255`
+  - Das entspricht **4 Minuten und 15 Sekunden!**
+
+  :::
+
 :::
 
 :::{.spacer-md}
@@ -496,6 +501,11 @@ Was passiert, wenn `initalTemp` großer als `finalTemp` ist?
 
 ### Ziel ist es, Fehler frühzeitig zu entdecken
 
+:::{.spacer-md}
+::::
+
+::: {.mid-space}
+
 - Prozessmaßnahmen:
 
   ::: {.fragment}
@@ -505,6 +515,13 @@ Was passiert, wenn `initalTemp` großer als `finalTemp` ist?
   - Testgetriebene Entwicklung (Test-Driven Development ; TDD)
 
   :::
+
+:::
+
+:::{.spacer-md}
+::::
+
+::: {.mid-space}
 
 - Technische Maßnahmen:
 
@@ -516,33 +533,21 @@ Was passiert, wenn `initalTemp` großer als `finalTemp` ist?
 
   :::
 
-## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {.center auto-animate=true}
+:::
 
-Wie könnte man das Problem adressieren?
+## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {auto-animate=true}
 
-::: {.spacer-md}
+::: {.spacer-sm}
+:::
+
+Eine mögliche Lösung, inspiriert von vertragsbasierter Programmierung (Design by Contract).
+
+::: {.spacer-lg}
 :::
 
 :::{data-id="code_caffe_machine}
 
-```cpp
-uint16_t computeHeatingTime(const uint8_t initialTemp,
-                            const uint8_t finalTemp)
-{
-    const uint8_t conversion_factor = 1; // seconds per degree Celsius
-    const uint8_t deltaT = finalTemp - initialTemp;
-    const uint16_t time_sec = conversion_factor * deltaT;
-    return time_sec;
-}
-```
-
-:::
-
-## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {.center auto-animate=true}
-
-:::{data-id="code_caffe_machine}
-
-```cpp
+```cpp{code-line-numbers="|6-8"}
 bool computeHeatingTime(const uint8_t initialTemp,
                         const uint8_t finalTemp,
                         uint16_t* heating_time)
@@ -565,76 +570,43 @@ bool computeHeatingTime(const uint8_t initialTemp,
 
 :::{.notes}
 
-- Prozessmaßnahmen:
-  - Code Reviews / Peer Reviews
-  - Testautomatisierung (Continuous Integration / Continuous Deployment - CI/CD)
-  - Testgetriebene Entwicklung (Test-Driven Development ; TDD)
-- Technische Maßnahmen:
-  - Statische Code-Analyse
-  - Code‑Coverage‑Analyse (z. B. Line‑ und Branch‑Coverage)
-  - Design by Contract (Vertragsbasierte Programmierung)
+DbC beruht auf drei Bausteinen:
+
+Vorbedingungen (Preconditions) → Bedingungen, die der Aufrufer erfüllen muss, bevor die Funktion korrekt arbeiten kann.
+
+In deinem Code:
+
+finalTemp >= initialTemp (sonst keine gültige Heizzeit).
+
+heating_time != NULL (sonst kein Speicherziel).
+
+→ Das ist der „Vertrag“: „Ich als Funktion rechne nur, wenn du mir gültige Eingaben gibst.“
+
+Nachbedingungen (Postconditions) → Zusicherungen, die die Funktion garantiert, wenn sie erfolgreich zurückkehrt.
+
+In deinem Code:
+
+Wenn true zurückgegeben wird, ist garantiert, dass \*heating_time einen gültigen Wert enthält.
+
+Wenn false zurückgegeben wird, bleibt der Speicher unverändert.
+
+→ Das ist die Zusicherung: „Wenn ich Erfolg melde, bekommst du ein korrektes Ergebnis.“
+
+Invarianten → Bedingungen, die während der gesamten Ausführung gültig bleiben.
+
+Beispiel hier: conversion_factor ist konstant und positiv.
+
+Damit bleibt die Berechnung stabil und nachvollziehbar.
 
 :::
 
-## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {.center auto-animate=true}
-
-### Ziel ist es, Fehler frühzeitig zu entdecken
-
-**Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine**
-
-```{.cpp code-line-numbers="5"}
-uint16_t computeHeatingTime(const uint8_t initialTemp,
-                            const uint8_t finalTemp)
-{
-    const uint8_t conversion_factor = 1; // seconds per degree Celsius
-    const uint8_t deltaT = finalTemp - initialTemp;
-    const uint16_t time_sec = conversion_factor * deltaT;
-    return time_sec;
-}
-```
-
-:::{.spacer-md}
-:::
-
-Was passiert, wenn `initialTemp=96` und `finalTemp=95`?
-
-:::{.fragment}
-
-- Bei `initialTemp=96` und `finalTemp=95` ergibt sich **time_sec=255**
-- Das entspricht **4 Minuten und 15 Sekunden!**
-
-:::
-
-:::{.spacer-md}
-:::
-
-::: {.callout-note appearance="simple" .fragment}
-**Solche Fehler müssen bereits in der Entwicklungsphase entdeckt werden!**
-:::
-
-::: {.notes}
-
-Weitere Präventivmaßnahmen
-Code Reviews / Peer Reviews → Frühes Auffinden von Fehlern durch das Vier‑Augen‑Prinzip; fördert auch Wissensaustausch im Team.
-
-Pair Programming → Zwei Entwickler arbeiten gleichzeitig am selben Code; reduziert Tippfehler und Denkfehler.
-
-Formale Methoden / Modellprüfung → Mathematische Verifikation von Algorithmen und Zustandsautomaten; besonders relevant in sicherheitskritischen Systemen.
-
-Defensive Programmierung → Eingaben validieren, Fehlerfälle explizit behandeln, Assertions einsetzen → verhindert „stille“ Fehler.
-
-Coding Standards (MISRA‑C, CERT‑C, AUTOSAR) → Einheitliche Regeln für Sprache und Stil; vermeiden typische Fehlerquellen in Embedded Systems.
-
-Continuous Monitoring / Logging → Laufzeitüberwachung und strukturierte Logs helfen, Fehler früh zu erkennen und reproduzierbar zu machen.
-
-Simulation & Hardware‑in‑the‑Loop Tests (HIL) → Testen mit realistischen Umgebungen, bevor Hardware verfügbar ist; reduziert Überraschungen beim Integrations‑Debugging.
-
-Fuzz Testing → Zufällige oder fehlerhafte Eingaben automatisch generieren, um Robustheit zu prüfen.
-:::
+# Defektanalyse als Teil des Debugging‑Prozesses {background-image="Figuren/First_Computer_Bug_1945.jpg" background-opacity="0.3" background-color="black"}
 
 ## Defekte infolge von Kommunikations- und Interpretationsfehlern {auto-animate=true}
 
-Wir wollen ein Spurhaltewarnsystem (_Lane departure warning system_; LDWS) entwickeln und die vordere Kamera ist ein Kernsensor.
+- Wir wollen ein Spurhaltewarnsystem (_Lane departure warning system_; LDWS) entwickeln.
+
+:::{data-id="LDWS_Anf}
 
 ::: {.fragment}
 
@@ -648,14 +620,23 @@ Wir wollen ein Spurhaltewarnsystem (_Lane departure warning system_; LDWS) entwi
     - Beispiele: Regentropfen auf den Linsenelementen, Blendung durch Sonnenlicht
 
 :::
-
+:::
 :::
 
 ::: {.slide-footnote}
 Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.
 :::
 
+::: {.notes}
+
+- Besser Anforderung Formulierung für die Kamera:
+  „Die Kamera muss eine Degradation melden, wenn äußere Bedingungen die Bildqualität so beeinträchtigen, dass definierte Funktions‑KPIs (z. B. Erkennungsrate, Spurtreue) unterschritten werden.“
+
+:::
+
 ## Defekte infolge von Kommunikations- und Interpretationsfehlern {auto-animate=true}
+
+:::{data-id="LDWS_Anf}
 
 - **Anforderung P.1:** LDWS muss aktiv sein, wenn die Kamera einen nominalen Zustand meldet (keine Degradation).
 - [**Anforderung P.2:** LDWS muss sich deaktivieren, wenn die Kamera eine Degradation meldet.]{style="color: dimgray;"}
@@ -663,13 +644,14 @@ Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwe
   - [↳ **Kamera-Anforderung K.1:** Die Kamera muss eine Degradation melden, wenn ungeeignete Wetterbedingungen erkannt werden.]{style="color: dimgray;"}
     - [Beispiele: Regentropfen auf den Linsenelementen, Blendung durch Sonnenlicht]{style="color: dimgray;"}
 
+:::
 In einer späteren Testphase wird ein solcher Testreport erstellt:
 
 ::: {data-id="test-fall-example" .small-text}
 
-| Test-ID      | Vorbedingungen                          | Soll-Verhalten | Ist-Verhalten                                                                                            | System-Versionierung             | Häufigkeit     | Kritikalität | Trace-Link   |
-| ------------ | --------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------- | -------------- | ------------ | ------------ |
-| **P.1 - 01** | Ideales Wetter: Tag, Sonne, kaum Wolken | LDWS ist aktiv | LDWS ist aktiv bei freier Fahrt, deaktiviert sich jedoch in einer Stausituation. → **LDWS nicht aktiv!** | SW 1.1 / HW C / Net V2.0 / CFG A | Reproduzierbar | Kritisch     | [DLT Link]() |
+| Test-ID      | Vorbedingungen                          | Soll-Verhalten | Ist-Verhalten                                                                                            | System-Versionierung             | Häufigkeit         | Kritikalität | Trace-Link |
+| ------------ | --------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------- | ------------------ | ------------ | ---------- |
+| **P.1 - 01** | Ideales Wetter: Tag, Sonne, kaum Wolken | LDWS ist aktiv | LDWS ist aktiv bei freier Fahrt, deaktiviert sich jedoch in einer Stausituation. → **LDWS nicht aktiv!** | SW 1.1 / HW C / Net V2.0 / CFG A | **Reproduzierbar** | **Kritisch** | [Trace]()  |
 
 <!--
 | Test ID      | Vorbedingungen                            | Soll-Verhalten | Ist-Verhalten                                                                                                 | SW-Version | HW-Version |
@@ -716,8 +698,8 @@ Um die Kameravideos zu erhalten, mussten spezielle **Debug-Flags** in der Kamera
 
 :::{.column width="60%" .fragment .mid-space}
 
-- Für die Kamera sind diese Wetterbedingungen _nicht_ geeignet, auch wenn von der Fahrerperspektive, Wetterbedingungen ideal sind.
-- Während die Anforderungen eindeutig den nominalen Kamerazustand (_keine Degradation_) beschrieben, wurden die Testbedingungen indirekt über Wetterannahmen abgebildet.
+- **Für die Kamera sind diese Wetterbedingungen nicht geeignet**, auch wenn von der Fahrerperspektive, Wetterbedingungen ideal sind.
+- Während die Anforderungen eindeutig den nominalen Kamerazustand (_keine Degradation_) beschrieben, wurden **die Testbedingungen indirekt über Wetterannahmen abgebildet**.
 
 :::
 :::
@@ -729,6 +711,8 @@ In großen Projekten ist der erste Schritt der Defektanalyse die **Überprüfung
 ::: {.slide-footnote}
 Alle Figuren sind mit Microsoft Copilot generiert.
 :::
+
+# Quiz {background-image="Figuren/First_Computer_Bug_1945.jpg" background-opacity="0.3" background-color="black"}
 
 # Backup
 
