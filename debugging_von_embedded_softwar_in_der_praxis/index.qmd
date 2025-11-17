@@ -119,7 +119,7 @@ Ein zentrales Thema beim Debugging eingebetteter Software ist die _Reproduzierba
 
 - Effektives Debugging setzt voraus, dass ein Defekt **wiederholt ausgelöst** und sichtbar gemacht werden kann.
 
-  - Von entscheidender Wichtigkeit: Fehler müssen immer **stimuliert** werden und niemals nur simuliert.
+  - Von entscheidender Wichtigkeit: Fehler müssen **immer stimuliert** werden und **niemals nur simuliert**.
 
 ::: {.incremental}
 
@@ -158,31 +158,83 @@ In eingebetteten Systemen ist dies jedoch häufig schwierig wenn nicht unmöglic
 Wir haben einen Regler für einen Elektromotor entwickelt.
 
 - Die Reglerfunktion ist jede **15 ms** aufgerufen und hat ein maximales Timing‑Budget von **2 ms**.
-- Wir möchten überprüfen wie lange unsere Funktion wirklich braucht um alle die Berechnungen abzuschließen.
+- Wir müssen überprüfen wie lange unsere Funktion wirklich braucht um alle die Berechnungen abzuschließen.
+
+::: {.columns}
+:::{.column width="90%"}
+
+&nbsp;
+
+```c{code-line-numbers="|5"}
+bool applyControlRule(const InputParameter* motor_state)
+{
+    bool is_rule_successfully_computed = false;
+    ControlRule control_rule;
+    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
+    // Fehlerbehandlung und Übergabe der Regel
+}
+```
+
+:::
+:::
+
+## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
+
+### Beispiel: Elektromotorregler
+
+Wir haben einen Regler für einen Elektromotor entwickelt.
+
+- Die Reglerfunktion ist jede **15 ms** aufgerufen und hat ein maximales Timing‑Budget von **2 ms**.
+- Wir müssen überprüfen wie lange unsere Funktion wirklich braucht um alle die Berechnungen abzuschließen.
+
+::: {.columns}
+:::{.column width="90%"}
+**Naiver Ansatz: printf**
+
+```c{code-line-numbers="5,7"}
+bool applyControlRule(const InputParameter* motor_state)
+{
+    bool is_rule_successfully_computed = false;
+    ControlRule control_rule;
+    printf("applyControlRule - Start: %ld ms\n", get_time_ms());
+    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
+    printf("applyControlRule - End: %ld ms\n", get_time_ms());
+    // Fehlerbehandlung und Übergabe der Regel
+}
+```
+
+:::
+:::
+
+## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
+
+### Beispiel: Elektromotorregler
+
+Wir haben einen Regler für einen Elektromotor entwickelt.
+
+- Die Reglerfunktion ist jede **15 ms** aufgerufen und hat ein maximales Timing‑Budget von **2 ms**.
+- Wir müssen überprüfen wie lange unsere Funktion wirklich braucht um alle die Berechnungen abzuschließen.
 
 ::: {.columns}
 :::{.column width="60%"}
-:::{.fragment}
 **Naiver Ansatz: printf**
 
-```c{code-line-numbers="|3,6"}
+```c{code-line-numbers="5,7"}
 bool applyControlRule(const InputParameter* motor_state)
 {
+    bool is_rule_successfully_computed = false;
+    ControlRule control_rule;
     printf("applyControlRule - Start: %ld ms\n", get_time_ms());
-    bool is_rule_successfully_applied = true;
-    // ... hier sind die eigentliche Regelung aufgerufen ...
+    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
     printf("applyControlRule - End: %ld ms\n", get_time_ms());
-    return is_rule_successfully_applied;
+    // Fehlerbehandlung und Übergabe der Regel
 }
 ```
 
 :::
 
-:::
-
 :::{.column width="40%"}
 
-:::{.fragment}
 **Ausgabe:**
 
 ```shell
@@ -199,7 +251,6 @@ applyControlRule - End: 1023 ms
 - Die gemessene Gesamtdauer beträgt ca. **6 ms**
 - **Der Wert ist jedoch nicht korrekt!**
 
-:::
 :::
 :::
 :::
@@ -230,22 +281,23 @@ Jeder Aufruf von printf kann mehrere Millisekunden beanspruchen
 ```c{code-line-numbers="3,6"}
 bool applyControlRule(const InputParameter* motor_state)
 {
+    bool is_rule_successfully_computed = false;
+    ControlRule control_rule;
     gpio_set(GPIO_PIN_DEBUG, true);
-    bool is_rule_successfully_applied = true;
-    // ... hier sind die eigentliche Regelung aufgerufen ...
+    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
     gpio_set(GPIO_PIN_DEBUG, false);
-    return is_rule_successfully_applied;
+    // Fehlerbehandlung und Übergabe der Regel
 }
 ```
 
 :::
 
 :::{.column width="40%"}
-Messungen:
+**Messungen:**
 ![](Figuren/Timing_Diagram.svg){width=100%}
 
 ::: {.small-text}
-Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms** und ist sie somit innerhalb das maximal Time-Budget von 2 ms.
+Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms** und liegt damit innerhalb des maximalen Time‑Budgets von 2 ms.
 :::
 
 :::
@@ -255,7 +307,7 @@ Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms** und ist sie somit inne
 :::
 
 ::: {.fragment}
-Diese Art von Zeitliche Messungen ermöglicht, in vergleicht zu printf Ansatz:
+Diese Art von zeitlichen Messungen ermöglicht im Vergleich zum printf‑Ansatz:
 
 - **Deutlich höhere Genauigkeit** der Laufzeitmessung
 - **Reproduzierbarkeit** der Ergebnisse über viele Zyklen hinweg
@@ -290,7 +342,7 @@ Messungen:
 ![](Figuren/Timing_Diagram.svg){width=100%}
 
 ::: {.small-text}
-Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms** und ist sie somit innerhalb das maximal Time-Budget von 2 ms.
+Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms** und liegt damit innerhalb des maximalen Time‑Budgets von 2 ms.
 :::
 
 :::
@@ -301,7 +353,7 @@ Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms** und ist sie somit inne
 
 Der Ansatz hat aber auch Einschränkungen:
 
-- **Begrenzte Ausgabe**: nur wenige Informationen können über Pins dargestellt werden
+- Nur begrenzte Ausgaben sind möglich, da sich **über Pins nur wenige Informationen darstellen lassen**.
 
 - Vorgeschlagene Alternative: **Logger und Trace‑Tools**
   - Ermöglichen strukturierte, präzise und echtzeitfähige Messungen.
@@ -318,7 +370,7 @@ Präventivemaßnahmen müssen in den Entwicklungsprozess von Software eingebaut 
 
   - Code Reviews / Peer Reviews
   - Testautomatisierung (Continuous Integration / Continuous Deployment - CI/CD)
-  - Test-Driven Development (TDD)
+  - Testgetriebene Entwicklung (Test-Driven Development ; TDD)
 
   :::
 
@@ -354,7 +406,7 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 - Prozessmaßnahmen:
   - Code Reviews / Peer Reviews
   - Testautomatisierung (Continuous Integration / Continuous Deployment - CI/CD)
-  - Test-Driven Development (TDD)
+  - Testgetriebene Entwicklung (Test-Driven Development ; TDD)
 - Technische Maßnahmen:
   - Statische Code-Analyse
   - Code‑Coverage‑Analyse (z. B. Line‑ und Branch‑Coverage)
@@ -466,7 +518,7 @@ Barry W. Boehm
 
 - Anforderungen werden iterativ verfeinert, Testfälle daraus abgeleitet
 - Anforderungen definieren das **Soll‑Verhalten**, Testfälle prüfen es
-- In der Testphase ist das Soll‑Verhalten ausschließlich durch die Testfälle beschrieben
+- In der Testphase wird das Soll‑Verhalten ausschließlich durch die Testfälle beschrieben
 
 ::: {.spacer-sm}
 :::
@@ -488,18 +540,18 @@ Barry W. Boehm
 ::: {.fragment}
 
 - Software‑Debugging erfolgt häufig als Reaktion auf einen Defekt.
-- Defekte entstehen in der Test- und Validierungsphase wenn das **Ist-Verhalten** nicht das **Soll-Verhalten** entspricht.
+- Defekte entstehen in der Test- und Validierungsphase, wenn das **Ist-Verhalten** nicht das **Soll-Verhalten** entspricht.
 
 :::
 
-## Kommunikationsfehler als Defektursache {auto-animate=true}
+## Defekte infolge von Kommunikations- und Interpretationsfehlern {auto-animate=true}
 
-Wir wollen ein Spurhaltewarnsystem (_Lane departure warning system_) (LDWS) entwickeln und die vordere Kamera ist ein Kernsensor.
+Wir wollen ein Spurhaltewarnsystem (_Lane departure warning system_; LDWS) entwickeln und die vordere Kamera ist ein Kernsensor.
 
 ::: {.fragment}
 
-- **Anforderung P.1:** LDWS muss aktive sein, wenn die Kamera einen nominalen Zustand meldet (keine Degradation).
-- **Anforderung P.2:** LDWS muss sich sicher deaktivieren, wenn die Kamera eine Degradation meldet.
+- **Anforderung P.1:** LDWS muss aktiv sein, wenn die Kamera einen nominalen Zustand meldet (keine Degradation).
+- **Anforderung P.2:** LDWS muss sich deaktivieren, wenn die Kamera eine Degradation meldet.
 
 ::: {.fragment}
 
@@ -515,21 +567,26 @@ Wir wollen ein Spurhaltewarnsystem (_Lane departure warning system_) (LDWS) entw
 Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.
 :::
 
-## Kommunikationsfehler als Defektursache {auto-animate=true}
+## Defekte infolge von Kommunikations- und Interpretationsfehlern {auto-animate=true}
 
-- **Anforderung P.1:** LDWS muss aktive sein, wenn die Kamera einen nominalen Zustand meldet (keine Degradation).
-- [**Anforderung P.2:** LDWS muss sich sicher deaktivieren, wenn die Kamera eine Degradation meldet.]{style="color: dimgray;"}
+- **Anforderung P.1:** LDWS muss aktiv sein, wenn die Kamera einen nominalen Zustand meldet (keine Degradation).
+- [**Anforderung P.2:** LDWS muss sich deaktivieren, wenn die Kamera eine Degradation meldet.]{style="color: dimgray;"}
 - ...
   - [↳ **Kamera-Anforderung K.1:** Die Kamera muss eine Degradation melden, wenn ungeeignete Wetterbedingungen erkannt werden.]{style="color: dimgray;"}
     - [Beispiele: Regentropfen auf den Linsenelementen, Blendung durch Sonnenlicht]{style="color: dimgray;"}
 
-Im Laufe einer späteren Testphase, wird so ein Testreport herstellt:
+In einer späteren Testphase wird ein solcher Testreport erstellt:
 
 ::: {data-id="test-fall-example" .small-text}
 
-| Test ID      | Vorbedingungen                            | Soll-Verhalten | Ist-Verhalten                                                                                           | SW-Version | HW-Version |
-| ------------ | ----------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------- | ---------- | ---------- |
-| **P.1 - 01** | _Ideales Wetter_: Tag, Sonne, kaum Wolken | LDWS ist aktiv | LDWS ist aktiv bei freier Fahrt, deaktiviert jedoch sich in eine Stausituation. → **LDWS nicht aktiv!** | 1.1        | C          |
+| Test-ID      | Vorbedingungen                          | Soll-Verhalten | Ist-Verhalten                                                                                            | System-Versionierung             | Häufigkeit     | Kritikalität | Trace-Link   |
+| ------------ | --------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------- | -------------- | ------------ | ------------ |
+| **P.1 - 01** | Ideales Wetter: Tag, Sonne, kaum Wolken | LDWS ist aktiv | LDWS ist aktiv bei freier Fahrt, deaktiviert sich jedoch in einer Stausituation. → **LDWS nicht aktiv!** | SW 1.1 / HW C / Net V2.0 / CFG A | Reproduzierbar | Kritisch     | [DLT Link]() |
+
+<!--
+| Test ID      | Vorbedingungen                            | Soll-Verhalten | Ist-Verhalten                                                                                                 | SW-Version | HW-Version |
+| ------------ | ----------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------- | ---------- | ---------- |
+| **P.1 - 01** | _Ideales Wetter_: Tag, Sonne, kaum Wolken | LDWS ist aktiv | LDWS ist aktiv bei freier Fahrt, deaktiviert sich jedoch sich in einer Stausituation. → **LDWS nicht aktiv!** | 1.1        | C          | -->
 
 :::
 
@@ -537,45 +594,48 @@ Im Laufe einer späteren Testphase, wird so ein Testreport herstellt:
 Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.
 :::
 
-## Kommunikationsfehler als Defektursache {auto-animate=true}
+## Defekte infolge von Kommunikations- und Interpretationsfehlern {auto-animate=true}
 
 ::: {data-id="test-fall-example" .tiny-text}
 
-| Test ID      | Vorbedingungen                          | Soll-Verhalten | Ist-Verhalten                                                                                           | SW-Version | HW-Version |
-| ------------ | --------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------- | ---------- | ---------- |
-| **P.1 - 01** | Ideales Wetter: Tag, Sonne, kaum Wolken | LDWS ist aktiv | LDWS ist aktiv bei freier Fahrt, deaktiviert jedoch sich in eine Stausituation. → **LDWS nicht aktiv!** | 1.1        | C          |
+| Test-ID      | Vorbedingungen                          | Soll-Verhalten | Ist-Verhalten                                                                                            | System-Versionierung             | Häufigkeit     | Kritikalität | Trace-Link   |
+| ------------ | --------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------- | -------------- | ------------ | ------------ |
+| **P.1 - 01** | Ideales Wetter: Tag, Sonne, kaum Wolken | LDWS ist aktiv | LDWS ist aktiv bei freier Fahrt, deaktiviert sich jedoch in einer Stausituation. → **LDWS nicht aktiv!** | SW 1.1 / HW C / Net V2.0 / CFG A | Reproduzierbar | Kritisch     | [DLT Link]() |
+
+<!--
+| Test ID      | Vorbedingungen                          | Soll-Verhalten | Ist-Verhalten                                                                                                 | SW-Version | HW-Version |
+| ------------ | --------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------- | ---------- | ---------- |
+| **P.1 - 01** | Ideales Wetter: Tag, Sonne, kaum Wolken | LDWS ist aktiv | LDWS ist aktiv bei freier Fahrt, deaktiviert sich jedoch sich in einer Stausituation. → **LDWS nicht aktiv!** | 1.1        | C          | -->
 
 :::
 
-::: {.spacer-sm}
-:::
+::: {.fragment .small-text}
 
-::: {.columns}
-:::{.column width="30%"}
-![Fahrerperspektive](Figuren/Stau_Fahrerperspective.png){fig-alt="Fahrerperspektive: ideale Wetterbedingungen" width="70%"}
+Um die Kameravideos zu erhalten, mussten spezielle **Debug-Flags** in der Kamerasoftware aktiviert werden.
 
 :::
 
-:::{.column width="30%" .fragment}
-![Kameraperspektive](Figuren/Stau_Kameraperspektive.png){fig-alt="Kameraperspektive: Blendung durch Sonnenlicht" width="70%"}
+::: {.columns .fragment}
+:::{.column width="20%"}
+![**Fahrerperspektive**](Figuren/Stau_Fahrerperspective.png){fig-alt="Fahrerperspektive: ideale Wetterbedingungen" width="90%"}
 
 :::
 
-:::{.column width="40%" .fragment .mid-space}
-
-- Für die Kamera sind diese Wetterbedingungen _nicht_ geeignet, auch wenn von der Fahrerperspektive, Wetterbedienung ideal sind.
-
-- **Kommunikationsfehler:** Die Anforderungen waren korrekt spezifiziert. Die Testbedingungen waren jedoch nicht konsistent mit den Anforderungen und führten zu einem fehlerhaften Testfall.
-
-::: {.spacer-sm}
-:::
+:::{.column width="20%" .fragment}
+![**Kameraperspektive**](Figuren/Stau_Kameraperspektive.png){fig-alt="Kameraperspektive: Blendung durch Sonnenlicht" width="90%"}
 
 :::
 
+:::{.column width="60%" .fragment .mid-space}
+
+- Für die Kamera sind diese Wetterbedingungen _nicht_ geeignet, auch wenn von der Fahrerperspektive, Wetterbedingungen ideal sind.
+- Während die Anforderungen eindeutig den nominalen Kamerazustand (_keine Degradation_) beschrieben, wurden die Testbedingungen indirekt über Wetterannahmen abgebildet.
+
+:::
 :::
 
 ::: {.callout-note appearance="simple" .small-text .fragment}
-Erster Schritt bei der Analyse eines Defekts ist die Überprüfung, ob tatsächlich ein Defekt vorliegt.
+In großen Projekten ist der erste Schritt der Defektanalyse die **Überprüfung, ob tatsächlich ein Defekt vorliegt!**.
 :::
 
 ::: {.slide-footnote}
