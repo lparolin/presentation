@@ -92,7 +92,7 @@ Eingebettete Systeme sind in ihrer Architektur, Funktionalität und Anwendung st
 ![](Figuren/BeispieleEmbeddedSystems.png){fig-alt="Beispiele eingebetteter Systeme" width="100%"}
 :::
 
-:::{.column width="50%" .incremental }
+:::{.column width="50%" .incremental .mid-space}
 
 Einige Gemeinsamkeiten bestehen jedoch:
 
@@ -151,19 +151,99 @@ In eingebetteten Systemen ist dies jedoch häufig schwierig wenn nicht unmöglic
 
 # Technische und prozessuale Methoden {background-image="Figuren/First_Computer_Bug_1945.jpg" background-opacity="0.3" background-color="black"}
 
+## Wenn man in die Tiefe des Mikrocontrollers schauen muss {auto-animate=true}
+
+Manchmal ist es notwendig, Inhalte von Registern oder Speicher eines Mikrocontrollers auszulesen oder gezielt zu verändern.
+
+:::{.incremental}
+
+- Viele moderne **32‑Bit‑Mikrocontroller** besitzen dedizierte **On‑Chip Debug‑Interfaces**, z.B. Joint Test Action Group (_JTAG_) oder Serial Wire Debug (_SWD_)^[[https://www.jtag.com/de/](https://www.jtag.com/de/), [SWD für ARM](https://developer.arm.com/documentation/ihi0031/a/The-Serial-Wire-Debug-Port--SW-DP-/Introduction-to-the-ARM-Serial-Wire-Debug--SWD--protocol)]
+  - Ermöglicht direkten Zugriff auf Register, Speicher und CPU‑Kontrolle
+
+:::
+
+::: {.spacer-sm}
+:::
+
+:::{data-id="jtag-figure"}
+:::{.columns}
+:::{.column width="50%"}
+![Verbindung über JTAG^[Bildquelle: Erich Styger, „FTDI JTAG Connection“, MCU on Eclipse Blog, 2019. URL: [link](https://mcuoneclipse.com/wp-content/uploads/2019/10/ftdi-jtag-connection.png)]](Figuren/ftdi-jtag-connection_small.png){width="100%"}
+:::
+
+:::{.column width="50%"}
+![Debugging mit GDB^[Bildquelle: Espressif Systems, „VS Code ESP-IDF Extension – GDB Commands“, offizielle Dokumentation. URL: [link](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/_images/gdb_commands.png)]](Figuren/gdb_commands_small.png){width="100%"}
+:::
+:::
+:::
+
+::: {.notes}
+ARM = Advanced RISC Machine
+RISC= Reduced Instruction Set Computer
+
+- Typische Werkzeuge:
+  - **JTAG (Joint Test Action Group)**
+  - **SWD (Serial Wire Debug)** – abgespeckte Variante für ARM Cortex‑M
+  - **OpenOCD (Open On‑Chip Debugger)** + **GDB (GNU Debugger)** im Open‑Source‑Umfeld
+  - Kommerzielle Alternativen: **Segger J‑Link**, **Lauterbach TRACE32**, Hersteller‑IDEs (z. B. STM32CubeIDE, NXP MCUXpresso)
+- On‑Chip Debug-Interfaces erlauben Daten auszulesen, Speicher und Register zu verändern und der Programmfluss zu beeinflussen
+  - Breakpoints erlauben es, den Code gezielt anzuhalten und zu überwachen
+
+:::
+
+## Wenn man in die Tiefe des Mikrocontrollers schauen muss {auto-animate=true}
+
+:::{data-id="jtag-figure"}
+:::{.columns}
+:::{.column width="50%"}
+![Verbindung über JTAG^[Bildquelle: Erich Styger, „FTDI JTAG Connection“, MCU on Eclipse Blog, 2019. URL: [link](https://mcuoneclipse.com/wp-content/uploads/2019/10/ftdi-jtag-connection.png)]](Figuren/ftdi-jtag-connection_small.png){width="100%"}
+:::
+
+:::{.column width="50%"}
+![Debugging mit GDB^[Bildquelle: Espressif Systems, „VS Code ESP-IDF Extension – GDB Commands“, offizielle Dokumentation. URL: [link](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/_images/gdb_commands.png)]](Figuren/gdb_commands_small.png){width="100%"}
+:::
+:::
+:::
+
+::: {.space-xl}
+:::
+
+:::{.mid-space}
+
+- Debugging erfordert oft die Verwendung spezieller **Debug-Flags**
+  - Diese deaktivieren Optimierungen und verändern Ablauf sowie Performance gegenüber optimierten Build
+
+:::
+
+::: {.space-lg}
+:::
+
+::: {.space-lg}
+:::
+
+:::{.fragment}
+
+:::{.callout-note appearance="simple"}
+
+**Zeitliche Probleme bleiben im Debug‑Build häufig verborgen**, da die reale Code-Performance im optimierten Build abweicht.
+
+:::
+:::
+
 ## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
 
 ### Beispiel: Elektromotorregler
 
 Wir haben einen Regler für einen Elektromotor entwickelt.
 
-- Die Reglerfunktion ist jede **15 ms** aufgerufen und hat ein maximales Timing‑Budget von **2 ms**.
-- Wir müssen überprüfen wie lange unsere Funktion wirklich braucht um alle die Berechnungen abzuschließen.
+- Die Funktion `computeControlRule` ist alle **15 ms** aufgerufen und hat ein **maximales Zeitbudget von 2 ms**.
+- Wir müssen überprüfen wie lange unsere Funktion benötigt, um alle Berechnungen abzuschließen.
 
-::: {.columns}
-:::{.column width="90%"}
+:::{.spacer-lg}
+:::
 
-&nbsp;
+::: {.fragment}
+:::{data-id="timing_analysis"}
 
 ```c{code-line-numbers="|5"}
 bool applyControlRule(const InputParameter* motor_state)
@@ -178,105 +258,34 @@ bool applyControlRule(const InputParameter* motor_state)
 :::
 :::
 
+::: {.spacer-lg}
+:::
+
+:::{.fragment}
+
+- **Wie können wir die Messungen durchführen?**
+
+:::
+
+<!--
 ## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
 
 ### Beispiel: Elektromotorregler
 
 Wir haben einen Regler für einen Elektromotor entwickelt.
 
-- Die Reglerfunktion ist jede **15 ms** aufgerufen und hat ein maximales Timing‑Budget von **2 ms**.
+- Die Reglerfunktion ist alle **15 ms** aufgerufen und hat ein maximales Timing‑Budget von **2 ms**.
 - Wir müssen überprüfen wie lange unsere Funktion wirklich braucht um alle die Berechnungen abzuschließen.
 
 ::: {.columns}
 :::{.column width="90%"}
-**Naiver Ansatz: printf**
 
-```c{code-line-numbers="5,7"}
-bool applyControlRule(const InputParameter* motor_state)
-{
-    bool is_rule_successfully_computed = false;
-    ControlRule control_rule;
-    printf("applyControlRule - Start: %ld ms\n", get_time_ms());
-    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
-    printf("applyControlRule - End: %ld ms\n", get_time_ms());
-    // Fehlerbehandlung und Übergabe der Regel
-}
-```
-
-:::
+:::{.spacer-lg}
 :::
 
-## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
+:::{data-id="timing_analysis"}
 
-### Beispiel: Elektromotorregler
-
-Wir haben einen Regler für einen Elektromotor entwickelt.
-
-- Die Reglerfunktion ist jede **15 ms** aufgerufen und hat ein maximales Timing‑Budget von **2 ms**.
-- Wir müssen überprüfen wie lange unsere Funktion wirklich braucht um alle die Berechnungen abzuschließen.
-
-::: {.columns}
-:::{.column width="60%"}
-**Naiver Ansatz: printf**
-
-```c{code-line-numbers="5,7"}
-bool applyControlRule(const InputParameter* motor_state)
-{
-    bool is_rule_successfully_computed = false;
-    ControlRule control_rule;
-    printf("applyControlRule - Start: %ld ms\n", get_time_ms());
-    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
-    printf("applyControlRule - End: %ld ms\n", get_time_ms());
-    // Fehlerbehandlung und Übergabe der Regel
-}
-```
-
-:::
-
-:::{.column width="40%"}
-
-**Ausgabe:**
-
-```shell
-applyControlRule - Start: 1000 ms
-applyControlRule - End: 1006 ms
-...
-applyControlRule - Start: 1015 ms
-applyControlRule - End: 1023 ms
-...
-```
-
-::: {.small-text}
-
-- Die gemessene Gesamtdauer beträgt ca. **6 ms**
-- **Der Wert ist jedoch nicht korrekt!**
-
-:::
-:::
-:::
-
-::: {.fragment}
-
-Jeder Aufruf von printf kann mehrere Millisekunden beanspruchen
-
-- Das **Zeitverhalten** wird dadurch erheblich beeinträchtigt und Deadlines können verfehlt werden.
-
-:::
-
-::: {.fragment}
-:::{.callout-note appearance="simple"}
-**Niemals printf im Echtzeitpfad verwenden!**
-:::
-:::
-
-## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
-
-### Beispiel: Elektromotorregler
-
-::: {.columns}
-:::{.column width="60%"}
-
-**Besser Ansatz: Pin-Toggling**
+**Ansatz 1: Pin-Toggling**
 
 ```c{code-line-numbers="5,7"}
 bool applyControlRule(const InputParameter* motor_state)
@@ -292,12 +301,47 @@ bool applyControlRule(const InputParameter* motor_state)
 
 :::
 
-:::{.column width="40%"}
+:::
+::: -->
+
+## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
+
+### Beispiel: Elektromotorregler
+
+::: {.columns}
+:::{.column width="55%"}
+
+**Ansatz 1: Pin-Toggling**
+
+:::{data-id="timing_analysis"}
+
+```c{code-line-numbers="5,7"}
+bool applyControlRule(const InputParameter* motor_state)
+{
+    bool is_rule_successfully_computed = false;
+    ControlRule control_rule;
+    gpio_set(GPIO_PIN_DEBUG, true);
+    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
+    gpio_set(GPIO_PIN_DEBUG, false);
+    // Fehlerbehandlung und Übergabe der Regel
+}
+```
+
+:::
+
+:::
+
+:::{.column width="45%"}
+::: {.fragment}
 **Messungen:**
 ![](Figuren/Timing_Diagram.svg){width=100%}
 
 ::: {.small-text}
-Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms** und liegt damit innerhalb des maximalen Time‑Budgets von 2 ms.
+
+- Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms**
+- Sie liegt damit innerhalb des maximalen Time‑Budgets von 2 ms.
+
+:::
 :::
 
 :::
@@ -306,29 +350,151 @@ Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms** und liegt damit innerh
 :::{.spacer-sm}
 :::
 
-::: {.fragment .small-text}
+::: {.fragment}
 
-- Diese Art von zeitlichen Messungen ermöglicht im Vergleich zum printf‑Ansatz:
-
-  - **Deutlich höhere Genauigkeit** der Laufzeitmessung
-  - **Reproduzierbarkeit** der Ergebnisse über viele Zyklen hinweg
-  - **Minimale Beeinflussung** der Echtzeit (Overhead im Nanosekunden-/Mikrosekundenbereich)
+- Der Ansatz ermöglicht eine **höhere Genauigkeit** der Laufzeitmessung
+  - Er hat eine **minimale Beeinflussung** der Echtzeit
 
 :::
 
-::: {.fragment .small-text}
-Der Ansatz hat aber auch Einschränkungen:
+::: {.incremental}
 
-- Nur begrenzte Ausgaben sind möglich. Vorgeschlagene Alternative: **Logger und Trace‑Tools**
-  - z.B., Diagnostic Log and Trace in Automotive[^Diagnostic Log and Trace [DLT](https://www.autosar.org/fileadmin/standards/R20-11/CP/AUTOSAR_SWS_DiagnosticLogAndTrace.pdf)]
+- Der Ansatz hat aber auch Einschränkungen:
+
+  - Nur begrenzte Ausgaben sind möglich.
+
+:::
+
+:::{.fragment}
+
+- **Welche Alternativen bieten sich an?**
+
+:::
+
+<!--
+## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true .center}
+
+### Beispiel: Elektromotorregler
+
+:::{data-id="timing_analysis"}
+
+**Ansatz 2: printf**
+
+```c{code-line-numbers="5,7"}
+bool applyControlRule(const InputParameter* motor_state)
+{
+    bool is_rule_successfully_computed = false;
+    ControlRule control_rule;
+    printf("applyControlRule - Start: %ld ms\n", get_time_ms());
+    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
+    printf("applyControlRule - End: %ld ms\n", get_time_ms());
+    // Fehlerbehandlung und Übergabe der Regel
+}
+```
+
+::: -->
+
+## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
+
+### Beispiel: Elektromotorregler
+
+::: {.columns}
+:::{.column width="60%"}
+:::{data-id="timing_analysis"}
+
+**Ansatz 2: printf**
+
+```c{code-line-numbers="5,7"}
+bool applyControlRule(const InputParameter* motor_state)
+{
+    bool is_rule_successfully_computed = false;
+    ControlRule control_rule;
+    printf("applyControlRule - Start: %ld ms\n", get_time_ms());
+    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
+    printf("applyControlRule - End: %ld ms\n", get_time_ms());
+    // Fehlerbehandlung und Übergabe der Regel
+}
+```
+
+:::
+:::
+
+:::{.column width="40%"}
+
+:::{.fragment}
+**Ausgabe:**
+
+```shell
+applyControlRule - Start: 1000 ms
+applyControlRule - End: 1006 ms
+...
+applyControlRule - Start: 1015 ms
+applyControlRule - End: 1023 ms
+...
+```
+
+::: {.small-text}
+
+- Die gemessene Gesamtdauer beträgt jetzt ca. **6 ms!**
+
+:::
+:::
+:::
+:::
+
+:::{.spacer-md}
+:::
+
+::: {.fragment}
+
+- Jeder Aufruf von printf kann mehrere Millisekunden beanspruchen
+
+  - Das **Zeitverhalten** wird dadurch erheblich beeinträchtigt.
+
+  - Bessere Alternative sind dedizierte **dedizierte Logger‑Bibliotheken und Trace‑Tools**, z.B., Diagnostic Log and Trace in Automotive^[Diagnostic Log and Trace [DLT](https://www.autosar.org/fileadmin/standards/R20-11/CP/AUTOSAR_SWS_DiagnosticLogAndTrace.pdf)]
 
 :::
 
 ## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {auto-animate=true}
 
-### Ziel ist es, Fehler frühzeitig zu entdecken
+### Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine
 
-Präventivemaßnahmen müssen in den Entwicklungsprozess von Software eingebaut werden, z.B.:
+:::{data-id="defensive_programming"}
+
+```cpp {code-line-numbers="|5"}
+uint16_t computeHeatingTime(const uint8_t initialTemp,
+                            const uint8_t finalTemp)
+{
+    const uint8_t conversion_factor = 1; // seconds per degree Celsius
+    const uint8_t deltaT = finalTemp - initialTemp;
+    const uint16_t time_sec = conversion_factor * deltaT;
+    return time_sec;
+}
+```
+
+:::
+
+:::{.fragment}
+Was passiert, wenn `initalTemp` großer als `finalTemp` ist?
+
+:::{.fragment}
+
+- Bei `finalTemp=95` und `initialTemp=96` ergibt sich **time_sec=255**
+- Das entspricht **4 Minuten und 15 Sekunden!**
+
+:::
+:::
+
+:::{.spacer-md}
+:::
+
+::: {.callout-note appearance="simple" .fragment}
+**Solche Fehler müssen bereits in der Entwicklungsphase entdeckt werden!**
+:::
+
+## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung
+
+### Ziel ist es, Fehler frühzeitig zu entdecken
 
 - Prozessmaßnahmen:
 
@@ -346,13 +512,18 @@ Präventivemaßnahmen müssen in den Entwicklungsprozess von Software eingebaut 
 
   - Statische Code-Analyse
   - Code‑Coverage‑Analyse (z. B. Line‑ und Branch‑Coverage)
-  - Design by Contract (Vertragsbasierte Programmierung)
+  - Vertragsbasierte Programmierung (Design by Contract)
 
   :::
 
-::: {.fragment}
+## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {.center auto-animate=true}
 
-**Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine**
+Wie könnte man das Problem adressieren?
+
+::: {.spacer-md}
+:::
+
+:::{data-id="code_caffe_machine}
 
 ```cpp
 uint16_t computeHeatingTime(const uint8_t initialTemp,
@@ -362,6 +533,31 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
     const uint8_t deltaT = finalTemp - initialTemp;
     const uint16_t time_sec = conversion_factor * deltaT;
     return time_sec;
+}
+```
+
+:::
+
+## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {.center auto-animate=true}
+
+:::{data-id="code_caffe_machine}
+
+```cpp
+bool computeHeatingTime(const uint8_t initialTemp,
+                        const uint8_t finalTemp,
+                        uint16_t* heating_time)
+{
+    // Vorbedingungen prüfen
+    if ((finalTemp < initialTemp) || (heating_time == NULL)) {
+        return false;
+    }
+
+    const uint8_t conversion_factor = 1; // Sekunden pro Grad Celsius
+    const uint8_t deltaT = finalTemp - initialTemp;
+    const uint16_t time_sec = conversion_factor * deltaT;
+
+    *heating_time = time_sec; // Wert schreiben
+    return true;
 }
 ```
 
@@ -380,7 +576,7 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 
 :::
 
-## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {auto-animate=true}
+## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {.center auto-animate=true}
 
 ### Ziel ist es, Fehler frühzeitig zu entdecken
 
@@ -397,11 +593,14 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 }
 ```
 
-Was passiert, wenn `initalTemp` großer als `finalTemp` ist?
+:::{.spacer-md}
+:::
+
+Was passiert, wenn `initialTemp=96` und `finalTemp=95`?
 
 :::{.fragment}
 
-- Bei `finalTemp=95` und `initialTemp=96` ergibt sich **time_sec=255**
+- Bei `initialTemp=96` und `finalTemp=95` ergibt sich **time_sec=255**
 - Das entspricht **4 Minuten und 15 Sekunden!**
 
 :::
@@ -414,6 +613,7 @@ Was passiert, wenn `initalTemp` großer als `finalTemp` ist?
 :::
 
 ::: {.notes}
+
 Weitere Präventivmaßnahmen
 Code Reviews / Peer Reviews → Frühes Auffinden von Fehlern durch das Vier‑Augen‑Prinzip; fördert auch Wissensaustausch im Team.
 
@@ -430,84 +630,6 @@ Continuous Monitoring / Logging → Laufzeitüberwachung und strukturierte Logs 
 Simulation & Hardware‑in‑the‑Loop Tests (HIL) → Testen mit realistischen Umgebungen, bevor Hardware verfügbar ist; reduziert Überraschungen beim Integrations‑Debugging.
 
 Fuzz Testing → Zufällige oder fehlerhafte Eingaben automatisch generieren, um Robustheit zu prüfen.
-:::
-
-## Das V‑Modell {auto-animate=true}
-
-### Anforderungen, Tests und Kommunikationsrisiken zwischen Teams
-
-- Das V‑Modell entstand Ende der 1970er Jahre als Erweiterung des Wasserfallmodells,
-  vorgeschlagen von Barry W. Boehm (1979), um Verifikation und Validierung systematisch zu verankern.
-
-::: {.r-stack}
-![Das V‑Modell – eine vereinfachte Darstellung](Figuren/V_modell_Teil1.svg){.fragment width="100%"}
-
-![Das V‑Modell – eine vereinfachte Darstellung](Figuren/V_modell_Teil2.svg){.fragment width="100%"}
-
-![Das V‑Modell – eine vereinfachte Darstellung](Figuren/V_modell.svg){.fragment width="100%"}
-
-:::
-
-::: {.slide-footnote}
-Boehm, B. W. (1979). _Guidelines for Verifying and Validating Software Requirements and Design Specifications._ In Proceedings of the European Conference on Applied Software Engineering
-:::
-
-:::{.notes}
-
-Barry W. Boehm
-
-- Geboren 1935, gestorben 2022.
-- Professor an der University of Southern California (USC).
-- Arbeitete zuvor u. a. bei RAND Corporation und TRW.
-- Bekannt für grundlegende Beiträge zur Softwareentwicklung, u. a.:
-- Spiralmodell (1986) – ein iteratives Vorgehensmodell.
-- COCOMO‑Modell (Constructive Cost Model) – zur Aufwandsschätzung von Softwareprojekten.
-- V‑Modell (1979) – als Erweiterung des Wasserfallmodells.
-
-:::
-
-## Das V‑Modell {auto-animate=true}
-
-### Anforderungen, Tests und Kommunikationsrisiken zwischen Teams
-
-::: {.spacer-sm}
-:::
-
-::: {.columns}
-:::{.column width="45%"}
-![](Figuren/V_modell.svg){fig-alt="V-Model without axes" width="100%"}
-:::
-
-::: {.column width="55%" .small-text}
-::: {.spacer-sm}
-:::
-
-- Anforderungen werden iterativ verfeinert, Testfälle daraus abgeleitet
-- Anforderungen definieren das **Soll‑Verhalten**, Testfälle prüfen es
-- In der Testphase wird das Soll‑Verhalten ausschließlich durch die Testfälle beschrieben
-
-::: {.spacer-sm}
-:::
-
-::: {.fragment fragment-index=2}
-
-- **Unterschiedliche Teams** arbeiten häufig auf verschiedenen Ebenen des V‑Modells
-- Entwurfsteams sind typischerweise nicht identisch mit den Teams, die Tests und Verifikation durchführen
-- **Kommunikationsfehler** können dazu führen, dass Anforderungen oder Testfälle falsch abgeleitet werden
-- Solche Fehler werden oft erst in der Testphase erkannt
-
-:::
-:::
-:::
-
-:::{.spacer-sm}
-:::
-
-::: {.fragment}
-
-- Software‑Debugging erfolgt häufig als Reaktion auf einen Defekt.
-- Defekte entstehen in der Test- und Validierungsphase, wenn das **Ist-Verhalten** nicht das **Soll-Verhalten** entspricht.
-
 :::
 
 ## Defekte infolge von Kommunikations- und Interpretationsfehlern {auto-animate=true}
@@ -608,7 +730,87 @@ In großen Projekten ist der erste Schritt der Defektanalyse die **Überprüfung
 Alle Figuren sind mit Microsoft Copilot generiert.
 :::
 
-# Otherstuff
+# Backup
+
+## Das V‑Modell {auto-animate=true}
+
+### Anforderungen, Tests und Kommunikationsrisiken zwischen Teams
+
+- Das V‑Modell entstand Ende der 1970er Jahre als Erweiterung des Wasserfallmodells,
+  vorgeschlagen von Barry W. Boehm (1979), um Verifikation und Validierung systematisch zu verankern.
+
+::: {.r-stack}
+![Das V‑Modell – eine vereinfachte Darstellung](Figuren/V_modell_Teil1.svg){.fragment width="100%"}
+
+![Das V‑Modell – eine vereinfachte Darstellung](Figuren/V_modell_Teil2.svg){.fragment width="100%"}
+
+![Das V‑Modell – eine vereinfachte Darstellung](Figuren/V_modell.svg){.fragment width="100%"}
+
+:::
+
+::: {.slide-footnote}
+Boehm, B. W. (1979). _Guidelines for Verifying and Validating Software Requirements and Design Specifications._ In Proceedings of the European Conference on Applied Software Engineering
+:::
+
+:::{.notes}
+
+Barry W. Boehm
+
+- Geboren 1935, gestorben 2022.
+- Professor an der University of Southern California (USC).
+- Arbeitete zuvor u. a. bei RAND Corporation und TRW.
+- Bekannt für grundlegende Beiträge zur Softwareentwicklung, u. a.:
+- Spiralmodell (1986) – ein iteratives Vorgehensmodell.
+- COCOMO‑Modell (Constructive Cost Model) – zur Aufwandsschätzung von Softwareprojekten.
+- V‑Modell (1979) – als Erweiterung des Wasserfallmodells.
+
+:::
+
+## Das V‑Modell {auto-animate=true}
+
+### Anforderungen, Tests und Kommunikationsrisiken zwischen Teams
+
+::: {.spacer-sm}
+:::
+
+::: {.columns}
+:::{.column width="45%"}
+![](Figuren/V_modell.svg){fig-alt="V-Model without axes" width="100%"}
+:::
+
+::: {.column width="55%" .small-text}
+::: {.spacer-sm}
+:::
+
+- Anforderungen werden iterativ verfeinert, Testfälle daraus abgeleitet
+- Anforderungen definieren das **Soll‑Verhalten**, Testfälle prüfen es
+- In der Testphase wird das Soll‑Verhalten ausschließlich durch die Testfälle beschrieben
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment fragment-index=2}
+
+- **Unterschiedliche Teams** arbeiten häufig auf verschiedenen Ebenen des V‑Modells
+- Entwurfsteams sind typischerweise nicht identisch mit den Teams, die Tests und Verifikation durchführen
+- **Kommunikationsfehler** können dazu führen, dass Anforderungen oder Testfälle falsch abgeleitet werden
+- Solche Fehler werden oft erst in der Testphase erkannt
+
+:::
+:::
+:::
+
+:::{.spacer-sm}
+:::
+
+::: {.fragment}
+
+- Software‑Debugging erfolgt häufig als Reaktion auf einen Defekt.
+- Defekte entstehen in der Test- und Validierungsphase, wenn das **Ist-Verhalten** nicht das **Soll-Verhalten** entspricht.
+
+:::
+
+# To be removed
 
 ## Find a title here
 
@@ -748,124 +950,57 @@ Bild von Michael Pätzold, S. Seyfert, [CC BY-SA 3.0](https://creativecommons.or
   - Hypothese generieren, testen, verfeinern
   - Geduld und Ausdauer sind entscheidend
 
-## Defekt Bestätigt: Wie man Root-cause findet
+## Instrumentierung und Tracing für Timing‑Analyse - Details
 
-## Temp
+### Beispiel: Elektromotorregler
 
-```{dot}
-digraph Defektanalyse {
-    rankdir=TB;
-    node [shape=rectangle, fontname="Helvetica"];
+::: {.columns}
+:::{.column width="60%"}
 
-    // Start- und Endknoten
-    start [shape=circle, style=filled, fillcolor=black, width=0.2, label=""];
-    end   [shape=circle, style=filled, fillcolor=black, peripheries=2, width=0.25, label=""];
+**Besser Ansatz: Pin-Toggling**
 
-    // Entscheidung
-    start -> A;
-    A [label="Defekt entdeckt"];
-    A -> B;
-    B [shape=diamond, label="Defekt besteht?"];
-
-    // Linker Pfad (Nein) als vertikale Spalte
-    subgraph cluster_left {
-        rankdir=TB;
-        style=invis;
-        C [label="Testfall/Konzept prüfen"];
-        D [label="Dokumentation"];
-        C -> D -> end;
-    }
-    B -> C [label="Nein"];
-
-    // Rechter Pfad (Ja) als vertikale Spalte
-    subgraph cluster_right {
-        rankdir=TB;
-        style=invis;
-        E [label="System verstehen"];
-        F [label="Fehler stimulieren"];
-        G [label="System instrumentieren"];
-        H [label="SW-Änderung identifizieren"];
-        I [label="System erneut testen"];
-        J [label="Dokumentation"];
-        E -> F -> G -> H -> I -> J -> end;
-    }
-    B -> E [label="Ja"];
+```c{code-line-numbers="5,7"}
+bool applyControlRule(const InputParameter* motor_state)
+{
+    bool is_rule_successfully_computed = false;
+    ControlRule control_rule;
+    gpio_set(GPIO_PIN_DEBUG, true);
+    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
+    gpio_set(GPIO_PIN_DEBUG, false);
+    // Fehlerbehandlung und Übergabe der Regel
 }
 ```
 
-## Debugging in Embedded Systems: Wichtige Überlegungen
-
-```
-
-# Backup
-
-## Wenn man in die Tiefe des Mikrocontrollers schauen muss {auto-animate=true}
-
-Manchmal ist es notwendig, Inhalte von Registern oder Speicher eines Mikrocontrollers auszulesen oder gezielt zu verändern.
-
-- Viele moderne **32‑Bit‑Mikrocontroller** besitzen dedizierte **On‑Chip Debug‑Interfaces** (z. B. JTAG oder SWD)
-  - Ermöglicht direkten Zugriff auf Register, Speicher und CPU‑Kontrolle
-  <!-- - Typische Werkzeuge:
-  - **JTAG (Joint Test Action Group)**^[IEEE 1149.1 – Standard Test Access Port and Boundary-Scan Architecture (IEEE, 2013)]
-  - **SWD (Serial Wire Debug)** – abgespeckte Variante für ARM Cortex‑M
-  - **OpenOCD (Open On‑Chip Debugger)** + **GDB (GNU Debugger)** im Open‑Source‑Umfeld
-  - Kommerzielle Alternativen: **Segger J‑Link**, **Lauterbach TRACE32**, Hersteller‑IDEs (z. B. STM32CubeIDE, NXP MCUXpresso) -->
-- On‑Chip Debug-Interfaces erlauben Daten auszulesen, Speicher und Register zu verändern und der Programmfluss zu beeinflussen
-  - Breakpoints erlauben es, den Code gezielt anzuhalten und zu überwachen
-
-:::{.columns}
-:::{.column width="50%"}
-![Verbindung über JTAG^[Bildquelle: Erich Styger, „FTDI JTAG Connection“, MCU on Eclipse Blog, 2019. URL: [link](https://mcuoneclipse.com/wp-content/uploads/2019/10/ftdi-jtag-connection.png)]](Figuren/ftdi-jtag-connection_small.png){width="100%"}
 :::
 
-:::{.column width="50%"}
-![Debugging mit GDB^[Bildquelle: Espressif Systems, „VS Code ESP-IDF Extension – GDB Commands“, offizielle Dokumentation. URL: [link](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/_images/gdb_commands.png)]](Figuren/gdb_commands_small.png){width="100%"}
+:::{.column width="40%"}
+**Messungen:**
+![](Figuren/Timing_Diagram.svg){width=100%}
+
+::: {.small-text}
+Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms** und liegt damit innerhalb des maximalen Time‑Budgets von 2 ms.
 :::
 
 :::
+:::
 
-## Wenn man in die Tiefe des Mikrocontrollers schauen muss {auto-animate=true}
+:::{.spacer-sm}
+:::
 
-Manchmal ist es notwendig, Inhalte von Registern oder Speicher eines Mikrocontrollers auszulesen oder gezielt zu verändern.
+::: {.fragment .small-text}
 
-:::{.mid-space}
+- Diese Art von zeitlichen Messungen ermöglicht im Vergleich zum printf‑Ansatz:
 
-- Viele moderne **32‑Bit‑Mikrocontroller** besitzen dedizierte **On‑Chip Debug‑Interfaces** (z. B. JTAG oder SWD)
-  - Ermöglicht direkten Zugriff auf Register, Speicher und CPU‑Kontrolle
-  <!-- - Typische Werkzeuge:
-  - **JTAG (Joint Test Action Group)**^[IEEE 1149.1 – Standard Test Access Port and Boundary-Scan Architecture (IEEE, 2013)]
-  - **SWD (Serial Wire Debug)** – abgespeckte Variante für ARM Cortex‑M
-  - **OpenOCD (Open On‑Chip Debugger)** + **GDB (GNU Debugger)** im Open‑Source‑Umfeld
-  - Kommerzielle Alternativen: **Segger J‑Link**, **Lauterbach TRACE32**, Hersteller‑IDEs (z. B. STM32CubeIDE, NXP MCUXpresso) -->
-- On‑Chip Debug-Interfaces erlauben Daten auszulesen, Speicher und Register zu verändern und der Programmfluss zu beeinflussen
-  - Breakpoints erlauben es, den Code gezielt anzuhalten und zu überwachen
+  - **Deutlich höhere Genauigkeit** der Laufzeitmessung
+  - **Reproduzierbarkeit** der Ergebnisse über viele Zyklen hinweg
+  - **Minimale Beeinflussung** der Echtzeit (Overhead im Nanosekunden-/Mikrosekundenbereich)
 
 :::
 
-::: {.space-xl}
-:::
+::: {.fragment .small-text}
+Der Ansatz hat aber auch Einschränkungen:
 
-::: {.space-xl}
-:::
-:::{.mid-space .incremental}
-
-- Debugging erfordert oft die Verwendung spezieller **Debug-Flags**
-  - Diese deaktivieren Optimierungen und verändern Ablauf sowie Performance gegenüber optimierten Build
+- Nur begrenzte Ausgaben sind möglich. Vorgeschlagene Alternative: **Logger und Trace‑Tools**
+  - z.B., Diagnostic Log and Trace in Automotive[^Diagnostic Log and Trace [DLT](https://www.autosar.org/fileadmin/standards/R20-11/CP/AUTOSAR_SWS_DiagnosticLogAndTrace.pdf)]
 
 :::
-
-::: {.space-lg}
-:::
-
-::: {.space-lg}
-:::
-
-:::{.fragment}
-
-:::{.callout-note appearance="simple"}
-
-**Zeitliche Probleme bleiben im Debug‑Build häufig verborgen**, da die reale Code-Performance im optimierten Build abweicht.
-
-:::
-:::
-```
