@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.10)
+
+# Projektname und Sprache
+project(PrintfTimingDemo LANGUAGES CXX)
+
+# Standard auf C++17 setzen
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Executable aus main.cpp erzeugen
+add_executable(printf_timing_demo
+    main.cpp
+)

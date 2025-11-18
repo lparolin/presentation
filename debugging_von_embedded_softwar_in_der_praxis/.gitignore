@@ -2,5 +2,6 @@
 **/*.quarto_ipynb
 /temp_test_files/
 **/*.aux
-.Rhistory
-.RData
+**/.Rhistory
+**/.RData
+**/build/*
