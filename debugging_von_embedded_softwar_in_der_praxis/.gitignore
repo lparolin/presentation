@@ -1,7 +1,0 @@
-/.quarto/
-**/*.quarto_ipynb
-/temp_test_files/
-**/*.aux
-**/.Rhistory
-**/.RData
-**/build/*
