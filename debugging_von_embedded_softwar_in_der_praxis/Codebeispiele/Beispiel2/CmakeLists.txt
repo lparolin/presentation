@@ -1,0 +1,72 @@
+cmake_minimum_required(VERSION 3.11)
+
+set(CMAKE_C_COMPILER clang)
+set(CMAKE_CXX_COMPILER clang++)
+
+# Standard auf C++17 setzen
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
+# Projektname und Sprache
+project(PraeventiveMassnahmen LANGUAGES CXX)
+
+
+# Executable aus main.cpp erzeugen
+add_executable(heating
+    main.cpp
+)
+
+target_compile_options(heating PRIVATE
+        -Wall
+        -Wextra
+        -Wconversion
+        -Wsign-conversion
+        -pedantic
+        -Werror
+        -fsanitize=unsigned-integer-overflow
+    )
+
+target_link_options(heating PRIVATE -fsanitize=unsigned-integer-overflow)
+
+# Build a small library for the heating logic so tests can link against it
+add_library(heating_lib STATIC
+    heating.cpp
+)
+
+target_link_libraries(heating PRIVATE heating_lib)
+
+# Apply same compile options to library and tests (if any)
+target_compile_options(heating_lib PRIVATE
+        -Wall
+        -Wextra
+        -Wconversion
+        -Wsign-conversion
+        -pedantic
+    )
+
+enable_testing()
+
+# Use GoogleTest via FetchContent
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/releases/download/v1.17.0/googletest-1.17.0.tar.gz
+)
+FetchContent_MakeAvailable(googletest)
+
+add_executable(heating_tests
+    tests/test_heating.cpp
+)
+
+target_link_libraries(heating_tests PRIVATE heating_lib GTest::gtest_main)
+target_compile_options(heating_tests PRIVATE
+        -Wall
+        -Wextra
+        -Wconversion
+        -Wsign-conversion
+        -pedantic
+    )
+
+include(GoogleTest)
+gtest_discover_tests(heating_tests)

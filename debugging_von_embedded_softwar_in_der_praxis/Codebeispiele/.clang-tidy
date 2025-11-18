@@ -1,0 +1,10 @@
+Checks: >
+  bugprone-*,
+  clang-analyzer-*,
+  performance-*,
+  readability-*,
+  clang-analyzer-core.*,
+  bugprone-signed-char-misuse',
+  cppcoreguidelines-*
+WarningsAsErrors: ""
+HeaderFilterRegex: ".*"
