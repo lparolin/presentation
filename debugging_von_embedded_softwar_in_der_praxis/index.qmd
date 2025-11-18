@@ -15,6 +15,7 @@ format:
       data-background-position: center # Optional: centers image
       data-background-opacity: "0.3"
       data-background-color: "black"
+    footer: "THD · Debugging von Embedded Software in der Praxis · Dr. Luca Parolini"
 
 preview:
   watch-inputs: true
@@ -33,7 +34,6 @@ Der Begriff _Bug_ für technische Fehler lässt sich bis ins 19. Jahrhundert zur
 
 :::
 
-:::{.fragment .fade-left}
 :::{.columns}
 :::{.column width="60%"}
 ![](Figuren/First_Computer_Bug_1947_smaller.png){fig-alt="Motte im Relais" width="100%"}
@@ -41,7 +41,6 @@ Der Begriff _Bug_ für technische Fehler lässt sich bis ins 19. Jahrhundert zur
 :::{.column width="40%"}
 Motte zwischen den Kontakten am Relais Nr. 70, Panel F, des Mark II Aiken Relay Calculator (Harvard University, 1947).[^motte]
 
-:::
 :::
 :::
 
@@ -87,11 +86,12 @@ Eingebettete Systeme sind in ihrer Architektur, Funktionalität und Anwendung st
 - Sicherheits- und Datenschutzanforderungen benötigen zusätzliche Entwicklung- und Testprozesse
 
 :::{.columns}
-:::{.column width="50%"}
+:::{.column width="60%"}
 
 ![](Figuren/BeispieleEmbeddedSystems.png){fig-alt="Beispiele eingebetteter Systeme" width="100%"}
 :::
 
+<!--
 :::{.column width="50%" .incremental .mid-space}
 
 Einige Gemeinsamkeiten bestehen jedoch:
@@ -99,12 +99,14 @@ Einige Gemeinsamkeiten bestehen jedoch:
 - Ressourcenbeschränkungen (Speicher, Rechenleistung)
 - Echtzeitanforderungen
 - Die gesamte Entwicklung erfordert **Zusammenarbeit zwischen verschiedenen Teams** und Disziplinen
-<!-- - **Besondere Schwierigkeit beim SW Debugging**
+ - **Besondere Schwierigkeit beim SW Debugging**
   - Eingeschränkte Beobachtbarkeit von internen Zuständen
   - Fehler treten oft nur unter spezifischen Echtzeitbedingungen auf
-  - Hardwarezugriff ist begrenzt oder erfordert Spezialwerkzeuge -->
+  - Hardwarezugriff ist begrenzt oder erfordert Spezialwerkzeuge
 
 :::
+-->
+
 :::
 
 ::: {.slide-footnote}
@@ -145,92 +147,13 @@ In eingebetteten Systemen ist dies jedoch häufig schwierig wenn nicht unmöglic
 ::: {.fragment}
 :::{.callout-note appearance="simple"}
 
-**Ohne Reproduzierbarkeit ist Software‑Debugging praktisch unmöglich.**
+**Erfolgreiches Software‑Debugging setzt die Reproduzierbarkeit des Defekts voraus.**
 :::
 :::
 
 # Technische und prozessuale Methoden {background-image="Figuren/First_Computer_Bug_1945.jpg" background-opacity="0.3" background-color="black"}
 
-## Wenn man in die Tiefe des Mikrocontrollers schauen muss {auto-animate=true}
-
-Manchmal ist es notwendig, Inhalte von Registern oder Speicher eines Mikrocontrollers auszulesen oder gezielt zu verändern.
-
-:::{.incremental}
-
-- Viele moderne **32‑Bit‑Mikrocontroller** besitzen dedizierte **On‑Chip Debug‑Interfaces**, z.B. Joint Test Action Group (_JTAG_) oder Serial Wire Debug (_SWD_)^[[https://www.jtag.com/de/](https://www.jtag.com/de/), [SWD für ARM](https://developer.arm.com/documentation/ihi0031/a/The-Serial-Wire-Debug-Port--SW-DP-/Introduction-to-the-ARM-Serial-Wire-Debug--SWD--protocol)]
-  - Ermöglicht direkten Zugriff auf Register, Speicher und CPU‑Kontrolle
-
-:::
-
-::: {.spacer-sm}
-:::
-
-:::{data-id="jtag-figure"}
-:::{.columns}
-:::{.column width="50%"}
-![Verbindung über JTAG^[Bildquelle: Erich Styger, „FTDI JTAG Connection“, MCU on Eclipse Blog, 2019. URL: [link](https://mcuoneclipse.com/wp-content/uploads/2019/10/ftdi-jtag-connection.png)]](Figuren/ftdi-jtag-connection_small.png){width="100%"}
-:::
-
-:::{.column width="50%"}
-![Debugging mit GDB^[Bildquelle: Espressif Systems, „VS Code ESP-IDF Extension – GDB Commands“, offizielle Dokumentation. URL: [link](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/_images/gdb_commands.png)]](Figuren/gdb_commands_small.png){width="100%"}
-:::
-:::
-:::
-
-::: {.notes}
-ARM = Advanced RISC Machine
-RISC= Reduced Instruction Set Computer
-
-- Typische Werkzeuge:
-  - **JTAG (Joint Test Action Group)**
-  - **SWD (Serial Wire Debug)** – abgespeckte Variante für ARM Cortex‑M
-  - **OpenOCD (Open On‑Chip Debugger)** + **GDB (GNU Debugger)** im Open‑Source‑Umfeld
-  - Kommerzielle Alternativen: **Segger J‑Link**, **Lauterbach TRACE32**, Hersteller‑IDEs (z. B. STM32CubeIDE, NXP MCUXpresso)
-- On‑Chip Debug-Interfaces erlauben Daten auszulesen, Speicher und Register zu verändern und der Programmfluss zu beeinflussen
-  - Breakpoints erlauben es, den Code gezielt anzuhalten und zu überwachen
-
-:::
-
-## Wenn man in die Tiefe des Mikrocontrollers schauen muss {auto-animate=true}
-
-:::{data-id="jtag-figure"}
-:::{.columns}
-:::{.column width="50%"}
-![Verbindung über JTAG^[Bildquelle: Erich Styger, „FTDI JTAG Connection“, MCU on Eclipse Blog, 2019. URL: [link](https://mcuoneclipse.com/wp-content/uploads/2019/10/ftdi-jtag-connection.png)]](Figuren/ftdi-jtag-connection_small.png){width="100%"}
-:::
-
-:::{.column width="50%"}
-![Debugging mit GDB^[Bildquelle: Espressif Systems, „VS Code ESP-IDF Extension – GDB Commands“, offizielle Dokumentation. URL: [link](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/_images/gdb_commands.png)]](Figuren/gdb_commands_small.png){width="100%"}
-:::
-:::
-:::
-
-::: {.space-xl}
-:::
-
-:::{.mid-space}
-
-- Debugging erfordert oft die Verwendung spezieller **Debug-Flags**
-  - Diese deaktivieren Optimierungen und verändern Ablauf sowie Performance gegenüber optimierten Build
-
-:::
-
-::: {.space-lg}
-:::
-
-::: {.space-lg}
-:::
-
-:::{.fragment}
-
-:::{.callout-note appearance="simple"}
-
-**Zeitliche Probleme bleiben im Debug‑Build häufig verborgen**, da die reale Code-Performance im optimierten Build abweicht.
-
-:::
-:::
-
-## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
+## Messung und Analyse zeitkritischer Abläufe {auto-animate=true}
 
 ### Beispiel: Elektromotorregler
 
@@ -304,7 +227,7 @@ bool applyControlRule(const InputParameter* motor_state)
 :::
 ::: -->
 
-## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
+## Messung und Analyse zeitkritischer Abläufe {auto-animate=true}
 
 ### Beispiel: Elektromotorregler
 
@@ -394,7 +317,7 @@ bool applyControlRule(const InputParameter* motor_state)
 
 ::: -->
 
-## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
+## Messung und Analyse zeitkritischer Abläufe {auto-animate=true}
 
 ### Beispiel: Elektromotorregler
 
@@ -455,7 +378,7 @@ applyControlRule - End: 1023 ms
 
 :::
 
-## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {auto-animate=true .center}
+## Präventive Maßnahmen {auto-animate=true .center}
 
 ### Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine
 
@@ -497,7 +420,7 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 **Solche Fehler müssen bereits in der Entwicklungsphase entdeckt werden!**
 :::
 
-## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung
+## Präventive Maßnahmen
 
 ### Ziel ist es, Fehler frühzeitig zu entdecken
 
@@ -535,7 +458,7 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 
 :::
 
-## Präventive Maßnahmen in der Embedded‑Software‑Entwicklung {auto-animate=true}
+## Präventive Maßnahmen {auto-animate=true}
 
 ::: {.spacer-sm}
 :::
@@ -714,7 +637,159 @@ Alle Figuren sind mit Microsoft Copilot generiert.
 
 # Quiz {background-image="Figuren/First_Computer_Bug_1945.jpg" background-opacity="0.3" background-color="black"}
 
+## Frage 1
+
+::: {.spacer-lg}
+:::
+
+Welche Methode **beeinflusst** das Zeitverhalten einer Echtzeitfunktion stark?
+
+::: {.spacer-lg}
+:::
+
+:::{.mid-space}
+
+- **A.** Pin-Toggling.
+- **B.** printf-Ausgaben.
+
+:::
+
+::: {.spacer-lg}
+:::
+
+::: {.callout-note appearance="simple" .fragment}
+Richtige Antwort: **B**
+:::
+
+## Frage 2
+
+::: {.spacer-lg}
+:::
+
+Wie sollten Defekte im Debugging behandelt werden?
+
+::: {.spacer-lg}
+:::
+
+:::{.mid-space}
+
+- **A.** Defekte werden **simuliert**, um sie nachzustellen.
+- **B.** Defekte werden **stimuliert**, um sie reproduzierbar sichtbar zu machen.
+
+:::
+
+::: {.spacer-lg}
+:::
+
+::: {.callout-note appearance="simple" .fragment}
+Richtige Antwort: **B** – Defekte müssen **stimuliert** werden, niemals nur simuliert.
+:::
+
+## Frage 3
+
+::: {.spacer-lg}
+:::
+
+Welche präventive Maßnahme gehört zur Softwareentwicklung?
+
+::: {.spacer-lg}
+:::
+
+:::{.mid-space}
+
+- **A.** Statische Code-Analyse
+- **B.** Debugging mit printf
+- **C.** Hardware-Register auslesen
+
+:::
+
+::: {.spacer-lg}
+:::
+
+::: {.callout-note appearance="simple" .fragment}
+Richtige Antwort: **A**
+:::
+
 # Backup
+
+## Wenn man in die Tiefe des Mikrocontrollers schauen muss {auto-animate=true}
+
+Manchmal ist es notwendig, Inhalte von Registern oder Speicher eines Mikrocontrollers auszulesen oder gezielt zu verändern.
+
+:::{.incremental}
+
+- Viele moderne **32‑Bit‑Mikrocontroller** besitzen dedizierte **On‑Chip Debug‑Interfaces**, z.B. Joint Test Action Group (_JTAG_) oder Serial Wire Debug (_SWD_)^[[https://www.jtag.com/de/](https://www.jtag.com/de/), [SWD für ARM](https://developer.arm.com/documentation/ihi0031/a/The-Serial-Wire-Debug-Port--SW-DP-/Introduction-to-the-ARM-Serial-Wire-Debug--SWD--protocol)]
+  - Ermöglicht direkten Zugriff auf Register, Speicher und CPU‑Kontrolle
+
+:::
+
+::: {.spacer-sm}
+:::
+
+:::{data-id="jtag-figure"}
+:::{.columns}
+:::{.column width="50%"}
+![Verbindung über JTAG^[Bildquelle: Erich Styger, „FTDI JTAG Connection“, MCU on Eclipse Blog, 2019. URL: [link](https://mcuoneclipse.com/wp-content/uploads/2019/10/ftdi-jtag-connection.png)]](Figuren/ftdi-jtag-connection_small.png){width="100%"}
+:::
+
+:::{.column width="50%"}
+![Debugging mit GDB^[Bildquelle: Espressif Systems, „VS Code ESP-IDF Extension – GDB Commands“, offizielle Dokumentation. URL: [link](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/_images/gdb_commands.png)]](Figuren/gdb_commands_small.png){width="100%"}
+:::
+:::
+:::
+
+::: {.notes}
+ARM = Advanced RISC Machine
+RISC= Reduced Instruction Set Computer
+
+- Typische Werkzeuge:
+  - **JTAG (Joint Test Action Group)**
+  - **SWD (Serial Wire Debug)** – abgespeckte Variante für ARM Cortex‑M
+  - **OpenOCD (Open On‑Chip Debugger)** + **GDB (GNU Debugger)** im Open‑Source‑Umfeld
+  - Kommerzielle Alternativen: **Segger J‑Link**, **Lauterbach TRACE32**, Hersteller‑IDEs (z. B. STM32CubeIDE, NXP MCUXpresso)
+- On‑Chip Debug-Interfaces erlauben Daten auszulesen, Speicher und Register zu verändern und der Programmfluss zu beeinflussen
+  - Breakpoints erlauben es, den Code gezielt anzuhalten und zu überwachen
+
+:::
+
+## Wenn man in die Tiefe des Mikrocontrollers schauen muss {auto-animate=true}
+
+:::{data-id="jtag-figure"}
+:::{.columns}
+:::{.column width="50%"}
+![Verbindung über JTAG^[Bildquelle: Erich Styger, „FTDI JTAG Connection“, MCU on Eclipse Blog, 2019. URL: [link](https://mcuoneclipse.com/wp-content/uploads/2019/10/ftdi-jtag-connection.png)]](Figuren/ftdi-jtag-connection_small.png){width="100%"}
+:::
+
+:::{.column width="50%"}
+![Debugging mit GDB^[Bildquelle: Espressif Systems, „VS Code ESP-IDF Extension – GDB Commands“, offizielle Dokumentation. URL: [link](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/_images/gdb_commands.png)]](Figuren/gdb_commands_small.png){width="100%"}
+:::
+:::
+:::
+
+::: {.space-xl}
+:::
+
+:::{.mid-space}
+
+- Debugging erfordert oft die Verwendung spezieller **Debug-Flags**
+  - Diese deaktivieren Optimierungen und verändern Ablauf sowie Performance gegenüber optimierten Build
+
+:::
+
+::: {.space-lg}
+:::
+
+::: {.space-lg}
+:::
+
+:::{.fragment}
+
+:::{.callout-note appearance="simple"}
+
+**Zeitliche Probleme bleiben im Debug‑Build häufig verborgen**, da die reale Code-Performance im optimierten Build abweicht.
+
+:::
+:::
 
 ## Das V‑Modell {auto-animate=true}
 
@@ -794,7 +869,7 @@ Barry W. Boehm
 
 :::
 
-# To be removed
+<!-- # To be removed
 
 ## Find a title here
 
@@ -874,7 +949,6 @@ Alle Figuren sind mit Microsoft Copilot generiert.
 ::: {.columns}
 :::{.column width="70%"}
 
-<!-- ![**Das V-Modell als Entwicklungsmodell**](Figuren/V-Modell.png){fig-alt="V-Model without axes" width="100%"} -->
 
 :::
 
@@ -988,3 +1062,4 @@ Der Ansatz hat aber auch Einschränkungen:
   - z.B., Diagnostic Log and Trace in Automotive[^Diagnostic Log and Trace [DLT](https://www.autosar.org/fileadmin/standards/R20-11/CP/AUTOSAR_SWS_DiagnosticLogAndTrace.pdf)]
 
 :::
+--->
