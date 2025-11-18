@@ -11,10 +11,10 @@ format:
     slide-number: true
     auto-animate: true
     title-slide-attributes:
-      data-background-image: "images/bg_image_splash.png"  # Path to your image
+      data-background-image: "images/map_validation_bmw.png"  # Path to your image
       data-background-size: cover                   # Ensures full coverage
       data-background-position: center              # Optional: centers image
-      data-background-opacity: "0.3"
+      data-background-opacity: "0.6"
       data-background-color: "black" 
 
 
@@ -22,11 +22,6 @@ preview:
   watch-inputs: true
 
 ---
-## A Journey through Applications of Safe Embedded Systems
-- 🎓 PhD in Electrical & Computer Engineering, Carnegie Mellon University  
-- 🏭 10 :w+ years at BMW AG and GE Global Research  
-- 📚 Focus: Safety-critical embedded systems, autonomous driving, control theory  
-- 🔄 Transition: From applied industrial research to academic impact
 
 ## Online Map Validation {background-image="./images/map_validation_bmw_dark.png" .text-light .transparent-background .title-slide}
 ### Ensuring Safety in DynamicEnvironments
@@ -35,7 +30,7 @@ preview:
 :::
 
 ::: {.text-light}
-In collaboration with F. Drost, A. Fabris, and Dr. S. Schneider
+A work in collaboration with F. Drost, A. Fabris, and Dr. S. Schneider.
 :::
 
 ## The role of Maps in Autonomous-Driving Vehicle 
@@ -106,6 +101,152 @@ Depending on the specific application, different approaches to map validation ca
 In this talk we focus on the problems **1**, **2**, and __3__.
 :::
  
+
+
+## Use Probabilistic Graphical Model for Map Validation
+
+At run-time we divide the portion of a map relevant for trajectory planning into multiple sections.
+
+- Every section is associated with a random variable $\mathcal{M}$ representing the validity of the map in that section.
+- **The values taken by $\mathcal{M}$ are not directly measurable**.
+
+::: {.r-stack style="position: relative; height: 100%;"}
+::: {.fragment .fade-in-then-out .no-margin-bottom style="position: absolute; top: 0;"}
+
+Our observable variables are the *matches* between measured positions of landmarks and of lanes provided by sensors, and their expected position given by the map.
+
+::: {.column width="45%" .small-text}
+Lane markings
+![](images/lane_marking_wide.png){fig-align="left" width=100% fig-alt="Example of lane marking" .no-margin-top}
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="45%" .small-text}
+Land marks: Traffic lights, building edges, traffic signs.
+![](images/landmarks.png){fig-align="left" width=100% fig-alt="Example of landmarks" .no-margin-top}
+:::
+
+:::
+
+::: {.fragment .fade-up style="position: absolute; top: 0;"}
+We propose the following PGM:
+
+::: {.column width="100%"}
+::: {.width-30}
+```{dot}
+digraph MapValidity {
+  rankdir=TB;
+  fontname="Helvetica";
+
+  Weather [shape=box, style=filled, fillcolor=lightblue];
+
+  Weather -> Lidar;
+  Weather -> Camera;
+  Weather -> Radar;
+
+  LaneMarkingAccuracy [label="Lane marking accuracy"];
+  MapValidity[shape=box, style=filled, fillcolor=lightgrey, label="Map validity"];
+  LandMarkAccuracy [label="Landmark accuracy"];
+
+  Localization;
+
+  Camera -> LaneMarkingAccuracy;
+  Camera -> LandMarkAccuracy;
+  Radar -> LandMarkAccuracy;
+  Lidar -> LandMarkAccuracy;
+
+  LaneMarkingMatch [shape=box, style=filled, fillcolor=lightblue, label="Lane marking match"];
+  LandMarkMatch [shape=box, style=filled, fillcolor=lightblue, label="Landmark match"];
+
+  LaneMarkingAccuracy -> Localization;
+  MapValidity -> Localization;
+  LandMarkAccuracy -> Localization;
+
+  LaneMarkingAccuracy -> LaneMarkingMatch;
+  MapValidity -> LaneMarkingMatch;
+  Localization -> LaneMarkingMatch;
+
+  LandMarkAccuracy -> LandMarkMatch;
+  MapValidity -> LandMarkMatch;
+  Localization -> LandMarkMatch;
+}
+
+```
+:::
+:::
+
+::: {.column width="60%"}
+Here text
+::: 
+
+:::
+:::
+ 
+
+## Proposed PGM for Online Map Validation
+
+Based on expert judgment, we consider a more refined model of cause-effects which account also for:
+
+- Weather affect on accuracy of sensor measurements;
+- Error correlation from camera in miss-detecting lane geometry and positions of landmarks;
+- Localization errors due to invalid map, or sensors errors.
+
+::: {.fragment}
+We consider the following model
+
+::: {.width-40}
+```{dot}
+digraph MapValidity {
+  rankdir=TB;
+  fontname="Helvetica";
+
+  Weather [shape=box, style=filled, fillcolor=lightblue];
+
+  Weather -> Lidar;
+  Weather -> Camera;
+  Weather -> Radar;
+
+  LaneMarkingAccuracy [label="Lane marking accuracy"];
+  MapValidity[shape=box, style=filled, fillcolor=lightgrey, label="Map validity"];
+  LandMarkAccuracy [label="Landmark accuracy"];
+
+  Localization;
+
+  Camera -> LaneMarkingAccuracy;
+  Camera -> LandMarkAccuracy;
+  Radar -> LandMarkAccuracy;
+  Lidar -> LandMarkAccuracy;
+
+  LaneMarkingMatch [shape=box, style=filled, fillcolor=lightblue, label="Lane marking match"];
+  LandMarkMatch [shape=box, style=filled, fillcolor=lightblue, label="Landmark match"];
+
+  LaneMarkingAccuracy -> Localization;
+  MapValidity -> Localization;
+  LandMarkAccuracy -> Localization;
+
+  LaneMarkingAccuracy -> LaneMarkingMatch;
+  MapValidity -> LaneMarkingMatch;
+  Localization -> LaneMarkingMatch;
+
+  LandMarkAccuracy -> LandMarkMatch;
+  MapValidity -> LandMarkMatch;
+  Localization -> LandMarkMatch;
+}
+
+```
+:::
+:::
+## Selection of nodes affecting match of lanes and landmark
+
+In the paper we decided to *observe* if lane marking and landmarks had a good match between data from the map and sensor data. 
+
+We also considered the effect of weather on sensor accuracy and the effect of incorrect localization in the probability of having poor matches in lanes and landmarks. 
+
+
+# Introduction to Probabilistic Graphical Methods
+
 ## Probabilistic Graphical Models - a Short Review
 
 Probabilistic Graphical Models rely on Graphs for modelling conditional dependencies between random variables.^[Daphne Koller and Nir Friedman. 2009. [Probabilistic Graphical Models: Principles and Techniques - Adaptive Computation and Machine Learning](https://mitpress.ublish.com/book/probabilistic-graphical-models). The MIT Press.]
@@ -316,146 +457,7 @@ $$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
 ::: -->
 
 
-## Use Probabilistic Graphical Model for Map Validation
 
-At run-time we divide the portion of a map relevant for trajectory planning into multiple sections.
-
-- Every section is associated with a random variable $\mathcal{M}$ representing the validity of the map in that section.
-- **The values taken by $\mathcal{M}$ are not directly measurable**.
-
-::: {.r-stack style="position: relative; height: 100%;"}
-::: {.fragment .fade-in-then-out .no-margin-bottom style="position: absolute; top: 0;"}
-
-Our observable variables are the *matches* between measured positions of landmarks and of lanes provided by sensors, and their expected position given by the map.
-
-::: {.column width="45%" .small-text}
-Lane markings
-![](images/lane_marking_wide.png){fig-align="left" width=100% fig-alt="Example of lane marking" .no-margin-top}
-:::
-
-::: {.column width="5%"}
-:::
-
-::: {.column width="45%" .small-text}
-Land marks: Traffic lights, building edges, traffic signs.
-![](images/landmarks.png){fig-align="left" width=100% fig-alt="Example of landmarks" .no-margin-top}
-:::
-
-:::
-
-::: {.fragment .fade-up style="position: absolute; top: 0;"}
-We propose the following PGM:
-
-::: {.column width="100%"}
-::: {.width-30}
-```{dot}
-digraph MapValidity {
-  rankdir=TB;
-  fontname="Helvetica";
-
-  Weather [shape=box, style=filled, fillcolor=lightblue];
-
-  Weather -> Lidar;
-  Weather -> Camera;
-  Weather -> Radar;
-
-  LaneMarkingAccuracy [label="Lane marking accuracy"];
-  MapValidity[shape=box, style=filled, fillcolor=lightgrey, label="Map validity"];
-  LandMarkAccuracy [label="Landmark accuracy"];
-
-  Localization;
-
-  Camera -> LaneMarkingAccuracy;
-  Camera -> LandMarkAccuracy;
-  Radar -> LandMarkAccuracy;
-  Lidar -> LandMarkAccuracy;
-
-  LaneMarkingMatch [shape=box, style=filled, fillcolor=lightblue, label="Lane marking match"];
-  LandMarkMatch [shape=box, style=filled, fillcolor=lightblue, label="Landmark match"];
-
-  LaneMarkingAccuracy -> Localization;
-  MapValidity -> Localization;
-  LandMarkAccuracy -> Localization;
-
-  LaneMarkingAccuracy -> LaneMarkingMatch;
-  MapValidity -> LaneMarkingMatch;
-  Localization -> LaneMarkingMatch;
-
-  LandMarkAccuracy -> LandMarkMatch;
-  MapValidity -> LandMarkMatch;
-  Localization -> LandMarkMatch;
-}
-
-```
-:::
-:::
-
-::: {.column width="60%"}
-Here text
-::: 
-
-:::
-:::
- 
-
-## Proposed PGM for Online Map Validation
-
-Based on expert judgment, we consider a more refined model of cause-effects which account also for:
-
-- Weather affect on accuracy of sensor measurements;
-- Error correlation from camera in miss-detecting lane geometry and positions of landmarks;
-- Localization errors due to invalid map, or sensors errors.
-
-::: {.fragment}
-We consider the following model
-
-::: {.width-40}
-```{dot}
-digraph MapValidity {
-  rankdir=TB;
-  fontname="Helvetica";
-
-  Weather [shape=box, style=filled, fillcolor=lightblue];
-
-  Weather -> Lidar;
-  Weather -> Camera;
-  Weather -> Radar;
-
-  LaneMarkingAccuracy [label="Lane marking accuracy"];
-  MapValidity[shape=box, style=filled, fillcolor=lightgrey, label="Map validity"];
-  LandMarkAccuracy [label="Landmark accuracy"];
-
-  Localization;
-
-  Camera -> LaneMarkingAccuracy;
-  Camera -> LandMarkAccuracy;
-  Radar -> LandMarkAccuracy;
-  Lidar -> LandMarkAccuracy;
-
-  LaneMarkingMatch [shape=box, style=filled, fillcolor=lightblue, label="Lane marking match"];
-  LandMarkMatch [shape=box, style=filled, fillcolor=lightblue, label="Landmark match"];
-
-  LaneMarkingAccuracy -> Localization;
-  MapValidity -> Localization;
-  LandMarkAccuracy -> Localization;
-
-  LaneMarkingAccuracy -> LaneMarkingMatch;
-  MapValidity -> LaneMarkingMatch;
-  Localization -> LaneMarkingMatch;
-
-  LandMarkAccuracy -> LandMarkMatch;
-  MapValidity -> LandMarkMatch;
-  Localization -> LandMarkMatch;
-}
-
-```
-:::
-:::
-## Selection of nodes affecting match of lanes and landmark
-
-In the paper we decided to *observe* if lane marking and landmarks had a good match between data from the map and sensor data. 
-
-We also considered the effect of weather on sensor accuracy and the effect of incorrect localization in the probability of having poor matches in lanes and landmarks. 
 
 <script>
   function addNumbersToTables() {
