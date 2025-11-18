@@ -10,3 +10,13 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
     const uint16_t time_sec = static_cast<uint16_t>(conversion_factor) * static_cast<uint16_t>(deltaT);
     return time_sec;
 }
+
+bool computeHeatingTimeDbC(const uint8_t initialTemp, const uint8_t finalTemp, uint16_t* time) {
+    // Check contract first
+    if ((finalTemp < initialTemp) || (time == nullptr) ) {
+        return false;
+    }
+
+    *time = computeHeatingTime(initialTemp, finalTemp);
+    return true;
+}

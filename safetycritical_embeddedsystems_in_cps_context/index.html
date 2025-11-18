@@ -126,7 +126,7 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" data-background-color="black" data-background-image="images/bg_image_splash.png" data-background-opacity="0.3" data-background-position="center" data-background-size="cover" class="quarto-title-block center">
+<section id="title-slide" data-background-color="black" data-background-image="images/map_validation_bmw.png" data-background-opacity="0.6" data-background-position="center" data-background-size="cover" class="quarto-title-block center">
   <h1 class="title">Online Map Validation for Autonomous Driving</h1>
   <p class="subtitle">An application of Probabilistic Graphical Models</p>
 
@@ -139,18 +139,6 @@ Dr.&nbsp;Luca Parolini
 </div>
 
 </section>
-<section id="a-journey-through-applications-of-safe-embedded-systems" class="slide level2">
-<h2>A Journey through Applications of Safe Embedded Systems</h2>
-<ul>
-<li>🎓 PhD in Electrical &amp; Computer Engineering, Carnegie Mellon University<br>
-</li>
-<li>🏭 10 :w+ years at BMW AG and GE Global Research<br>
-</li>
-<li>📚 Focus: Safety-critical embedded systems, autonomous driving, control theory<br>
-</li>
-<li>🔄 Transition: From applied industrial research to academic impact</li>
-</ul>
-</section>
 <section id="online-map-validation" class="slide level2 text-light transparent-background title-slide center" data-background-image="./images/map_validation_bmw_dark.png">
 <h2>Online Map Validation</h2>
 <h3 id="ensuring-safety-in-dynamicenvironments">Ensuring Safety in DynamicEnvironments</h3>
@@ -158,7 +146,7 @@ Dr.&nbsp;Luca Parolini
 
 </div>
 <div class="text-light">
-<p>In collaboration with F. Drost, A. Fabris, and Dr.&nbsp;S. Schneider</p>
+<p>A work in collaboration with F. Drost, A. Fabris, and Dr.&nbsp;S. Schneider.</p>
 </div>
 </section>
 <section id="the-role-of-maps-in-autonomous-driving-vehicle" class="slide level2">
@@ -269,294 +257,6 @@ Use sensor data to correct the map where it is marked as invalid
 <p>In this talk we focus on the problems <strong>1</strong>, <strong>2</strong>, and <strong>3</strong>.</p>
 </div>
 <aside><ol class="aside-footnotes"><li id="fn1"><p>“Online map validation for autonomous driving”, F. Drost, A. Fabris, L. <em>Parolini</em>, and S. Schneider, 2020</p></li></ol></aside></section>
-<section id="probabilistic-graphical-models---a-short-review" class="slide level2">
-<h2>Probabilistic Graphical Models - a Short Review</h2>
-<p>Probabilistic Graphical Models rely on Graphs for modelling conditional dependencies between random variables.<sup>1</sup></p>
-<div class="example no-margin-top-first-child">
-<p><strong>Example:</strong></p>
-<p>Suppose we are in a classroom without windows and want to understand if it is raining outside, or not.</p>
-<p>We can observe if the professor arrived in the classroom carrying an umbrella and if his/her clothes are wet.</p>
-<div class="fragment">
-<p>Based on previous knowledge, we know that:</p>
-<ul>
-<li>The professor tends to carry an umbrella when outside rains;</li>
-<li>If the clothes are wet and the professors does not carry an umbrella, we can be pretty sure that outside is raining.</li>
-</ul>
-</div>
-<div class="fragment">
-<p>Based on these observations we can <em>infer</em> if outside is raining, or not.</p>
-</div>
-<div class="fragment fade-down">
-<p>The information above can be represented by this PGM:</p>
-<div id="umbrella_problem_src" class="column" style="width:50%;">
-<div class="cell" data-layout-align="left">
-<div class="cell-output-display">
-<div>
-<p></p><figure class=""><p></p>
-<div>
-<svg width="960" height="480" viewbox="0.00 0.00 261.42 67.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none; display: block; margin: auto auto auto auto">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 63)">
-<title>WeatherProblem</title>
-<polygon fill="#f2f2f2" stroke="transparent" points="-4,4 -4,-63 257.42,-63 257.42,4 -4,4"></polygon>
-<!-- Rain -->
-<g id="node1" class="node">
-<title>Rain</title>
-<ellipse fill="none" stroke="black" cx="29.28" cy="-18" rx="29.05" ry="18"></ellipse>
-<text text-anchor="middle" x="29.28" y="-13.8" font-family="Sans-Serif" font-size="14.00">Rain</text>
-</g>
-<!-- Umbrella -->
-<g id="node2" class="node">
-<title>Umbrella</title>
-<polygon fill="lightblue" stroke="black" points="163.35,-59 94.62,-59 94.62,-23 163.35,-23 163.35,-59"></polygon>
-<text text-anchor="middle" x="128.99" y="-36.8" font-family="Sans-Serif" font-size="14.00">Umbrella</text>
-</g>
-<!-- Rain&#45;&gt;Umbrella -->
-<g id="edge1" class="edge">
-<title>Rain-&gt;Umbrella</title>
-<path fill="none" stroke="black" d="M56.97,-24.28C65.44,-26.28 75.03,-28.54 84.36,-30.73"></path>
-<polygon fill="black" stroke="black" points="83.79,-34.19 94.32,-33.08 85.39,-27.38 83.79,-34.19"></polygon>
-</g>
-<!-- WetClothes -->
-<g id="node3" class="node">
-<title>WetClothes</title>
-<polygon fill="lightblue" stroke="black" points="253.42,-36 199.42,-36 199.42,0 253.42,0 253.42,-36"></polygon>
-<text text-anchor="middle" x="226.42" y="-13.8" font-family="Sans-Serif" font-size="14.00">Wet</text>
-</g>
-<!-- Rain&#45;&gt;WetClothes -->
-<g id="edge3" class="edge">
-<title>Rain-&gt;WetClothes</title>
-<path fill="none" stroke="black" d="M58.42,-15.87C69.65,-15.12 82.71,-14.37 94.55,-14 125.14,-13.05 132.83,-13.01 163.42,-14 171.77,-14.27 180.75,-14.74 189.21,-15.27"></path>
-<polygon fill="black" stroke="black" points="188.98,-18.76 199.19,-15.93 189.45,-11.78 188.98,-18.76"></polygon>
-</g>
-<!-- Umbrella&#45;&gt;WetClothes -->
-<g id="edge2" class="edge">
-<title>Umbrella-&gt;WetClothes</title>
-<path fill="none" stroke="black" d="M163.36,-32.96C171.69,-30.95 180.67,-28.79 189.13,-26.75"></path>
-<polygon fill="black" stroke="black" points="190.22,-30.08 199.12,-24.34 188.58,-23.28 190.22,-30.08"></polygon>
-</g>
-</g>
-</svg>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:5%;">
-
-</div><div id="text_pgm1_src" class="column" style="width:45%;">
-<p><em>Vertices</em> of the graph represent random variables and <em>edges</em> represent conditional dependencies among the variables.</p>
-<p>The probability of carrying the umbrella depends on the <em>realization</em> of the random variable <em>Rain</em>.</p>
-</div></div>
-<!-- ::: {.column width=50% .math-compact .left .fragment .small}
-These are the set of probabilities we need to define:
-
-$$P(\textrm {Umbrella=Yes} | \textrm{Rain=Yes}) = 0.9 $$
-$$P(\textrm {Umbrella=Yes} | \textrm{Rain=No}) = 0.7 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=No}) = 0.01 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=Yes}) = 0.01 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=No}) = 0.99 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
-::: -->
-</div>
-<aside><ol class="aside-footnotes"><li id="fn2"><p>Daphne Koller and Nir Friedman. 2009. <a href="https://mitpress.ublish.com/book/probabilistic-graphical-models">Probabilistic Graphical Models: Principles and Techniques - Adaptive Computation and Machine Learning</a>. The MIT Press.</p></li></ol></aside></section>
-<section id="probabilistic-graphical-models---a-short-review-1" class="slide level2">
-<h2>Probabilistic Graphical Models - a Short Review</h2>
-<p>Probabilistic Graphical Models rely on Graphs for modelling conditional dependencies between random variables.<sup>1</sup></p>
-<div class="example no-margin-top-first-child">
-<p><strong>Example:</strong></p>
-<div class="column" style="width:50%;">
-<div id="umbrella_problem_dst">
-<div class="cell" data-layout-align="left">
-<div class="cell-output-display">
-<div>
-<p></p><figure class=""><p></p>
-<div>
-<svg width="960" height="480" viewbox="0.00 0.00 261.42 67.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none; display: block; margin: auto auto auto auto">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 63)">
-<title>WeatherProblem</title>
-<polygon fill="#f2f2f2" stroke="transparent" points="-4,4 -4,-63 257.42,-63 257.42,4 -4,4"></polygon>
-<!-- Rain -->
-<g id="node1" class="node">
-<title>Rain</title>
-<ellipse fill="none" stroke="black" cx="29.28" cy="-18" rx="29.05" ry="18"></ellipse>
-<text text-anchor="middle" x="29.28" y="-13.8" font-family="Sans-Serif" font-size="14.00">Rain</text>
-</g>
-<!-- Umbrella -->
-<g id="node2" class="node">
-<title>Umbrella</title>
-<polygon fill="lightblue" stroke="black" points="163.35,-59 94.62,-59 94.62,-23 163.35,-23 163.35,-59"></polygon>
-<text text-anchor="middle" x="128.99" y="-36.8" font-family="Sans-Serif" font-size="14.00">Umbrella</text>
-</g>
-<!-- Rain&#45;&gt;Umbrella -->
-<g id="edge1" class="edge">
-<title>Rain-&gt;Umbrella</title>
-<path fill="none" stroke="black" d="M56.97,-24.28C65.44,-26.28 75.03,-28.54 84.36,-30.73"></path>
-<polygon fill="black" stroke="black" points="83.79,-34.19 94.32,-33.08 85.39,-27.38 83.79,-34.19"></polygon>
-</g>
-<!-- WetClothes -->
-<g id="node3" class="node">
-<title>WetClothes</title>
-<polygon fill="lightblue" stroke="black" points="253.42,-36 199.42,-36 199.42,0 253.42,0 253.42,-36"></polygon>
-<text text-anchor="middle" x="226.42" y="-13.8" font-family="Sans-Serif" font-size="14.00">Wet</text>
-</g>
-<!-- Rain&#45;&gt;WetClothes -->
-<g id="edge3" class="edge">
-<title>Rain-&gt;WetClothes</title>
-<path fill="none" stroke="black" d="M58.42,-15.87C69.65,-15.12 82.71,-14.37 94.55,-14 125.14,-13.05 132.83,-13.01 163.42,-14 171.77,-14.27 180.75,-14.74 189.21,-15.27"></path>
-<polygon fill="black" stroke="black" points="188.98,-18.76 199.19,-15.93 189.45,-11.78 188.98,-18.76"></polygon>
-</g>
-<!-- Umbrella&#45;&gt;WetClothes -->
-<g id="edge2" class="edge">
-<title>Umbrella-&gt;WetClothes</title>
-<path fill="none" stroke="black" d="M163.36,-32.96C171.69,-30.95 180.67,-28.79 189.13,-26.75"></path>
-<polygon fill="black" stroke="black" points="190.22,-30.08 199.12,-24.34 188.58,-23.28 190.22,-30.08"></polygon>
-</g>
-</g>
-</svg>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:3%;">
-
-</div><div class="column" style="width:43%;">
-<div style="margin-top:-40px">
-<p>We consider these a priori and conditional probabilities:</p>
-<div class="tiny-text">
-<table class="top-border bottom-border table-left .tiny-text">
-<tbody><tr>
-<td>
-<span class="math inline">\(\small P(\textrm{Rain=Yes})\)</span>
-</td>
-<td>
-<table class="table-left">
-<tbody><tr>
-<td>
-50%
-</td>
-</tr>
-</tbody></table>
-</td>
-</tr>
-<tr>
-<td>
-<span class="math inline">\(\small P(\textrm{Umbrella=Yes}|\small\textrm{Rain})\)</span>
-</td>
-<td>
-<table class="table-left">
-<tbody><tr>
-<th>
-Rain=Yes
-</th>
-<th>
-Rain=No
-</th>
-</tr>
-<tr>
-<td>
-90%
-</td>
-<td>
-50%
-</td>
-</tr>
-</tbody></table>
-</td>
-</tr>
-<tr>
-<td>
-<span class="math inline">\(\small P(\textrm{Wet=Yes}|\\\small\phantom{P(}\textrm{Rain,Umbrella})\)</span>
-</td>
-<td>
-<table class="table-left">
-<tbody><tr>
-<th>
-</th>
-<th>
-Rain=Yes
-</th>
-<th>
-Rain=No
-</th>
-</tr>
-<tr>
-<th>
-Umbrella=Yes
-</th>
-<td style="border-top: 1px solid">
-5%
-</td>
-<td style="border-top: 1px solid">
-0.1%
-</td>
-</tr>
-<tr>
-<th>
-Umbrella=No
-</th>
-<td>
-99%
-</td>
-<td>
-0.1%
-</td>
-</tr>
-</tbody></table>
-</td>
-</tr>
-</tbody></table>
-</div>
-</div>
-</div><div class="spacer-sm">
-
-</div>
-<div class="fragment">
-<p>We can infer the following probability of rain, given our observation of wet clothes and umbrella:</p>
-<table class="top-border bottom-border table-left .tiny-text">
-<tbody><tr>
-<th>
-</th>
-<th>
-Umbrella=Yes
-</th>
-<th>
-Umbrella=No
-</th>
-</tr>
-<tr>
-<th>
-Wet=Yes
-</th>
-<td>
-</td>
-<td>
-</td>
-</tr>
-<tr>
-<th>
-Wet=No
-</th>
-<td>
-</td>
-<td>
-</td>
-</tr>
-</tbody></table>
-</div>
-</div>
-<!-- ::: {.column width=50% .math-compact .left .fragment .small}
-These are the set of probabilities we need to define:
-
-$$P(\textrm {Umbrella=Yes} | \textrm{Rain=Yes}) = 0.9 $$
-$$P(\textrm {Umbrella=Yes} | \textrm{Rain=No}) = 0.7 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=No}) = 0.01 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=Yes}) = 0.01 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=No}) = 0.99 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
-::: -->
-<aside><ol class="aside-footnotes"><li id="fn3"><p>Daphne Koller and Nir Friedman. 2009. <a href="https://mitpress.ublish.com/book/probabilistic-graphical-models">Probabilistic Graphical Models: Principles and Techniques - Adaptive Computation and Machine Learning</a>. The MIT Press.</p></li></ol></aside></section>
 <section id="use-probabilistic-graphical-model-for-map-validation" class="slide level2">
 <h2>Use Probabilistic Graphical Model for Map Validation</h2>
 <p>At run-time we divide the portion of a map relevant for trajectory planning into multiple sections.</p>
@@ -946,6 +646,299 @@ $$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
 <h2>Selection of nodes affecting match of lanes and landmark</h2>
 <p>In the paper we decided to <em>observe</em> if lane marking and landmarks had a good match between data from the map and sensor data.</p>
 <p>We also considered the effect of weather on sensor accuracy and the effect of incorrect localization in the probability of having poor matches in lanes and landmarks.</p>
+</section>
+<section>
+<section id="introduction-to-probabilistic-graphical-methods" class="title-slide slide level1 center">
+<h1>Introduction to Probabilistic Graphical Methods</h1>
+
+</section>
+<section id="probabilistic-graphical-models---a-short-review" class="slide level2">
+<h2>Probabilistic Graphical Models - a Short Review</h2>
+<p>Probabilistic Graphical Models rely on Graphs for modelling conditional dependencies between random variables.<sup>1</sup></p>
+<div class="example no-margin-top-first-child">
+<p><strong>Example:</strong></p>
+<p>Suppose we are in a classroom without windows and want to understand if it is raining outside, or not.</p>
+<p>We can observe if the professor arrived in the classroom carrying an umbrella and if his/her clothes are wet.</p>
+<div class="fragment">
+<p>Based on previous knowledge, we know that:</p>
+<ul>
+<li>The professor tends to carry an umbrella when outside rains;</li>
+<li>If the clothes are wet and the professors does not carry an umbrella, we can be pretty sure that outside is raining.</li>
+</ul>
+</div>
+<div class="fragment">
+<p>Based on these observations we can <em>infer</em> if outside is raining, or not.</p>
+</div>
+<div class="fragment fade-down">
+<p>The information above can be represented by this PGM:</p>
+<div id="umbrella_problem_src" class="column" style="width:50%;">
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<svg width="960" height="480" viewbox="0.00 0.00 261.42 67.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none; display: block; margin: auto auto auto auto">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 63)">
+<title>WeatherProblem</title>
+<polygon fill="#f2f2f2" stroke="transparent" points="-4,4 -4,-63 257.42,-63 257.42,4 -4,4"></polygon>
+<!-- Rain -->
+<g id="node1" class="node">
+<title>Rain</title>
+<ellipse fill="none" stroke="black" cx="29.28" cy="-18" rx="29.05" ry="18"></ellipse>
+<text text-anchor="middle" x="29.28" y="-13.8" font-family="Sans-Serif" font-size="14.00">Rain</text>
+</g>
+<!-- Umbrella -->
+<g id="node2" class="node">
+<title>Umbrella</title>
+<polygon fill="lightblue" stroke="black" points="163.35,-59 94.62,-59 94.62,-23 163.35,-23 163.35,-59"></polygon>
+<text text-anchor="middle" x="128.99" y="-36.8" font-family="Sans-Serif" font-size="14.00">Umbrella</text>
+</g>
+<!-- Rain&#45;&gt;Umbrella -->
+<g id="edge1" class="edge">
+<title>Rain-&gt;Umbrella</title>
+<path fill="none" stroke="black" d="M56.97,-24.28C65.44,-26.28 75.03,-28.54 84.36,-30.73"></path>
+<polygon fill="black" stroke="black" points="83.79,-34.19 94.32,-33.08 85.39,-27.38 83.79,-34.19"></polygon>
+</g>
+<!-- WetClothes -->
+<g id="node3" class="node">
+<title>WetClothes</title>
+<polygon fill="lightblue" stroke="black" points="253.42,-36 199.42,-36 199.42,0 253.42,0 253.42,-36"></polygon>
+<text text-anchor="middle" x="226.42" y="-13.8" font-family="Sans-Serif" font-size="14.00">Wet</text>
+</g>
+<!-- Rain&#45;&gt;WetClothes -->
+<g id="edge3" class="edge">
+<title>Rain-&gt;WetClothes</title>
+<path fill="none" stroke="black" d="M58.42,-15.87C69.65,-15.12 82.71,-14.37 94.55,-14 125.14,-13.05 132.83,-13.01 163.42,-14 171.77,-14.27 180.75,-14.74 189.21,-15.27"></path>
+<polygon fill="black" stroke="black" points="188.98,-18.76 199.19,-15.93 189.45,-11.78 188.98,-18.76"></polygon>
+</g>
+<!-- Umbrella&#45;&gt;WetClothes -->
+<g id="edge2" class="edge">
+<title>Umbrella-&gt;WetClothes</title>
+<path fill="none" stroke="black" d="M163.36,-32.96C171.69,-30.95 180.67,-28.79 189.13,-26.75"></path>
+<polygon fill="black" stroke="black" points="190.22,-30.08 199.12,-24.34 188.58,-23.28 190.22,-30.08"></polygon>
+</g>
+</g>
+</svg>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:5%;">
+
+</div><div id="text_pgm1_src" class="column" style="width:45%;">
+<p><em>Vertices</em> of the graph represent random variables and <em>edges</em> represent conditional dependencies among the variables.</p>
+<p>The probability of carrying the umbrella depends on the <em>realization</em> of the random variable <em>Rain</em>.</p>
+</div></div>
+<!-- ::: {.column width=50% .math-compact .left .fragment .small}
+These are the set of probabilities we need to define:
+
+$$P(\textrm {Umbrella=Yes} | \textrm{Rain=Yes}) = 0.9 $$
+$$P(\textrm {Umbrella=Yes} | \textrm{Rain=No}) = 0.7 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=No}) = 0.01 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=Yes}) = 0.01 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=No}) = 0.99 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
+::: -->
+</div>
+<aside><ol class="aside-footnotes"><li id="fn2"><p>Daphne Koller and Nir Friedman. 2009. <a href="https://mitpress.ublish.com/book/probabilistic-graphical-models">Probabilistic Graphical Models: Principles and Techniques - Adaptive Computation and Machine Learning</a>. The MIT Press.</p></li></ol></aside></section>
+<section id="probabilistic-graphical-models---a-short-review-1" class="slide level2">
+<h2>Probabilistic Graphical Models - a Short Review</h2>
+<p>Probabilistic Graphical Models rely on Graphs for modelling conditional dependencies between random variables.<sup>1</sup></p>
+<div class="example no-margin-top-first-child">
+<p><strong>Example:</strong></p>
+<div class="column" style="width:50%;">
+<div id="umbrella_problem_dst">
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<svg width="960" height="480" viewbox="0.00 0.00 261.42 67.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none; display: block; margin: auto auto auto auto">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 63)">
+<title>WeatherProblem</title>
+<polygon fill="#f2f2f2" stroke="transparent" points="-4,4 -4,-63 257.42,-63 257.42,4 -4,4"></polygon>
+<!-- Rain -->
+<g id="node1" class="node">
+<title>Rain</title>
+<ellipse fill="none" stroke="black" cx="29.28" cy="-18" rx="29.05" ry="18"></ellipse>
+<text text-anchor="middle" x="29.28" y="-13.8" font-family="Sans-Serif" font-size="14.00">Rain</text>
+</g>
+<!-- Umbrella -->
+<g id="node2" class="node">
+<title>Umbrella</title>
+<polygon fill="lightblue" stroke="black" points="163.35,-59 94.62,-59 94.62,-23 163.35,-23 163.35,-59"></polygon>
+<text text-anchor="middle" x="128.99" y="-36.8" font-family="Sans-Serif" font-size="14.00">Umbrella</text>
+</g>
+<!-- Rain&#45;&gt;Umbrella -->
+<g id="edge1" class="edge">
+<title>Rain-&gt;Umbrella</title>
+<path fill="none" stroke="black" d="M56.97,-24.28C65.44,-26.28 75.03,-28.54 84.36,-30.73"></path>
+<polygon fill="black" stroke="black" points="83.79,-34.19 94.32,-33.08 85.39,-27.38 83.79,-34.19"></polygon>
+</g>
+<!-- WetClothes -->
+<g id="node3" class="node">
+<title>WetClothes</title>
+<polygon fill="lightblue" stroke="black" points="253.42,-36 199.42,-36 199.42,0 253.42,0 253.42,-36"></polygon>
+<text text-anchor="middle" x="226.42" y="-13.8" font-family="Sans-Serif" font-size="14.00">Wet</text>
+</g>
+<!-- Rain&#45;&gt;WetClothes -->
+<g id="edge3" class="edge">
+<title>Rain-&gt;WetClothes</title>
+<path fill="none" stroke="black" d="M58.42,-15.87C69.65,-15.12 82.71,-14.37 94.55,-14 125.14,-13.05 132.83,-13.01 163.42,-14 171.77,-14.27 180.75,-14.74 189.21,-15.27"></path>
+<polygon fill="black" stroke="black" points="188.98,-18.76 199.19,-15.93 189.45,-11.78 188.98,-18.76"></polygon>
+</g>
+<!-- Umbrella&#45;&gt;WetClothes -->
+<g id="edge2" class="edge">
+<title>Umbrella-&gt;WetClothes</title>
+<path fill="none" stroke="black" d="M163.36,-32.96C171.69,-30.95 180.67,-28.79 189.13,-26.75"></path>
+<polygon fill="black" stroke="black" points="190.22,-30.08 199.12,-24.34 188.58,-23.28 190.22,-30.08"></polygon>
+</g>
+</g>
+</svg>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:3%;">
+
+</div><div class="column" style="width:43%;">
+<div style="margin-top:-40px">
+<p>We consider these a priori and conditional probabilities:</p>
+<div class="tiny-text">
+<table class="top-border bottom-border table-left .tiny-text">
+<tbody><tr>
+<td>
+<span class="math inline">\(\small P(\textrm{Rain=Yes})\)</span>
+</td>
+<td>
+<table class="table-left">
+<tbody><tr>
+<td>
+50%
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td>
+<span class="math inline">\(\small P(\textrm{Umbrella=Yes}|\small\textrm{Rain})\)</span>
+</td>
+<td>
+<table class="table-left">
+<tbody><tr>
+<th>
+Rain=Yes
+</th>
+<th>
+Rain=No
+</th>
+</tr>
+<tr>
+<td>
+90%
+</td>
+<td>
+50%
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td>
+<span class="math inline">\(\small P(\textrm{Wet=Yes}|\\\small\phantom{P(}\textrm{Rain,Umbrella})\)</span>
+</td>
+<td>
+<table class="table-left">
+<tbody><tr>
+<th>
+</th>
+<th>
+Rain=Yes
+</th>
+<th>
+Rain=No
+</th>
+</tr>
+<tr>
+<th>
+Umbrella=Yes
+</th>
+<td style="border-top: 1px solid">
+5%
+</td>
+<td style="border-top: 1px solid">
+0.1%
+</td>
+</tr>
+<tr>
+<th>
+Umbrella=No
+</th>
+<td>
+99%
+</td>
+<td>
+0.1%
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div><div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>We can infer the following probability of rain, given our observation of wet clothes and umbrella:</p>
+<table class="top-border bottom-border table-left .tiny-text">
+<tbody><tr>
+<th>
+</th>
+<th>
+Umbrella=Yes
+</th>
+<th>
+Umbrella=No
+</th>
+</tr>
+<tr>
+<th>
+Wet=Yes
+</th>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Wet=No
+</th>
+<td>
+</td>
+<td>
+</td>
+</tr>
+</tbody></table>
+</div>
+</div>
+<!-- ::: {.column width=50% .math-compact .left .fragment .small}
+These are the set of probabilities we need to define:
+
+$$P(\textrm {Umbrella=Yes} | \textrm{Rain=Yes}) = 0.9 $$
+$$P(\textrm {Umbrella=Yes} | \textrm{Rain=No}) = 0.7 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=No}) = 0.01 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=Yes}) = 0.01 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=No}) = 0.99 $$
+$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
+::: -->
 <script>
   function addNumbersToTables() {
     document.querySelectorAll(".numbered-table tbody").forEach((tbody) => {
@@ -1348,7 +1341,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </script>
 
-</section>
+<aside><ol class="aside-footnotes"><li id="fn3"><p>Daphne Koller and Nir Friedman. 2009. <a href="https://mitpress.ublish.com/book/probabilistic-graphical-models">Probabilistic Graphical Models: Principles and Techniques - Adaptive Computation and Machine Learning</a>. The MIT Press.</p></li></ol></aside></section></section>
 
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">

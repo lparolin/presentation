@@ -36,3 +36,13 @@ __pycache__/
 
 # Node modules (if using JS tooling)
 node_modules/
+
+**/clipboard/
+**/Readme_files/
+index.html
+index.pdf
+*.xcf
+*.pdf
+**/.Rhistory
+
+**/rain_estimation_files/

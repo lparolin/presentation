@@ -28,8 +28,74 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto-b8f0409ee5ffbcc0e3c1e68817b8d997.css">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto-5062a8d810c3dfbaac706e36d2f6bdb0.css">
   <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -140,106 +206,598 @@ Dr.&nbsp;Luca Parolini
 </section>
 <section id="von-bugs-zu-debugging" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Von Bugs zu Debugging</h2>
-<p>Die historische Wurzel des Begriffs „Bug“ im Zusammenhang mit technischen Fehlern reicht bis ins 19. Jahrhundert zurück.</p>
+<h3 id="historischer-überblick">Historischer Überblick</h3>
+<p>Der Begriff <em>Bug</em> für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.</p>
 <ul>
 <li class="fragment">1878: Thomas Edison beschreibt „kleine Fehler“ in seinen Erfindungen als <em>Bugs</em>.<sup>1</sup></li>
 <li class="fragment">1947: Mark II Aiken Relay Calculator – berühmter „Bug“ (Motte im Relais).<sup>2</sup></li>
 </ul>
-<div class="spacer-sm">
-
-</div>
-<div class="fragment fade-left">
 <div class="columns">
-<div class="column" style="width:40%;">
-<div class="quarto-figure quarto-figure-left">
-<figure>
-<p><img data-src="Figuren/First_Computer_Bug_1945.jpg" style="width:90.0%" alt="Motte im Relais"></p>
-<figcaption><strong>Motte im Relais</strong><sup>3</sup></figcaption>
-</figure>
-</div>
-</div><div class="column" style="width:60%;">
-<p>Motte zwischen den Kontakten am Relais Nr. 70, Panel F, des Mark II Aiken Relay Calculator gefunden, während er an der Harvard University getestet wurde, am 9. September 1947. Das Relais wurde entfernt und die Motte in das Logbuch eingeklebt.</p>
-<p>Der Begriff „Bug“ etabliert sich im Bereich der Computerscience.</p>
+<div class="column" style="width:60%;">
+<p><img data-src="Figuren/First_Computer_Bug_1947_smaller.png" style="width:100.0%" alt="Motte im Relais"></p>
+</div><div class="column" style="width:40%;">
+<p>Motte zwischen den Kontakten am Relais Nr. 70, Panel F, des Mark II Aiken Relay Calculator (Harvard University, 1947).<sup>3</sup></p>
 </div></div>
-</div>
 <aside><ol class="aside-footnotes"><li id="fn1"><p>Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.</p></li><li id="fn2"><p>Grace Hopper, <em>The First Bug</em>, 1986.</p></li><li id="fn3"><p>Courtesy of the Naval Surface Warfare Center, Dahlgren, VA., 1988., Public Domain. <a href="https://de.wikipedia.org/wiki/Debuggen#/media/Datei:First_Computer_Bug,_1945.jpg">Link</a></p></li></ol></aside></section>
 <section id="von-bugs-zu-debugging-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Von Bugs zu Debugging</h2>
-<p>Die historische Wurzel des Begriffs „Bug“ im Zusammenhang mit technischen Fehlern reicht bis ins 19. Jahrhundert zurück.</p>
+<h3 id="debugging-ist-nicht-gleicht-troubleshooting">Debugging ist nicht gleicht Troubleshooting</h3>
+<p>Der Begriff <em>Bug</em> für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.</p>
 <ul>
 <li>1878: Thomas Edison beschreibt „kleine Fehler“ in seinen Erfindungen als <em>Bugs</em>.<sup>1</sup></li>
 <li>1947: Mark II Aiken Relay Calculator – berühmter „Bug“ (Motte im Relais).<sup>2</sup></li>
 </ul>
-<div class="callout callout-note no-icon callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<p><strong>Debugging ist nicht gleich Troubleshooting</strong></p>
-</div>
-<div class="callout-content">
-<blockquote>
-<p>„Debugging bedeutet in der Regel herauszufinden, warum ein Entwurf nicht wie geplant funktioniert. Troubleshooting hingegen bedeutet herauszufinden, was an einer bestimmten Kopie eines Produkts defekt ist, wenn das Produktdesign an sich als korrekt gilt.“ — Agans (2023)<sup>3</sup></p>
-</blockquote>
-<div class="tiny">
-<blockquote>
-<p><em>“Debugging usually means figuring out why a design doesn’t work as planned. Troubleshooting, on the other hand, means figuring out what is wrong with a particular copy of a product when the product design itself is considered correct.”</em></p>
-</blockquote>
-</div>
-</div>
-</div>
-</div>
-<aside><ol class="aside-footnotes"><li id="fn4"><p>Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.</p></li><li id="fn5"><p>Grace Hopper, <em>The First Bug</em>, 1986.</p></li><li id="fn6"><p>Agans, David J. <em>Debugging: The 9 indispensable rules for finding even the most elusive software and hardware problems</em>. HarperChristian+ ORM, 2023.</p></li></ol></aside></section>
-<section id="debugging-und-kommunikationsfehler-in-embedded-software" class="slide level2">
-<h2>Debugging und Kommunikationsfehler in Embedded Software</h2>
-<h3 id="anzahl-der-beteiligten-gruppen-erschwert-die-defektanalyse">Anzahl der beteiligten Gruppen erschwert die Defektanalyse</h3>
-<div class="spacer-sm">
+<div class="spacer-lg">
 
 </div>
-<div class="columns">
-<div class="column" style="width:33%;">
-<div class="quarto-figure quarto-figure-left">
-<figure>
-<p><img data-src="Figuren/Thermostat_square.png" style="width:100.0%" alt="Heizkörper-Thermostat"></p>
-<figcaption><strong>Thermostat (Smart Home)</strong></figcaption>
-</figure>
-</div>
-<div class="small-text fragment">
-<ul>
-<li><strong>Geschätzte Gruppen:</strong> &lt;3</li>
-<li><strong>Komplexität:</strong> Niedrig</li>
-</ul>
-</div>
-</div><div class="column" style="width:33%;">
-<div class="quarto-figure quarto-figure-left">
-<figure>
-<p><img data-src="Figuren/KaffeMachine_square.png" style="width:100.0%" alt="Vollautomatik Kaffeemaschine"></p>
-<figcaption><strong>Vollautomatik Kaffeemaschine</strong></figcaption>
-</figure>
-</div>
-<div class="small-text fragment">
-<ul>
-<li><strong>Geschätzte Gruppen:</strong> 5-10</li>
-<li><strong>Komplexität:</strong> Mittel</li>
-</ul>
-</div>
-</div><div class="column" style="width:33%;">
-<div class="quarto-figure quarto-figure-left">
-<figure>
-<p><img data-src="Figuren/Auto_square.png" style="width:100.0%" alt="Fahrerassistenzsysteme"></p>
-<figcaption><strong>Fahrassistenzsysteme</strong></figcaption>
-</figure>
-</div>
-<div class="small-text fragment">
-<ul>
-<li><strong>Geschätzte Gruppen:</strong> &gt;20</li>
-<li><strong>Komplexität:</strong> Hoch</li>
-</ul>
-</div>
-</div></div>
-<div class="fragment small-text">
+<div class="fade-left">
 <div class="callout callout-note no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
-<p><strong>Risiko von Kommunikationsfehler wächst mit der Zahl der beteiligten Gruppen.</strong></p>
+<blockquote>
+<p><em>Debugging bedeutet in der Regel herauszufinden, warum ein Entwurf nicht wie geplant funktioniert. Troubleshooting hingegen bedeutet herauszufinden, was an einer bestimmten Instanz eines Produkts defekt ist, wenn das Produktdesign an sich als korrekt gilt.</em> (nach Agans, 2002)<sup>3</sup></p>
+</blockquote>
+<!-- ::: {.small-text}
+
+> Debugging usually means figuring out why a design doesn't work as planned. Troubleshooting usually means figuring out what's broken in a particular copy of a product when the product's design is known to be good.(Agans, 2002)[^agans]
+
+::: -->
+</div>
+</div>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn4"><p>Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.</p></li><li id="fn5"><p>Grace Hopper, <em>The First Bug</em>, 1986.</p></li><li id="fn6"><p>David, J. Agans. “The 9 indispensable rules for finding even the most elusive software and hardware problems.” (2002).</p></li></ol></aside></section>
+<section id="vielfältigkeit-eingebetteter-systeme" class="slide level2">
+<h2>Vielfältigkeit eingebetteter Systeme</h2>
+<h3 id="von-sensoren-bis-zu-triebwerken">von Sensoren bis zu Triebwerken</h3>
+<p>Eingebettete Systeme sind in ihrer Architektur, Funktionalität und Anwendung stark unterschiedlich.</p>
+<ul>
+<li>Standards und Vorschriften variieren deutlich je nach Branche</li>
+<li>Sicherheits- und Datenschutzanforderungen benötigen zusätzliche Entwicklung- und Testprozesse</li>
+</ul>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p><img data-src="Figuren/BeispieleEmbeddedSystems.png" style="width:100.0%" alt="Beispiele eingebetteter Systeme"></p>
+</div><!--
+:::{.column width="50%" .incremental .mid-space}
+
+Einige Gemeinsamkeiten bestehen jedoch:
+
+- Ressourcenbeschränkungen (Speicher, Rechenleistung)
+- Echtzeitanforderungen
+- Die gesamte Entwicklung erfordert **Zusammenarbeit zwischen verschiedenen Teams** und Disziplinen
+ - **Besondere Schwierigkeit beim SW Debugging**
+  - Eingeschränkte Beobachtbarkeit von internen Zuständen
+  - Fehler treten oft nur unter spezifischen Echtzeitbedingungen auf
+  - Hardwarezugriff ist begrenzt oder erfordert Spezialwerkzeuge
+
+:::
+-->
+</div>
+<div class="slide-footnote">
+<p>Abbildung ist mit Adobe Firefly generiert.</p>
+</div>
+</section>
+<section id="reproduzierbarkeit-von-defekten" class="slide level2">
+<h2>Reproduzierbarkeit von Defekten</h2>
+<p>Ein zentrales Thema beim Debugging eingebetteter Software ist die <em>Reproduzierbarkeit</em> von Fehlern.</p>
+<div class="mid-space">
+<ul>
+<li><p>Effektives Debugging setzt voraus, dass ein Defekt <strong>wiederholt ausgelöst</strong> und sichtbar gemacht werden kann.</p>
+<ul>
+<li>Von entscheidender Wichtigkeit: Fehler müssen <strong>immer stimuliert</strong> werden und <strong>niemals nur simuliert</strong>.</li>
+</ul></li>
+</ul>
+<ul>
+<li class="fragment">Vorteile der Reproduzierbarkeit:
+<ul>
+<li class="fragment">Fehler lässt sich wieder sichtbar machen</li>
+<li class="fragment">Ursachenanalyse wird möglich</li>
+<li class="fragment">Fix kann überprüft werden</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<p>In eingebetteten Systemen ist dies jedoch häufig schwierig wenn nicht unmöglich</p>
+<ul>
+<li>Fast immer sind mehrere Einflussfaktoren (z. B. zeitliche Randbedingungen, Umgebungsbedingungen) nicht unter unserer Kontrolle und oft auch nicht zuverlässig messbar.</li>
+</ul>
+</div>
+<div class="spacer-md">
+
+</div>
+<div class="fragment">
+<div class="callout callout-note no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p><strong>Erfolgreiches Software‑Debugging setzt die Reproduzierbarkeit des Defekts voraus.</strong></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<section id="technische-und-prozessuale-methoden" class="title-slide slide level1 center" data-background-image="Figuren/First_Computer_Bug_1945.jpg" data-background-opacity="0.3" data-background-color="black">
+<h1>Technische und prozessuale Methoden</h1>
+
+</section>
+<section id="messung-und-analyse-zeitkritischer-abläufe" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Messung und Analyse zeitkritischer Abläufe</h2>
+<h3 id="beispiel-elektromotorregler">Beispiel: Elektromotorregler</h3>
+<p>Wir haben einen Regler für einen Elektromotor entwickelt.</p>
+<ul>
+<li>Die Funktion <code>computeControlRule</code> ist alle <strong>15 ms</strong> aufgerufen und hat ein <strong>maximales Zeitbudget von 2 ms</strong>.</li>
+<li>Wir müssen überprüfen wie lange unsere Funktion benötigt, um alle Berechnungen abzuschließen.</li>
+</ul>
+<div class="spacer-lg">
+
+</div>
+<div class="fragment">
+<div data-id="timing_analysis">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-code-line-numbers="|5"><pre class="sourceCode numberSource c number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode c hljs"><span id="cb1-1" class="hljs-ln-code"><a href=""></a><span class="dt">bool</span> applyControlRule<span class="op">(</span><span class="dt">const</span> InputParameter<span class="op">*</span> motor_state<span class="op">)</span></span>
+<span id="cb1-2" class="hljs-ln-code"><a href=""></a><span class="op">{</span></span>
+<span id="cb1-3" class="hljs-ln-code"><a href=""></a>    <span class="dt">bool</span> is_rule_successfully_computed <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb1-4" class="hljs-ln-code"><a href=""></a>    ControlRule control_rule<span class="op">;</span></span>
+<span id="cb1-5" class="hljs-ln-code"><a href=""></a>    is_rule_successfully_computed <span class="op">=</span> computeControlRule<span class="op">(</span>motor_state<span class="op">,</span> <span class="op">&amp;</span>control_rule<span class="op">);</span></span>
+<span id="cb1-6" class="hljs-ln-code"><a href=""></a>    <span class="co">// Fehlerbehandlung und Übergabe der Regel</span></span>
+<span id="cb1-7" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="spacer-lg">
+
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Wie können wir die Messungen durchführen?</strong></li>
+</ul>
+</div>
+<!--
+## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
+
+### Beispiel: Elektromotorregler
+
+Wir haben einen Regler für einen Elektromotor entwickelt.
+
+- Die Reglerfunktion ist alle **15 ms** aufgerufen und hat ein maximales Timing‑Budget von **2 ms**.
+- Wir müssen überprüfen wie lange unsere Funktion wirklich braucht um alle die Berechnungen abzuschließen.
+
+::: {.columns}
+:::{.column width="90%"}
+
+:::{.spacer-lg}
+:::
+
+:::{data-id="timing_analysis"}
+
+**Ansatz 1: Pin-Toggling**
+
+```c{code-line-numbers="5,7"}
+bool applyControlRule(const InputParameter* motor_state)
+{
+    bool is_rule_successfully_computed = false;
+    ControlRule control_rule;
+    gpio_set(GPIO_PIN_DEBUG, true);
+    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
+    gpio_set(GPIO_PIN_DEBUG, false);
+    // Fehlerbehandlung und Übergabe der Regel
+}
+```
+
+:::
+
+:::
+::: -->
+</section>
+<section id="messung-und-analyse-zeitkritischer-abläufe-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Messung und Analyse zeitkritischer Abläufe</h2>
+<h3 id="beispiel-elektromotorregler-1">Beispiel: Elektromotorregler</h3>
+<div class="columns">
+<div class="column" style="width:55%;">
+<p><strong>Ansatz 1: Pin-Toggling</strong></p>
+<div data-id="timing_analysis">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-code-line-numbers="5,7"><pre class="sourceCode numberSource c number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode c hljs"><span id="cb2-1" class="hljs-ln-code"><a href=""></a><span class="dt">bool</span> applyControlRule<span class="op">(</span><span class="dt">const</span> InputParameter<span class="op">*</span> motor_state<span class="op">)</span></span>
+<span id="cb2-2" class="hljs-ln-code"><a href=""></a><span class="op">{</span></span>
+<span id="cb2-3" class="hljs-ln-code"><a href=""></a>    <span class="dt">bool</span> is_rule_successfully_computed <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb2-4" class="hljs-ln-code"><a href=""></a>    ControlRule control_rule<span class="op">;</span></span>
+<span id="cb2-5" class="hljs-ln-code"><a href=""></a>    gpio_set<span class="op">(</span>GPIO_PIN_DEBUG<span class="op">,</span> <span class="kw">true</span><span class="op">);</span></span>
+<span id="cb2-6" class="hljs-ln-code"><a href=""></a>    is_rule_successfully_computed <span class="op">=</span> computeControlRule<span class="op">(</span>motor_state<span class="op">,</span> <span class="op">&amp;</span>control_rule<span class="op">);</span></span>
+<span id="cb2-7" class="hljs-ln-code"><a href=""></a>    gpio_set<span class="op">(</span>GPIO_PIN_DEBUG<span class="op">,</span> <span class="kw">false</span><span class="op">);</span></span>
+<span id="cb2-8" class="hljs-ln-code"><a href=""></a>    <span class="co">// Fehlerbehandlung und Übergabe der Regel</span></span>
+<span id="cb2-9" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:45%;">
+<div class="fragment">
+<p><strong>Messungen:</strong> <img data-src="Figuren/Timing_Diagram.svg" style="width:100.0%"></p>
+<div class="small-text">
+<ul>
+<li>Die gemessene Gesamtdauer beträgt jetzt ca. <strong>1,8 ms</strong></li>
+<li>Sie liegt damit innerhalb des maximalen Time‑Budgets von 2 ms.</li>
+</ul>
+</div>
+</div>
+</div></div>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<ul>
+<li>Der Ansatz ermöglicht eine <strong>höhere Genauigkeit</strong> der Laufzeitmessung
+<ul>
+<li>Er hat eine <strong>minimale Beeinflussung</strong> der Echtzeit</li>
+</ul></li>
+</ul>
+</div>
+<ul>
+<li class="fragment"><p>Der Ansatz hat aber auch Einschränkungen:</p>
+<ul>
+<li class="fragment">Nur begrenzte Ausgaben sind möglich.</li>
+</ul></li>
+</ul>
+<div class="fragment">
+<ul>
+<li><strong>Welche Alternativen bieten sich an?</strong></li>
+</ul>
+</div>
+<!--
+## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true .center}
+
+### Beispiel: Elektromotorregler
+
+:::{data-id="timing_analysis"}
+
+**Ansatz 2: printf**
+
+```c{code-line-numbers="5,7"}
+bool applyControlRule(const InputParameter* motor_state)
+{
+    bool is_rule_successfully_computed = false;
+    ControlRule control_rule;
+    printf("applyControlRule - Start: %ld ms\n", get_time_ms());
+    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
+    printf("applyControlRule - End: %ld ms\n", get_time_ms());
+    // Fehlerbehandlung und Übergabe der Regel
+}
+```
+
+::: -->
+</section>
+<section id="messung-und-analyse-zeitkritischer-abläufe-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Messung und Analyse zeitkritischer Abläufe</h2>
+<h3 id="beispiel-elektromotorregler-2">Beispiel: Elektromotorregler</h3>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div data-id="timing_analysis">
+<p><strong>Ansatz 2: printf</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-code-line-numbers="5,7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href=""></a><span class="dt">bool</span> applyControlRule<span class="op">(</span><span class="dt">const</span> InputParameter<span class="op">*</span> motor_state<span class="op">)</span></span>
+<span id="cb3-2"><a href=""></a><span class="op">{</span></span>
+<span id="cb3-3"><a href=""></a>    <span class="dt">bool</span> is_rule_successfully_computed <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb3-4"><a href=""></a>    ControlRule control_rule<span class="op">;</span></span>
+<span id="cb3-5"><a href=""></a>    printf<span class="op">(</span><span class="st">"applyControlRule - Start: </span><span class="sc">%ld</span><span class="st"> ms</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> get_time_ms<span class="op">());</span></span>
+<span id="cb3-6"><a href=""></a>    is_rule_successfully_computed <span class="op">=</span> computeControlRule<span class="op">(</span>motor_state<span class="op">,</span> <span class="op">&amp;</span>control_rule<span class="op">);</span></span>
+<span id="cb3-7"><a href=""></a>    printf<span class="op">(</span><span class="st">"applyControlRule - End: </span><span class="sc">%ld</span><span class="st"> ms</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> get_time_ms<span class="op">());</span></span>
+<span id="cb3-8"><a href=""></a>    <span class="co">// Fehlerbehandlung und Übergabe der Regel</span></span>
+<span id="cb3-9"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column" style="width:45%;">
+<div class="fragment">
+<p><strong>Ausgabe:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href=""></a>applyControlRule - Start: 1000 ms</span>
+<span id="cb4-2"><a href=""></a>applyControlRule - End: 1006 ms</span>
+<span id="cb4-3"><a href=""></a>...</span>
+<span id="cb4-4"><a href=""></a>applyControlRule - Start: 1015 ms</span>
+<span id="cb4-5"><a href=""></a>applyControlRule - End: 1023 ms</span>
+<span id="cb4-6"><a href=""></a>...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="small-text">
+<ul>
+<li>Die gemessene Gesamtdauer beträgt jetzt ca. <strong>6 ms!</strong></li>
+</ul>
+</div>
+</div>
+</div></div>
+<div class="spacer-md">
+
+</div>
+<div class="fragment">
+<ul>
+<li><p>Jeder Aufruf von printf kann mehrere Millisekunden beanspruchen</p>
+<ul>
+<li><p>Das <strong>Zeitverhalten</strong> wird dadurch erheblich beeinträchtigt.</p></li>
+<li><p>Bessere Alternative sind dedizierte <strong>dedizierte Logger‑Bibliotheken und Trace‑Tools</strong>, z.B., Diagnostic Log and Trace in Automotive<sup>1</sup></p></li>
+</ul></li>
+</ul>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn7"><p>Diagnostic Log and Trace <a href="https://www.autosar.org/fileadmin/standards/R20-11/CP/AUTOSAR_SWS_DiagnosticLogAndTrace.pdf">DLT</a></p></li></ol></aside></section>
+<section id="präventive-maßnahmen" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Präventive Maßnahmen</h2>
+<h3 id="eine-regelfunktion-für-die-warmwasserbereitung-einer-kaffeemaschine">Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine</h3>
+<div data-id="defensive_programming">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-code-line-numbers="|5"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb5-1" class="hljs-ln-code"><a href=""></a><span class="dt">uint16_t</span> computeHeatingTime<span class="op">(</span><span class="at">const</span> <span class="dt">uint8_t</span> initialTemp<span class="op">,</span></span>
+<span id="cb5-2" class="hljs-ln-code"><a href=""></a>                            <span class="at">const</span> <span class="dt">uint8_t</span> finalTemp<span class="op">)</span></span>
+<span id="cb5-3" class="hljs-ln-code"><a href=""></a><span class="op">{</span></span>
+<span id="cb5-4" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint8_t</span> conversion_factor <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// seconds per degree Celsius</span></span>
+<span id="cb5-5" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint8_t</span> deltaT <span class="op">=</span> finalTemp <span class="op">-</span> initialTemp<span class="op">;</span></span>
+<span id="cb5-6" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint16_t</span> time_sec <span class="op">=</span> conversion_factor <span class="op">*</span> deltaT<span class="op">;</span></span>
+<span id="cb5-7" class="hljs-ln-code"><a href=""></a>    <span class="cf">return</span> time_sec<span class="op">;</span></span>
+<span id="cb5-8" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="spacer-md">
+
+</div>
+<div class="fragment">
+<ul>
+<li><p>Was passiert, wenn <code>initalTemp=96</code> und <code>finalTemp=95</code>?</p>
+<div class="fragment">
+<ul>
+<li>Bei <code>initialTemp=96</code> und <code>finalTemp=95</code> ergibt sich <code>time_sec=255</code></li>
+<li>Das entspricht <strong>4 Minuten und 15 Sekunden!</strong></li>
+</ul>
+</div></li>
+</ul>
+</div>
+<div class="spacer-md">
+
+</div>
+<div class="fragment">
+<div class="callout callout-note no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p><strong>Solche Fehler müssen bereits in der Entwicklungsphase entdeckt werden!</strong></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="präventive-maßnahmen-1" class="slide level2">
+<h2>Präventive Maßnahmen</h2>
+<h3 id="ziel-ist-es-fehler-frühzeitig-zu-entdecken">Ziel ist es, Fehler frühzeitig zu entdecken</h3>
+<div class="spacer-md">
+
+</div>
+<div class="mid-space">
+<ul>
+<li><p>Prozessmaßnahmen:</p>
+<div class="fragment">
+<ul>
+<li>Code Reviews / Peer Reviews</li>
+<li>Testautomatisierung (Continuous Integration / Continuous Deployment - CI/CD)</li>
+<li>Testgetriebene Entwicklung (Test-Driven Development ; TDD)</li>
+</ul>
+</div></li>
+</ul>
+</div>
+<div class="spacer-md">
+
+</div>
+<div class="mid-space">
+<ul>
+<li><p>Technische Maßnahmen:</p>
+<div class="fragment">
+<ul>
+<li>Statische Code-Analyse</li>
+<li>Code‑Coverage‑Analyse (z. B. Line‑ und Branch‑Coverage)</li>
+<li>Vertragsbasierte Programmierung (Design by Contract)</li>
+</ul>
+</div></li>
+</ul>
+</div>
+</section>
+<section id="präventive-maßnahmen-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Präventive Maßnahmen</h2>
+<div class="spacer-sm">
+
+</div>
+<p>Eine mögliche Lösung, inspiriert von vertragsbasierter Programmierung (Design by Contract).</p>
+<div class="spacer-lg">
+
+</div>
+<div data-id="&quot;code_caffe_machine">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-code-line-numbers="|6-8"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb6-1" class="hljs-ln-code"><a href=""></a><span class="dt">bool</span> computeHeatingTime<span class="op">(</span><span class="at">const</span> <span class="dt">uint8_t</span> initialTemp<span class="op">,</span></span>
+<span id="cb6-2" class="hljs-ln-code"><a href=""></a>                        <span class="at">const</span> <span class="dt">uint8_t</span> finalTemp<span class="op">,</span></span>
+<span id="cb6-3" class="hljs-ln-code"><a href=""></a>                        <span class="dt">uint16_t</span><span class="op">*</span> heating_time<span class="op">)</span></span>
+<span id="cb6-4" class="hljs-ln-code"><a href=""></a><span class="op">{</span></span>
+<span id="cb6-5" class="hljs-ln-code"><a href=""></a>    <span class="co">// Vorbedingungen prüfen</span></span>
+<span id="cb6-6" class="hljs-ln-code"><a href=""></a>    <span class="cf">if</span> <span class="op">((</span>finalTemp <span class="op">&lt;</span> initialTemp<span class="op">)</span> <span class="op">||</span> <span class="op">(</span>heating_time <span class="op">==</span> NULL<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb6-7" class="hljs-ln-code"><a href=""></a>        <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb6-8" class="hljs-ln-code"><a href=""></a>    <span class="op">}</span></span>
+<span id="cb6-9" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb6-10" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint8_t</span> conversion_factor <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// Sekunden pro Grad Celsius</span></span>
+<span id="cb6-11" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint8_t</span> deltaT <span class="op">=</span> finalTemp <span class="op">-</span> initialTemp<span class="op">;</span></span>
+<span id="cb6-12" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint16_t</span> time_sec <span class="op">=</span> conversion_factor <span class="op">*</span> deltaT<span class="op">;</span></span>
+<span id="cb6-13" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb6-14" class="hljs-ln-code"><a href=""></a>    <span class="op">*</span>heating_time <span class="op">=</span> time_sec<span class="op">;</span> <span class="co">// Wert schreiben</span></span>
+<span id="cb6-15" class="hljs-ln-code"><a href=""></a>    <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb6-16" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<aside class="notes">
+<p>DbC beruht auf drei Bausteinen:</p>
+<p>Vorbedingungen (Preconditions) → Bedingungen, die der Aufrufer erfüllen muss, bevor die Funktion korrekt arbeiten kann.</p>
+<p>In deinem Code:</p>
+<p>finalTemp &gt;= initialTemp (sonst keine gültige Heizzeit).</p>
+<p>heating_time != NULL (sonst kein Speicherziel).</p>
+<p>→ Das ist der „Vertrag“: „Ich als Funktion rechne nur, wenn du mir gültige Eingaben gibst.“</p>
+<p>Nachbedingungen (Postconditions) → Zusicherungen, die die Funktion garantiert, wenn sie erfolgreich zurückkehrt.</p>
+<p>In deinem Code:</p>
+<p>Wenn true zurückgegeben wird, ist garantiert, dass *heating_time einen gültigen Wert enthält.</p>
+<p>Wenn false zurückgegeben wird, bleibt der Speicher unverändert.</p>
+<p>→ Das ist die Zusicherung: „Wenn ich Erfolg melde, bekommst du ein korrektes Ergebnis.“</p>
+<p>Invarianten → Bedingungen, die während der gesamten Ausführung gültig bleiben.</p>
+<p>Beispiel hier: conversion_factor ist konstant und positiv.</p>
+<p>Damit bleibt die Berechnung stabil und nachvollziehbar.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section></section>
+<section>
+<section id="defektanalyse-als-teil-des-debuggingprozesses" class="title-slide slide level1 center" data-background-image="Figuren/First_Computer_Bug_1945.jpg" data-background-opacity="0.3" data-background-color="black">
+<h1>Defektanalyse als Teil des Debugging‑Prozesses</h1>
+
+</section>
+<section id="defekte-infolge-von-kommunikations--und-interpretationsfehlern" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Defekte infolge von Kommunikations- und Interpretationsfehlern</h2>
+<ul>
+<li>Wir wollen ein Spurhaltewarnsystem (<em>Lane departure warning system</em>; LDWS) entwickeln.</li>
+</ul>
+<div data-id="&quot;LDWS_Anf">
+<div class="fragment">
+<ul>
+<li><strong>Anforderung P.1:</strong> LDWS muss aktiv sein, wenn die Kamera einen nominalen Zustand meldet (keine Degradation).</li>
+<li><strong>Anforderung P.2:</strong> LDWS muss sich deaktivieren, wenn die Kamera eine Degradation meldet.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>…
+<ul>
+<li>↳ <strong>Kamera-Anforderung K.1:</strong> Die Kamera muss eine Degradation melden, wenn ungeeignete Wetterbedingungen erkannt werden.
+<ul>
+<li>Beispiele: Regentropfen auf den Linsenelementen, Blendung durch Sonnenlicht</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="slide-footnote">
+<p>Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.</p>
+</div>
+<aside class="notes">
+<ul>
+<li>Besser Anforderung Formulierung für die Kamera: „Die Kamera muss eine Degradation melden, wenn äußere Bedingungen die Bildqualität so beeinträchtigen, dass definierte Funktions‑KPIs (z. B. Erkennungsrate, Spurtreue) unterschritten werden.“</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="defekte-infolge-von-kommunikations--und-interpretationsfehlern-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Defekte infolge von Kommunikations- und Interpretationsfehlern</h2>
+<div data-id="&quot;LDWS_Anf">
+<ul>
+<li><strong>Anforderung P.1:</strong> LDWS muss aktiv sein, wenn die Kamera einen nominalen Zustand meldet (keine Degradation).</li>
+<li><span style="color: dimgray;"><strong>Anforderung P.2:</strong> LDWS muss sich deaktivieren, wenn die Kamera eine Degradation meldet.</span></li>
+<li>…
+<ul>
+<li><span style="color: dimgray;">↳ <strong>Kamera-Anforderung K.1:</strong> Die Kamera muss eine Degradation melden, wenn ungeeignete Wetterbedingungen erkannt werden.</span>
+<ul>
+<li><span style="color: dimgray;">Beispiele: Regentropfen auf den Linsenelementen, Blendung durch Sonnenlicht</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<p>In einer späteren Testphase wird ein solcher Testreport erstellt:</p>
+<div class="small-text" data-id="test-fall-example">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Test-ID</th>
+<th>Vorbedingungen</th>
+<th>Soll-Verhalten</th>
+<th>Ist-Verhalten</th>
+<th>System-Versionierung</th>
+<th>Häufigkeit</th>
+<th>Kritikalität</th>
+<th>Trace-Link</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>P.1 - 01</strong></td>
+<td>Ideales Wetter: Tag, Sonne, kaum Wolken</td>
+<td>LDWS ist aktiv</td>
+<td>LDWS ist aktiv bei freier Fahrt, deaktiviert sich jedoch in einer Stausituation. → <strong>LDWS nicht aktiv!</strong></td>
+<td>SW 1.1 / HW C / Net V2.0 / CFG A</td>
+<td><strong>Reproduzierbar</strong></td>
+<td><strong>Kritisch</strong></td>
+<td><a href="">Trace</a></td>
+</tr>
+</tbody>
+</table>
+<!--
+| Test ID      | Vorbedingungen                            | Soll-Verhalten | Ist-Verhalten                                                                                                 | SW-Version | HW-Version |
+| ------------ | ----------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------- | ---------- | ---------- |
+| **P.1 - 01** | _Ideales Wetter_: Tag, Sonne, kaum Wolken | LDWS ist aktiv | LDWS ist aktiv bei freier Fahrt, deaktiviert sich jedoch sich in einer Stausituation. → **LDWS nicht aktiv!** | 1.1        | C          | -->
+</div>
+<div class="slide-footnote">
+<p>Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.</p>
+</div>
+</section>
+<section id="defekte-infolge-von-kommunikations--und-interpretationsfehlern-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Defekte infolge von Kommunikations- und Interpretationsfehlern</h2>
+<div class="tiny-text" data-id="test-fall-example">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Test-ID</th>
+<th>Vorbedingungen</th>
+<th>Soll-Verhalten</th>
+<th>Ist-Verhalten</th>
+<th>System-Versionierung</th>
+<th>Häufigkeit</th>
+<th>Kritikalität</th>
+<th>Trace-Link</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>P.1 - 01</strong></td>
+<td>Ideales Wetter: Tag, Sonne, kaum Wolken</td>
+<td>LDWS ist aktiv</td>
+<td>LDWS ist aktiv bei freier Fahrt, deaktiviert sich jedoch in einer Stausituation. → <strong>LDWS nicht aktiv!</strong></td>
+<td>SW 1.1 / HW C / Net V2.0 / CFG A</td>
+<td>Reproduzierbar</td>
+<td>Kritisch</td>
+<td><a href="">DLT Link</a></td>
+</tr>
+</tbody>
+</table>
+<!--
+| Test ID      | Vorbedingungen                          | Soll-Verhalten | Ist-Verhalten                                                                                                 | SW-Version | HW-Version |
+| ------------ | --------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------- | ---------- | ---------- |
+| **P.1 - 01** | Ideales Wetter: Tag, Sonne, kaum Wolken | LDWS ist aktiv | LDWS ist aktiv bei freier Fahrt, deaktiviert sich jedoch sich in einer Stausituation. → **LDWS nicht aktiv!** | 1.1        | C          | -->
+</div>
+<div class="fragment small-text">
+<p>Um die Kameravideos zu erhalten, mussten spezielle <strong>Debug-Flags</strong> in der Kamerasoftware aktiviert werden.</p>
+</div>
+<div class="columns fragment">
+<div class="column" style="width:20%;">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/Stau_Fahrerperspective.png" style="width:90.0%" alt="Fahrerperspektive: ideale Wetterbedingungen"></p>
+<figcaption><strong>Fahrerperspektive</strong></figcaption>
+</figure>
+</div>
+</div><div class="column fragment" style="width:20%;">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/Stau_Kameraperspektive.png" style="width:90.0%" alt="Kameraperspektive: Blendung durch Sonnenlicht"></p>
+<figcaption><strong>Kameraperspektive</strong></figcaption>
+</figure>
+</div>
+</div><div class="column fragment mid-space" style="width:60%;">
+<ul>
+<li><strong>Für die Kamera sind diese Wetterbedingungen nicht geeignet</strong>, auch wenn von der Fahrerperspektive, Wetterbedingungen ideal sind.</li>
+<li>Während die Anforderungen eindeutig den nominalen Kamerazustand (<em>keine Degradation</em>) beschrieben, wurden <strong>die Testbedingungen indirekt über Wetterannahmen abgebildet</strong>.</li>
+</ul>
+</div></div>
+<div class="small-text fragment">
+<div class="callout callout-note no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p>In großen Projekten ist der erste Schritt der Defektanalyse die <strong>Überprüfung, ob tatsächlich ein Defekt vorliegt!</strong>.</p>
 </div>
 </div>
 </div>
@@ -247,425 +805,504 @@ Dr.&nbsp;Luca Parolini
 <div class="slide-footnote">
 <p>Alle Figuren sind mit Microsoft Copilot generiert.</p>
 </div>
+</section></section>
+<section>
+<section id="quiz" class="title-slide slide level1 center" data-background-image="Figuren/First_Computer_Bug_1945.jpg" data-background-opacity="0.3" data-background-color="black">
+<h1>Quiz</h1>
+
 </section>
-<section id="die-soll-funktion-ergibt-sich-aus-den-anforderungen" class="slide level2">
-<h2>Die Soll-Funktion ergibt sich aus den Anforderungen</h2>
-<h3 id="die-testfällen-beschrieben-aber-sie-explicit">Die Testfällen beschrieben aber sie explicit</h3>
-<div class="columns">
-<div class="column" style="width:70%;">
-<div class="quarto-figure quarto-figure-left">
-<figure>
-<p><img data-src="Figuren/V-Modell.png" style="width:100.0%" alt="V-Model without axes"></p>
-<figcaption><strong>Das V-Modell als Entwicklungsmodell</strong></figcaption>
-</figure>
+<section id="frage-1" class="slide level2">
+<h2>Frage 1</h2>
+<div class="spacer-lg">
+
 </div>
-</div><div class="column mid-space" style="width:30%;">
+<p>Welche Methode <strong>beeinflusst</strong> das Zeitverhalten einer Echtzeitfunktion stark?</p>
+<div class="spacer-lg">
+
+</div>
+<div class="mid-space">
 <ul>
-<li>Jede Ebene ableitet detailliertere Anforderungen für die nächste Ebene sowie passende <em>Testfälle</em>.</li>
-<li>Anforderungen beschrieben das Soll-Verhalten für mehrere Input Bedingungen.</li>
-<li>Während eine Testphase, ist die Soll-Verhalten nur anhand von einem Test case für das <em>System Unter Test</em> (SUT) spezifiziert.</li>
-<li>Test cases spezifizieren das Soll-Verhalten für ein spezifische, sehr detaillierten Fall</li>
+<li><strong>A.</strong> Pin-Toggling.</li>
+<li><strong>B.</strong> printf-Ausgaben.</li>
 </ul>
-</div></div>
-<div class="small-text">
+</div>
+<div class="spacer-lg">
+
+</div>
+<div class="fragment">
 <div class="callout callout-note no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
-<p>Fehler können sowohl in der Spezifikation der Anforderungen als auch in der Ableitung der Testfälle entstehen.</p>
+<p>Richtige Antwort: <strong>B</strong></p>
 </div>
+</div>
+</div>
+</div>
+</section>
+<section id="frage-2" class="slide level2">
+<h2>Frage 2</h2>
+<div class="spacer-lg">
+
+</div>
+<p>Wie sollten Defekte im Debugging behandelt werden?</p>
+<div class="spacer-lg">
+
+</div>
+<div class="mid-space">
+<ul>
+<li><strong>A.</strong> Defekte werden <strong>simuliert</strong>, um sie nachzustellen.</li>
+<li><strong>B.</strong> Defekte werden <strong>stimuliert</strong>, um sie reproduzierbar sichtbar zu machen.</li>
+</ul>
+</div>
+<div class="spacer-lg">
+
+</div>
+<div class="fragment">
+<div class="callout callout-note no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p>Richtige Antwort: <strong>B</strong> – Defekte müssen <strong>stimuliert</strong> werden, niemals nur simuliert.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="frage-3" class="slide level2">
+<h2>Frage 3</h2>
+<div class="spacer-lg">
+
+</div>
+<p>Welche präventive Maßnahme gehört zur Softwareentwicklung?</p>
+<div class="spacer-lg">
+
+</div>
+<div class="mid-space">
+<ul>
+<li><strong>A.</strong> Statische Code-Analyse</li>
+<li><strong>B.</strong> Debugging mit printf</li>
+<li><strong>C.</strong> Hardware-Register auslesen</li>
+</ul>
+</div>
+<div class="spacer-lg">
+
+</div>
+<div class="fragment">
+<div class="callout callout-note no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p>Richtige Antwort: <strong>A</strong></p>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="backup" class="title-slide slide level1 center">
+<h1>Backup</h1>
+
+</section>
+<section id="wenn-man-in-die-tiefe-des-mikrocontrollers-schauen-muss" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Wenn man in die Tiefe des Mikrocontrollers schauen muss</h2>
+<p>Manchmal ist es notwendig, Inhalte von Registern oder Speicher eines Mikrocontrollers auszulesen oder gezielt zu verändern.</p>
+<ul>
+<li class="fragment">Viele moderne <strong>32‑Bit‑Mikrocontroller</strong> besitzen dedizierte <strong>On‑Chip Debug‑Interfaces</strong>, z.B. Joint Test Action Group (<em>JTAG</em>) oder Serial Wire Debug (<em>SWD</em>)<sup>1</sup>
+<ul>
+<li class="fragment">Ermöglicht direkten Zugriff auf Register, Speicher und CPU‑Kontrolle</li>
+</ul></li>
+</ul>
+<div class="spacer-sm">
+
+</div>
+<div data-id="jtag-figure">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/ftdi-jtag-connection_small.png" style="width:100.0%"></p>
+<figcaption>Verbindung über JTAG<sup>2</sup></figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/gdb_commands_small.png" style="width:100.0%"></p>
+<figcaption>Debugging mit GDB<sup>3</sup></figcaption>
+</figure>
+</div>
+</div></div>
+</div>
+<aside class="notes">
+<p>ARM = Advanced RISC Machine RISC= Reduced Instruction Set Computer</p>
+<ul>
+<li>Typische Werkzeuge:
+<ul>
+<li><strong>JTAG (Joint Test Action Group)</strong></li>
+<li><strong>SWD (Serial Wire Debug)</strong> – abgespeckte Variante für ARM Cortex‑M</li>
+<li><strong>OpenOCD (Open On‑Chip Debugger)</strong> + <strong>GDB (GNU Debugger)</strong> im Open‑Source‑Umfeld</li>
+<li>Kommerzielle Alternativen: <strong>Segger J‑Link</strong>, <strong>Lauterbach TRACE32</strong>, Hersteller‑IDEs (z. B. STM32CubeIDE, NXP MCUXpresso)</li>
+</ul></li>
+<li>On‑Chip Debug-Interfaces erlauben Daten auszulesen, Speicher und Register zu verändern und der Programmfluss zu beeinflussen
+<ul>
+<li>Breakpoints erlauben es, den Code gezielt anzuhalten und zu überwachen</li>
+</ul></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<aside><ol class="aside-footnotes"><li id="fn8"><p><a href="https://www.jtag.com/de/">https://www.jtag.com/de/</a>, <a href="https://developer.arm.com/documentation/ihi0031/a/The-Serial-Wire-Debug-Port--SW-DP-/Introduction-to-the-ARM-Serial-Wire-Debug--SWD--protocol">SWD für ARM</a></p></li><li id="fn9"><p>Bildquelle: Erich Styger, „FTDI JTAG Connection“, MCU on Eclipse Blog, 2019. URL: <a href="https://mcuoneclipse.com/wp-content/uploads/2019/10/ftdi-jtag-connection.png">link</a></p></li><li id="fn10"><p>Bildquelle: Espressif Systems, „VS Code ESP-IDF Extension – GDB Commands“, offizielle Dokumentation. URL: <a href="https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/_images/gdb_commands.png">link</a></p></li></ol></aside></section>
+<section id="wenn-man-in-die-tiefe-des-mikrocontrollers-schauen-muss-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Wenn man in die Tiefe des Mikrocontrollers schauen muss</h2>
+<div data-id="jtag-figure">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/ftdi-jtag-connection_small.png" style="width:100.0%"></p>
+<figcaption>Verbindung über JTAG<sup>1</sup></figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/gdb_commands_small.png" style="width:100.0%"></p>
+<figcaption>Debugging mit GDB<sup>2</sup></figcaption>
+</figure>
+</div>
+</div></div>
+</div>
+<div class="space-xl">
+
+</div>
+<div class="mid-space">
+<ul>
+<li>Debugging erfordert oft die Verwendung spezieller <strong>Debug-Flags</strong>
+<ul>
+<li>Diese deaktivieren Optimierungen und verändern Ablauf sowie Performance gegenüber optimierten Build</li>
+</ul></li>
+</ul>
+</div>
+<div class="space-lg">
+
+</div>
+<div class="space-lg">
+
+</div>
+<div class="fragment">
+<div class="callout callout-note no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p><strong>Zeitliche Probleme bleiben im Debug‑Build häufig verborgen</strong>, da die reale Code-Performance im optimierten Build abweicht.</p>
+</div>
+</div>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn11"><p>Bildquelle: Erich Styger, „FTDI JTAG Connection“, MCU on Eclipse Blog, 2019. URL: <a href="https://mcuoneclipse.com/wp-content/uploads/2019/10/ftdi-jtag-connection.png">link</a></p></li><li id="fn12"><p>Bildquelle: Espressif Systems, „VS Code ESP-IDF Extension – GDB Commands“, offizielle Dokumentation. URL: <a href="https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/_images/gdb_commands.png">link</a></p></li></ol></aside></section>
+<section id="das-vmodell" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Das V‑Modell</h2>
+<h3 id="anforderungen-tests-und-kommunikationsrisiken-zwischen-teams">Anforderungen, Tests und Kommunikationsrisiken zwischen Teams</h3>
+<ul>
+<li>Das V‑Modell entstand Ende der 1970er Jahre als Erweiterung des Wasserfallmodells, vorgeschlagen von Barry W. Boehm (1979), um Verifikation und Validierung systematisch zu verankern.</li>
+</ul>
+<div class="r-stack">
+<div class="fragment">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/V_modell_Teil1.svg" style="width:100.0%"></p>
+<figcaption>Das V‑Modell – eine vereinfachte Darstellung</figcaption>
+</figure>
+</div>
+</div>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/V_modell_Teil2.svg" style="width:100.0%"></p>
+<figcaption>Das V‑Modell – eine vereinfachte Darstellung</figcaption>
+</figure>
+</div>
+</div>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/V_modell.svg" style="width:100.0%"></p>
+<figcaption>Das V‑Modell – eine vereinfachte Darstellung</figcaption>
+</figure>
 </div>
 </div>
 </div>
 <div class="slide-footnote">
-<p>Bild von Michael Pätzold, S. Seyfert, <a href="https://creativecommons.org/licenses/by-sa/3.0/de/">CC BY-SA 3.0</a>.</p>
+<p>Boehm, B. W. (1979). <em>Guidelines for Verifying and Validating Software Requirements and Design Specifications.</em> In Proceedings of the European Conference on Applied Software Engineering</p>
 </div>
-</section>
-<section id="anforderungstestfalldiskrepanz" class="slide level2">
-<h2>Anforderungs‑Testfall‑Diskrepanz</h2>
-<h3 id="kameradegradation-in-autonomen-fahrzeugen">Kamera‑Degradation in autonomen Fahrzeugen</h3>
+<aside class="notes">
+<p>Barry W. Boehm</p>
 <ul>
-<li><p><strong>Produktziel</strong> :Das Fahrzeug muss bei guten Wetterbedingungen sicher fahren können.</p>
-<ul>
-<li>↳ <strong>Anforderung S.1:</strong> Das System muss aktivierbar sein, wenn <em>geeignete Wetterbedingungen</em> erfüllt sind.</li>
-<li>↳ <strong>Anforderung S.2:</strong> Das System muss sich sicher deaktivieren, wenn geeignete Wetterbedingungen <em>nicht</em> erfüllt sind.</li>
+<li>Geboren 1935, gestorben 2022.</li>
+<li>Professor an der University of Southern California (USC).</li>
+<li>Arbeitete zuvor u. a. bei RAND Corporation und TRW.</li>
+<li>Bekannt für grundlegende Beiträge zur Softwareentwicklung, u. a.:</li>
+<li>Spiralmodell (1986) – ein iteratives Vorgehensmodell.</li>
+<li>COCOMO‑Modell (Constructive Cost Model) – zur Aufwandsschätzung von Softwareprojekten.</li>
+<li>V‑Modell (1979) – als Erweiterung des Wasserfallmodells.</li>
 </ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="das-vmodell-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Das V‑Modell</h2>
+<h3 id="anforderungen-tests-und-kommunikationsrisiken-zwischen-teams-1">Anforderungen, Tests und Kommunikationsrisiken zwischen Teams</h3>
+<div class="spacer-sm">
+
+</div>
+<div class="columns">
+<div class="column" style="width:45%;">
+<p><img data-src="Figuren/V_modell.svg" style="width:100.0%" alt="V-Model without axes"></p>
+</div><div class="column small-text" style="width:55%;">
+<div class="spacer-sm">
+
+</div>
+<ul>
+<li>Anforderungen werden iterativ verfeinert, Testfälle daraus abgeleitet</li>
+<li>Anforderungen definieren das <strong>Soll‑Verhalten</strong>, Testfälle prüfen es</li>
+<li>In der Testphase wird das Soll‑Verhalten ausschließlich durch die Testfälle beschrieben</li>
+</ul>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment" data-fragment-index="2">
+<ul>
+<li><strong>Unterschiedliche Teams</strong> arbeiten häufig auf verschiedenen Ebenen des V‑Modells</li>
+<li>Entwurfsteams sind typischerweise nicht identisch mit den Teams, die Tests und Verifikation durchführen</li>
+<li><strong>Kommunikationsfehler</strong> können dazu führen, dass Anforderungen oder Testfälle falsch abgeleitet werden</li>
+<li>Solche Fehler werden oft erst in der Testphase erkannt</li>
+</ul>
+</div>
+</div></div>
+<div class="spacer-sm">
+
+</div>
 <div class="fragment">
 <ul>
-<li><p>…</p></li>
-<li><p><strong>Anforderung S.102:</strong> Das System muss sich sicher deaktivieren, wenn <em>die Kamera ungeeignete Wetterbedingungen erkennt</em>.</p>
-<ul>
-<li>↳ <strong>Kamera-Anforderung K.1:</strong> Die Kamera muss ungeeignete Wetterbedingungen <em>erkennen</em> können.
-<ul>
-<li>Beispiele: Blendung durch Sonnenlicht, Regentropfen auf den Linsenelementen</li>
-</ul></li>
-</ul></li>
+<li>Software‑Debugging erfolgt häufig als Reaktion auf einen Defekt.</li>
+<li>Defekte entstehen in der Test- und Validierungsphase, wenn das <strong>Ist-Verhalten</strong> nicht das <strong>Soll-Verhalten</strong> entspricht.</li>
 </ul>
-</div></li>
-</ul>
-<div class="slide-footnote">
-<p>Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.</p>
 </div>
-</section>
-<section id="anforderungstestfalldiskrepanz-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Anforderungs‑Testfall‑Diskrepanz</h2>
-<h3 id="kameradegradation-in-autonomen-fahrzeugen-1">Kamera‑Degradation in autonomen Fahrzeugen</h3>
-<ul>
-<li><p><span style="color: dimgray;"><strong>Produktziel</strong> :Das Fahrzeug muss bei guten Wetterbedingungen sicher fahren können.</span></p>
-<ul>
-<li><p>↳ <strong>Anforderung S.1: <em>Das System muss aktivierbar sein, wenn geeignete Wetterbedingungen erfüllt sind.</em></strong></p></li>
-<li><p><span style="color: dimgray;">↳ <strong>Anforderung S.2:</strong> Das System muss sich sicher deaktivieren, wenn geeignete Wetterbedingungen <em>nicht</em> erfüllt sind.</span></p></li>
-<li><p><span style="color: dimgray;">…</span></p></li>
-<li><p><span style="color: dimgray;"><strong>Anforderung S.102:</strong> Das System muss sich sicher deaktivieren, wenn <em>die Kamera ungeeignete Wetterbedingungen erkennt</em>.</span></p>
-<ul>
-<li><span style="color: dimgray;">↳ <strong>Kamera-Anforderung K.1:</strong> Die Kamera muss ungeeignete Wetterbedingungen <em>erkennen</em> können.</span>
-<ul>
-<li><span style="color: dimgray;">Beispiele: Blendung durch Sonnenlicht, Regentropfen auf den Linsenelementen</span></li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul>
-<p>In Laufe eine spätere Testphase, wird ein Defekt entdeckt:</p>
-<div class="small-text" data-id="test-fall-example">
-<table class="caption-top">
-<colgroup>
-<col style="width: 4%">
-<col style="width: 14%">
-<col style="width: 22%">
-<col style="width: 51%">
-<col style="width: 3%">
-<col style="width: 3%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Test ID</th>
-<th>Vorbedingungen</th>
-<th>Soll-Verhalten</th>
-<th>Ist-Verhalten</th>
-<th>SW-Version</th>
-<th>HW-Version</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>S.1 - 01</strong></td>
-<td><em>Ideales Wetter</em>: Tag, Sonne, kaum Wolken</td>
-<td>Autonomes Fahren ist aktivierbar und läuft ohne Unterbrechungen</td>
-<td>Fahrzeug fährt korrekt bei freier Fahrt, bleibt jedoch stehen, sobald eine Stausituation entsteht. → <strong>Autonomes Fahren nicht mehr aktivierbar!</strong></td>
-<td>1.1</td>
-<td>C</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="slide-footnote">
-<p>Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.</p>
-</div>
-</section>
-<section id="anforderungstestfalldiskrepanz-2" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Anforderungs‑Testfall‑Diskrepanz</h2>
-<h3 id="kameradegradation-in-autonomen-fahrzeugen-2">Kamera‑Degradation in autonomen Fahrzeugen</h3>
-<div class="tiny-text" data-id="test-fall-example">
-<table class="caption-top">
-<colgroup>
-<col style="width: 4%">
-<col style="width: 13%">
-<col style="width: 22%">
-<col style="width: 51%">
-<col style="width: 3%">
-<col style="width: 3%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Test ID</th>
-<th>Vorbedingungen</th>
-<th>Soll-Verhalten</th>
-<th>Ist-Verhalten</th>
-<th>SW-Version</th>
-<th>HW-Version</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>S.1 - 01</strong></td>
-<td>Ideales Wetter: Tag, Sonne, kaum Wolken</td>
-<td>Autonomes Fahren ist aktivierbar und läuft ohne Unterbrechungen</td>
-<td>Fahrzeug fährt korrekt bei freier Fahrt, bleibt jedoch stehen, sobald eine Stausituation entsteht. → <strong>Autonomes Fahren nicht mehr aktivierbar!</strong></td>
-<td>1.1</td>
-<td>C</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="spacer-sm">
+<!-- # To be removed
 
-</div>
-<div class="columns">
-<div class="column" style="width:30%;">
-<div class="quarto-figure quarto-figure-left">
-<figure>
-<p><img data-src="Figuren/Stau_Fahrerperspective.png" style="width:70.0%" alt="Fahrerperspektive: ideale Wetterbedienungen"></p>
-<figcaption>Fahrerperspektive</figcaption>
-</figure>
-</div>
-</div><div class="column fragment" style="width:30%;">
-<div class="quarto-figure quarto-figure-left">
-<figure>
-<p><img data-src="Figuren/Stau_Kameraperspektive.png" style="width:70.0%" alt="Kameraperspektive: Blendung durch Sonnenlicht"></p>
-<figcaption>Kameraperspektive</figcaption>
-</figure>
-</div>
-</div><div class="column fragment" style="width:40%;">
-<ul>
-<li><p>Für die Kamera sind die Wetterbedingungen <em>nicht</em> geeignet, auch wenn von der Fahrerperspektive, Wetterbedienung ideal sind.</p>
-<ul>
-<li><strong>Konzept Fehler:</strong> Die Anforderung S.2 und K.1-01 beziehen sich auf unterschiedliche Definitionen von “geeigneten Wetterbedingungen”.</li>
-</ul></li>
-<li><p>Kommunikationsfehler zwischen Produkt und Kamera Teams.</p></li>
-</ul>
-<div class="spacer-sm">
+## Find a title here
 
-</div>
-</div></div>
-<div class="small-text fragment">
-<div class="callout callout-note no-icon callout-style-simple">
-<div class="callout-body">
-<div class="callout-content">
-<p>Erster Schritt bei der Analyse eines Defekts ist die Überprüfung, ob tatsächlich ein Defekt vorliegt.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="add-me" class="slide level2">
-<h2>Add me</h2>
-<ul>
-<li><p>Jede System muss sein Input monitorieren und off-line analysieren können</p></li>
-<li><p>Logging und Tracing sind kritisch</p></li>
-<li><p>Werkzeuge und Techniken um das System Verhalten zu beobachten</p></li>
-<li><p>Beispiel: Monitoring von Kaffee Temperatur in einer Kaffeemaschine</p></li>
-<li><p>Wie können wir das Verhalten beobachten ohne das System zu beeinflussen?</p>
-<ul>
-<li>Nie printf befehle in Embedded Systems benutzen!!</li>
-<li>Log Dateien mit Zeitstempel und Kontextinformationen</li>
-<li>Trace Analyse Werkzeuge</li>
-<li>Autmotive ist DLT (Diagnostic Log and Trace) Standard</li>
-</ul></li>
-<li><p>Hardware Debugging Werkzeuge</p>
-<ul>
-<li>JTAG, SWD, etc..</li>
-<li>Logic Analyzer</li>
-<li>In-Circuit Emulatoren</li>
-</ul></li>
-<li><p>Software Debugging Werkzeuge</p>
-<ul>
-<li>GDB, LLDB, etc..</li>
-<li>IDE integrierte Debugger</li>
-<li>Spezielle Debugging Werkzeuge für Embedded Systems</li>
-</ul></li>
-<li><p>Debugging Techniken</p>
-<ul>
-<li>Breakpoints und Watchpoints</li>
-<li>Step-by-Step Ausführung</li>
-<li>Speicher- und Register-Inspektion</li>
-<li>Code Coverage Analyse</li>
-<li>Performance Profiling</li>
-<li>Timing Analyse</li>
-<li>Kommunikationsprotokoll Analyse</li>
-</ul></li>
-<li><p>Zusammenarbeit im Team</p>
-<ul>
-<li><p>Gemeinsame Debugging Sitzungen</p></li>
-<li><p>Nie ein Fehler simulieren, Die Fehler müssen stimuliert werden!!</p></li>
-<li><p>Problem: Nicht alle Fehler sind reproduzierbar da nicht alle Input Bedingungen kontrollierbar sind und Status Informationen fehlen können</p></li>
-<li><p>Beispiel: Intermittierende Fehler durch elektromagnetische Störungen</p></li>
-<li><p>Debugging ist ein iterativer Prozess</p></li>
-<li><p>Hypothese generieren, testen, verfeinern</p></li>
-<li><p>Geduld und Ausdauer sind entscheidend</p></li>
-</ul></li>
-</ul>
-</section>
-<section id="defekt-bestätigt-wie-man-root-cause-findet" class="slide level2">
-<h2>Defekt Bestätigt: Wie man Root-cause findet</h2>
-</section>
-<section id="temp" class="slide level2">
-<h2>Temp</h2>
-<div class="cell" data-layout-align="left">
-<div class="cell-output-display">
-<div>
-<p></p><figure class=""><p></p>
-<div>
-<svg width="960" height="480" viewbox="0.00 0.00 408.00 716.60" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none; display: block; margin: auto auto auto auto">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 712.6)">
-<title>Defektanalyse</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-712.6 404,-712.6 404,4 -4,4"></polygon>
-<g id="clust1" class="cluster">
-<title>cluster_left</title>
-</g>
-<g id="clust2" class="cluster">
-<title>cluster_right</title>
-</g>
-<!-- start -->
-<g id="node1" class="node">
-<title>start</title>
-<ellipse fill="black" stroke="black" cx="200" cy="-701.6" rx="7" ry="7"></ellipse>
-</g>
-<!-- A -->
-<g id="node3" class="node">
-<title>A</title>
-<polygon fill="none" stroke="black" points="256.78,-657.6 143.22,-657.6 143.22,-621.6 256.78,-621.6 256.78,-657.6"></polygon>
-<text text-anchor="middle" x="200" y="-635.4" font-family="Helvetica,sans-Serif" font-size="14.00">Defekt entdeckt</text>
-</g>
-<!-- start&#45;&gt;A -->
-<g id="edge1" class="edge">
-<title>start-&gt;A</title>
-<path fill="none" stroke="black" d="M200,-694.18C200,-687.83 200,-677.67 200,-667.9"></path>
-<polygon fill="black" stroke="black" points="203.5,-667.65 200,-657.65 196.5,-667.65 203.5,-667.65"></polygon>
-</g>
-<!-- end -->
-<g id="node2" class="node">
-<title>end</title>
-<ellipse fill="black" stroke="black" cx="264" cy="-29" rx="9" ry="9"></ellipse>
-<ellipse fill="none" stroke="black" cx="264" cy="-29" rx="13" ry="13"></ellipse>
-</g>
-<!-- B -->
-<g id="node4" class="node">
-<title>B</title>
-<polygon fill="none" stroke="black" points="200,-584.6 88.97,-566.6 200,-548.6 311.03,-566.6 200,-584.6"></polygon>
-<text text-anchor="middle" x="200" y="-562.4" font-family="Helvetica,sans-Serif" font-size="14.00">Defekt besteht?</text>
-</g>
-<!-- A&#45;&gt;B -->
-<g id="edge2" class="edge">
-<title>A-&gt;B</title>
-<path fill="none" stroke="black" d="M200,-621.41C200,-613.39 200,-603.65 200,-594.67"></path>
-<polygon fill="black" stroke="black" points="203.5,-594.63 200,-584.63 196.5,-594.63 203.5,-594.63"></polygon>
-</g>
-<!-- C -->
-<g id="node5" class="node">
-<title>C</title>
-<polygon fill="none" stroke="black" points="383.96,-188 224.04,-188 224.04,-152 383.96,-152 383.96,-188"></polygon>
-<text text-anchor="middle" x="304" y="-165.8" font-family="Helvetica,sans-Serif" font-size="14.00">Testfall/Konzept prüfen</text>
-</g>
-<!-- B&#45;&gt;C -->
-<g id="edge5" class="edge">
-<title>B-&gt;C</title>
-<path fill="none" stroke="black" d="M221.08,-551.7C241.37,-536.46 269,-509.99 269,-478.8 269,-478.8 269,-478.8 269,-242 269,-225.81 276.41,-209.48 284.42,-196.58"></path>
-<polygon fill="black" stroke="black" points="287.34,-198.5 289.97,-188.23 281.51,-194.62 287.34,-198.5"></polygon>
-<text text-anchor="middle" x="282.61" y="-356.2" font-family="Times,serif" font-size="14.00">Nein</text>
-</g>
-<!-- E -->
-<g id="node7" class="node">
-<title>E</title>
-<polygon fill="none" stroke="black" points="196.05,-495.8 67.95,-495.8 67.95,-459.8 196.05,-459.8 196.05,-495.8"></polygon>
-<text text-anchor="middle" x="132" y="-473.6" font-family="Helvetica,sans-Serif" font-size="14.00">System verstehen</text>
-</g>
-<!-- B&#45;&gt;E -->
-<g id="edge12" class="edge">
-<title>B-&gt;E</title>
-<path fill="none" stroke="black" d="M188.16,-550.48C178.07,-537.61 163.39,-518.87 151.57,-503.77"></path>
-<polygon fill="black" stroke="black" points="154.26,-501.54 145.34,-495.83 148.75,-505.86 154.26,-501.54"></polygon>
-<text text-anchor="middle" x="177.83" y="-518" font-family="Times,serif" font-size="14.00">Ja</text>
-</g>
-<!-- D -->
-<g id="node6" class="node">
-<title>D</title>
-<polygon fill="none" stroke="black" points="346.17,-115 235.83,-115 235.83,-79 346.17,-79 346.17,-115"></polygon>
-<text text-anchor="middle" x="291" y="-92.8" font-family="Helvetica,sans-Serif" font-size="14.00">Dokumentation</text>
-</g>
-<!-- C&#45;&gt;D -->
-<g id="edge3" class="edge">
-<title>C-&gt;D</title>
-<path fill="none" stroke="black" d="M300.85,-151.81C299.38,-143.79 297.6,-134.05 295.96,-125.07"></path>
-<polygon fill="black" stroke="black" points="299.36,-124.23 294.12,-115.03 292.48,-125.5 299.36,-124.23"></polygon>
-</g>
-<!-- D&#45;&gt;end -->
-<g id="edge4" class="edge">
-<title>D-&gt;end</title>
-<path fill="none" stroke="black" d="M283.91,-78.66C280.41,-70.11 276.17,-59.74 272.5,-50.77"></path>
-<polygon fill="black" stroke="black" points="275.7,-49.35 268.67,-41.42 269.22,-52 275.7,-49.35"></polygon>
-</g>
-<!-- F -->
-<g id="node8" class="node">
-<title>F</title>
-<polygon fill="none" stroke="black" points="193.76,-422.8 66.24,-422.8 66.24,-386.8 193.76,-386.8 193.76,-422.8"></polygon>
-<text text-anchor="middle" x="130" y="-400.6" font-family="Helvetica,sans-Serif" font-size="14.00">Fehler stimulieren</text>
-</g>
-<!-- E&#45;&gt;F -->
-<g id="edge6" class="edge">
-<title>E-&gt;F</title>
-<path fill="none" stroke="black" d="M131.52,-459.61C131.29,-451.59 131.02,-441.85 130.76,-432.87"></path>
-<polygon fill="black" stroke="black" points="134.26,-432.73 130.48,-422.83 127.26,-432.92 134.26,-432.73"></polygon>
-</g>
-<!-- G -->
-<g id="node9" class="node">
-<title>G</title>
-<polygon fill="none" stroke="black" points="196.55,-334 33.45,-334 33.45,-298 196.55,-298 196.55,-334"></polygon>
-<text text-anchor="middle" x="115" y="-311.8" font-family="Helvetica,sans-Serif" font-size="14.00">System instrumentieren</text>
-</g>
-<!-- F&#45;&gt;G -->
-<g id="edge7" class="edge">
-<title>F-&gt;G</title>
-<path fill="none" stroke="black" d="M127.04,-386.65C124.94,-374.52 122.09,-358.02 119.69,-344.12"></path>
-<polygon fill="black" stroke="black" points="123.11,-343.37 117.96,-334.11 116.21,-344.56 123.11,-343.37"></polygon>
-</g>
-<!-- H -->
-<g id="node10" class="node">
-<title>H</title>
-<polygon fill="none" stroke="black" points="200.36,-261 15.64,-261 15.64,-225 200.36,-225 200.36,-261"></polygon>
-<text text-anchor="middle" x="108" y="-238.8" font-family="Helvetica,sans-Serif" font-size="14.00">SW-Änderung identifizieren</text>
-</g>
-<!-- G&#45;&gt;H -->
-<g id="edge8" class="edge">
-<title>G-&gt;H</title>
-<path fill="none" stroke="black" d="M113.31,-297.81C112.51,-289.79 111.55,-280.05 110.67,-271.07"></path>
-<polygon fill="black" stroke="black" points="114.14,-270.64 109.68,-261.03 107.18,-271.32 114.14,-270.64"></polygon>
-</g>
-<!-- I -->
-<g id="node11" class="node">
-<title>I</title>
-<polygon fill="none" stroke="black" points="194.29,-188 45.71,-188 45.71,-152 194.29,-152 194.29,-188"></polygon>
-<text text-anchor="middle" x="120" y="-165.8" font-family="Helvetica,sans-Serif" font-size="14.00">System erneut testen</text>
-</g>
-<!-- H&#45;&gt;I -->
-<g id="edge9" class="edge">
-<title>H-&gt;I</title>
-<path fill="none" stroke="black" d="M110.9,-224.81C112.26,-216.79 113.91,-207.05 115.42,-198.07"></path>
-<polygon fill="black" stroke="black" points="118.91,-198.47 117.12,-188.03 112,-197.31 118.91,-198.47"></polygon>
-</g>
-<!-- J -->
-<g id="node12" class="node">
-<title>J</title>
-<polygon fill="none" stroke="black" points="196.17,-115 85.83,-115 85.83,-79 196.17,-79 196.17,-115"></polygon>
-<text text-anchor="middle" x="141" y="-92.8" font-family="Helvetica,sans-Serif" font-size="14.00">Dokumentation</text>
-</g>
-<!-- I&#45;&gt;J -->
-<g id="edge10" class="edge">
-<title>I-&gt;J</title>
-<path fill="none" stroke="black" d="M125.08,-151.81C127.48,-143.7 130.4,-133.84 133.08,-124.78"></path>
-<polygon fill="black" stroke="black" points="136.48,-125.61 135.96,-115.03 129.77,-123.63 136.48,-125.61"></polygon>
-</g>
-<!-- J&#45;&gt;end -->
-<g id="edge11" class="edge">
-<title>J-&gt;end</title>
-<path fill="none" stroke="black" d="M173,-78.83C195.42,-66.8 224.71,-51.08 243.92,-40.77"></path>
-<polygon fill="black" stroke="black" points="245.8,-43.74 252.96,-35.92 242.49,-37.57 245.8,-43.74"></polygon>
-</g>
-</g>
-</svg>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</section>
-<section id="debugging-in-embedded-systems-wichtige-überlegungen" class="slide level2">
-<h2>Debugging in Embedded Systems: Wichtige Überlegungen</h2>
+Debugging ist daher ein notwendiger Schritt, um Tests zu validieren, Defekte zu verstehen und das System nachhaltig zu verbessern.“
 
-</section>
+- Debugging vs. Testing – Unterschied und Rolle im Entwicklungsprozess
+- Kosten von Fehlern – warum Prävention wichtig ist
+- Verifikation des Defekts – Testreport und Reproduzierbarkeit
+- System verstehen – HW, SW, Timing als mögliche Ursachen
+- Debugging-Werkzeuge
+  - JTAG, UART
+  - Trace & Logging (DLT, RTEdbg, SystemView)
+  - Debug-Build vs. Optimized Build
+- Timing-Probleme – die schwierigsten Fehler
+- Prävention statt Heilung
+  - Test Driven Development (TDD)
+  - Code Coverage
+  - Static Code Analysis
+- Fehlerbehebung & Absicherung – Regressionstests, Anforderungen ergänzen
+- Dokumentation & Lessons Learned
+
+## Debugging und Kommunikationsfehler in Embedded Software
+
+### Anzahl der beteiligten Gruppen erschwert die Defektanalyse
+
+:::{.spacer-sm}
+:::
+
+::: {.columns}
+:::{.column width="33%"}
+![**Thermostat (Smart Home)**](Figuren/Thermostat_square.png){fig-alt="Heizkörper-Thermostat" width="100%"}
+
+::: {.small-text .fragment}
+
+- **Geschätzte Gruppen:** <3
+- **Komplexität:** Niedrig
+
+:::
+:::
+
+:::{.column width="33%"}
+![**Vollautomatik Kaffeemaschine**](Figuren/KaffeMachine_square.png){fig-alt="Vollautomatik Kaffeemaschine" width="100%"}
+
+::: {.small-text .fragment}
+
+- **Geschätzte Gruppen:** 5-10
+- **Komplexität:** Mittel
+
+:::
+:::
+
+:::{.column width="33%"}
+![**Fahrassistenzsysteme**](Figuren/Auto_square.png){fig-alt="Fahrerassistenzsysteme" width="100%"}
+
+::: {.small-text .fragment}
+
+- **Geschätzte Gruppen:** >20
+- **Komplexität:** Hoch
+
+:::
+:::
+
+:::
+
+::: {.fragment .callout-note appearance="simple" .small-text}
+**Risiko von Kommunikationsfehler wächst mit der Zahl der beteiligten Gruppen.**
+:::
+
+::: {.slide-footnote}
+Alle Figuren sind mit Microsoft Copilot generiert.
+:::
+
+## Die Soll-Funktion ergibt sich aus den Anforderungen
+
+### Die Testfällen beschrieben aber sie explicit
+
+::: {.columns}
+:::{.column width="70%"}
+
+
+:::
+
+::: {.column width="30%" .mid-space}
+
+- Jede Ebene ableitet detailliertere Anforderungen für die nächste Ebene sowie passende _Testfälle_.
+- Anforderungen beschrieben das Soll-Verhalten für mehrere Input Bedingungen.
+- Während eine Testphase, ist die Soll-Verhalten nur anhand von einem Test case für das _System Unter Test_ (SUT) spezifiziert.
+- Test cases spezifizieren das Soll-Verhalten für ein spezifische, sehr detaillierten Fall
+
+:::
+:::
+
+::: {.callout-note appearance="simple" .small-text}
+Fehler können sowohl in der Spezifikation der Anforderungen als auch in der Ableitung der Testfälle entstehen.
+:::
+
+::: {.slide-footnote}
+Bild von Michael Pätzold, S. Seyfert, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/de/).
+:::
+
+## Add me
+
+- Jede System muss sein Input monitorieren und off-line analysieren können
+- Logging und Tracing sind kritisch
+- Werkzeuge und Techniken um das System Verhalten zu beobachten
+- Beispiel: Monitoring von Kaffee Temperatur in einer Kaffeemaschine
+- Wie können wir das Verhalten beobachten ohne das System zu beeinflussen?
+  - Nie printf befehle in Embedded Systems benutzen!!
+  - Log Dateien mit Zeitstempel und Kontextinformationen
+  - Trace Analyse Werkzeuge
+  - Autmotive ist DLT (Diagnostic Log and Trace) Standard
+- Hardware Debugging Werkzeuge
+  - JTAG, SWD, etc..
+  - Logic Analyzer
+  - In-Circuit Emulatoren
+- Software Debugging Werkzeuge
+  - GDB, LLDB, etc..
+  - IDE integrierte Debugger
+  - Spezielle Debugging Werkzeuge für Embedded Systems
+- Debugging Techniken
+  - Breakpoints und Watchpoints
+  - Step-by-Step Ausführung
+  - Speicher- und Register-Inspektion
+  - Code Coverage Analyse
+  - Performance Profiling
+  - Timing Analyse
+  - Kommunikationsprotokoll Analyse
+- Zusammenarbeit im Team
+
+  - Gemeinsame Debugging Sitzungen
+
+  - Nie ein Fehler simulieren, Die Fehler müssen stimuliert werden!!
+  - Problem: Nicht alle Fehler sind reproduzierbar da nicht alle Input Bedingungen kontrollierbar sind und Status Informationen fehlen können
+  - Beispiel: Intermittierende Fehler durch elektromagnetische Störungen
+  - Debugging ist ein iterativer Prozess
+  - Hypothese generieren, testen, verfeinern
+  - Geduld und Ausdauer sind entscheidend
+
+## Instrumentierung und Tracing für Timing‑Analyse - Details
+
+### Beispiel: Elektromotorregler
+
+::: {.columns}
+:::{.column width="60%"}
+
+**Besser Ansatz: Pin-Toggling**
+
+```c{code-line-numbers="5,7"}
+bool applyControlRule(const InputParameter* motor_state)
+{
+    bool is_rule_successfully_computed = false;
+    ControlRule control_rule;
+    gpio_set(GPIO_PIN_DEBUG, true);
+    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
+    gpio_set(GPIO_PIN_DEBUG, false);
+    // Fehlerbehandlung und Übergabe der Regel
+}
+```
+
+:::
+
+:::{.column width="40%"}
+**Messungen:**
+![](Figuren/Timing_Diagram.svg){width=100%}
+
+::: {.small-text}
+Die gemessene Gesamtdauer beträgt jetzt ca. **1,8 ms** und liegt damit innerhalb des maximalen Time‑Budgets von 2 ms.
+:::
+
+:::
+:::
+
+:::{.spacer-sm}
+:::
+
+::: {.fragment .small-text}
+
+- Diese Art von zeitlichen Messungen ermöglicht im Vergleich zum printf‑Ansatz:
+
+  - **Deutlich höhere Genauigkeit** der Laufzeitmessung
+  - **Reproduzierbarkeit** der Ergebnisse über viele Zyklen hinweg
+  - **Minimale Beeinflussung** der Echtzeit (Overhead im Nanosekunden-/Mikrosekundenbereich)
+
+:::
+
+::: {.fragment .small-text}
+Der Ansatz hat aber auch Einschränkungen:
+
+- Nur begrenzte Ausgaben sind möglich. Vorgeschlagene Alternative: **Logger und Trace‑Tools**
+  - z.B., Diagnostic Log and Trace in Automotive[^Diagnostic Log and Trace [DLT](https://www.autosar.org/fileadmin/standards/R20-11/CP/AUTOSAR_SWS_DiagnosticLogAndTrace.pdf)]
+
+:::
+--->
+
+</section></section>
 
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
-
+<p>THD · Debugging von Embedded Software in der Praxis · Dr.&nbsp;Luca Parolini</p>
 </div>
 </div></div>
 
