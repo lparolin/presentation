@@ -1,0 +1,3 @@
+::: {.qr-bottom-right data-id="qr-code-main"}
+![**https://shorturl.at/EWK2C**](Figuren/main_QR){fig-alt="Main QR code" width="50%"}
+:::

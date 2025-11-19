@@ -44,6 +44,9 @@ Motte zwischen den Kontakten am Relais Nr. 70, Panel F, des Mark II Aiken Re
 :::
 :::
 
+{{< include _link_Main.qmd >}}
+
+
 [^edison]: Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.
 [^mark2]: Grace Hopper, _The First Bug_, 1986.
 [^motte]: Courtesy of the Naval Surface Warfare Center, Dahlgren, VA., 1988., Public Domain. [Link](https://de.wikipedia.org/wiki/Debuggen#/media/Datei:First_Computer_Bug,_1945.jpg)
@@ -71,6 +74,10 @@ Der Begriff _Bug_ für technische Fehler lässt sich bis ins 19. Jahrhundert zur
 ::: -->
 
 :::
+
+
+{{< include _link_Main.qmd >}}
+
 
 [^edison]: Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.
 [^mark2]: Grace Hopper, _The First Bug_, 1986.
@@ -112,6 +119,9 @@ Einige Gemeinsamkeiten bestehen jedoch:
 ::: {.slide-footnote}
 Abbildung ist mit Adobe Firefly generiert.
 :::
+
+{{< include _link_Main.qmd >}}
+
 
 ## Reproduzierbarkeit von Defekten
 
@@ -165,7 +175,6 @@ Wir haben einen Regler für einen Elektromotor entwickelt.
 :::{.spacer-lg}
 :::
 
-::: {.fragment}
 :::{data-id="timing_analysis"}
 
 ```c{code-line-numbers="|5"}
@@ -179,10 +188,10 @@ bool applyControlRule(const InputParameter* motor_state)
 ```
 
 :::
-:::
 
 ::: {.spacer-lg}
 :::
+
 
 :::{.fragment}
 
@@ -190,42 +199,8 @@ bool applyControlRule(const InputParameter* motor_state)
 
 :::
 
-<!--
-## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
+{{< include _link_Beispiel1.qmd >}}
 
-### Beispiel: Elektromotorregler
-
-Wir haben einen Regler für einen Elektromotor entwickelt.
-
-- Die Reglerfunktion ist alle **15 ms** aufgerufen und hat ein maximales Timing‑Budget von **2 ms**.
-- Wir müssen überprüfen wie lange unsere Funktion wirklich braucht um alle die Berechnungen abzuschließen.
-
-::: {.columns}
-:::{.column width="90%"}
-
-:::{.spacer-lg}
-:::
-
-:::{data-id="timing_analysis"}
-
-**Ansatz 1: Pin-Toggling**
-
-```c{code-line-numbers="5,7"}
-bool applyControlRule(const InputParameter* motor_state)
-{
-    bool is_rule_successfully_computed = false;
-    ControlRule control_rule;
-    gpio_set(GPIO_PIN_DEBUG, true);
-    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
-    gpio_set(GPIO_PIN_DEBUG, false);
-    // Fehlerbehandlung und Übergabe der Regel
-}
-```
-
-:::
-
-:::
-::: -->
 
 ## Messung und Analyse zeitkritischer Abläufe {auto-animate=true}
 
@@ -255,7 +230,7 @@ bool applyControlRule(const InputParameter* motor_state)
 :::
 
 :::{.column width="45%"}
-::: {.fragment}
+::: {.fragment fragment-index="1"}
 **Messungen:**
 ![](Figuren/Timing_Diagram.svg){width=100%}
 
@@ -273,7 +248,7 @@ bool applyControlRule(const InputParameter* motor_state)
 :::{.spacer-sm}
 :::
 
-::: {.fragment}
+::: {.fragment fragment-index="1"}
 
 - Der Ansatz ermöglicht eine **höhere Genauigkeit** der Laufzeitmessung
   - Er hat eine **minimale Beeinflussung** der Echtzeit
@@ -294,28 +269,10 @@ bool applyControlRule(const InputParameter* motor_state)
 
 :::
 
-<!--
-## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true .center}
 
-### Beispiel: Elektromotorregler
+{{< include _link_Beispiel1.qmd >}}
 
-:::{data-id="timing_analysis"}
 
-**Ansatz 2: printf**
-
-```c{code-line-numbers="5,7"}
-bool applyControlRule(const InputParameter* motor_state)
-{
-    bool is_rule_successfully_computed = false;
-    ControlRule control_rule;
-    printf("applyControlRule - Start: %ld ms\n", get_time_ms());
-    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
-    printf("applyControlRule - End: %ld ms\n", get_time_ms());
-    // Fehlerbehandlung und Übergabe der Regel
-}
-```
-
-::: -->
 
 ## Messung und Analyse zeitkritischer Abläufe {auto-animate=true}
 
@@ -378,13 +335,18 @@ applyControlRule - End: 1023 ms
 
 :::
 
+
+{{< include _link_Beispiel1.qmd >}}
+
+
+
 ## Präventive Maßnahmen {auto-animate=true .center}
 
 ### Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine
 
 :::{data-id="defensive_programming"}
 
-```cpp {code-line-numbers="|5"}
+```cpp
 uint16_t computeHeatingTime(const uint8_t initialTemp,
                             const uint8_t finalTemp)
 {
@@ -396,15 +358,14 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 ```
 
 :::
-
 :::{.spacer-md}
 :::
 
-:::{.fragment}
+:::{.fragment fragment-index="1"}
 
 - Was passiert, wenn `initalTemp=96` und `finalTemp=95`?
 
-  :::{.fragment}
+  :::{.fragment fragment-index="2"}
 
   - Bei `initialTemp=96` und `finalTemp=95` ergibt sich `time_sec=255`
   - Das entspricht **4 Minuten und 15 Sekunden!**
@@ -416,9 +377,16 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 :::{.spacer-md}
 :::
 
-::: {.callout-note appearance="simple" .fragment}
+::: {.callout-note appearance="simple" .fragment .fade-up fragment-index="3"}
 **Solche Fehler müssen bereits in der Entwicklungsphase entdeckt werden!**
 :::
+
+:::{.fragment .fade-out fragment-index="3"}
+
+{{< include _link_Beispiel2.qmd >}}
+
+:::
+
 
 ## Präventive Maßnahmen
 
@@ -458,6 +426,33 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 
 :::
 
+
+## Präventive Maßnahmen {auto-animate=true}
+
+::: {.spacer-sm}
+:::
+
+
+::: {.spacer-lg}
+:::
+
+:::{data-id="code_caffe_machine}
+
+```cpp
+uint16_t computeHeatingTime(const uint8_t initialTemp,
+                            const uint8_t finalTemp)
+{
+    const uint8_t conversion_factor = 1; // seconds per degree Celsius
+    const uint8_t deltaT = finalTemp - initialTemp;
+    const uint16_t time_sec = conversion_factor * deltaT;
+    return time_sec;
+}
+```
+:::
+
+{{< include _link_Beispiel2.qmd >}}
+
+
 ## Präventive Maßnahmen {auto-animate=true}
 
 ::: {.spacer-sm}
@@ -465,8 +460,6 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 
 Eine mögliche Lösung, inspiriert von vertragsbasierter Programmierung (Design by Contract).
 
-::: {.spacer-lg}
-:::
 
 :::{data-id="code_caffe_machine}
 
@@ -488,8 +481,10 @@ bool computeHeatingTime(const uint8_t initialTemp,
     return true;
 }
 ```
-
 :::
+
+{{< include _link_Beispiel2.qmd >}}
+
 
 :::{.notes}
 
@@ -650,15 +645,20 @@ Welche Methode **beeinflusst** das Zeitverhalten einer Echtzeitfunktion stark?
 :::{.mid-space}
 
 - **A.** Pin-Toggling.
+
+::: {.fragment .highlight-blue fragment-index="1"}
+
 - **B.** printf-Ausgaben.
+
+:::
 
 :::
 
 ::: {.spacer-lg}
 :::
 
-::: {.callout-note appearance="simple" .fragment}
-Richtige Antwort: **B**
+::: {.callout-note appearance="simple" .fragment fragment-index="1"}
+Richtige Antwort: **B**.
 :::
 
 ## Frage 2
@@ -674,15 +674,19 @@ Wie sollten Defekte im Debugging behandelt werden?
 :::{.mid-space}
 
 - **A.** Defekte werden **simuliert**, um sie nachzustellen.
+
+::: {.fragment .highlight-blue fragment-index="1"}
+
 - **B.** Defekte werden **stimuliert**, um sie reproduzierbar sichtbar zu machen.
+:::
 
 :::
 
 ::: {.spacer-lg}
 :::
 
-::: {.callout-note appearance="simple" .fragment}
-Richtige Antwort: **B** – Defekte müssen **stimuliert** werden, niemals nur simuliert.
+::: {.callout-note appearance="simple" .fragment fragment-index="1"}
+Richtige Antwort: **B**.
 :::
 
 ## Frage 3
@@ -697,7 +701,12 @@ Welche präventive Maßnahme gehört zur Softwareentwicklung?
 
 :::{.mid-space}
 
+::: {.fragment .highlight-blue fragment-index="1"}
+
 - **A.** Statische Code-Analyse
+
+:::
+
 - **B.** Debugging mit printf
 - **C.** Hardware-Register auslesen
 
@@ -706,11 +715,11 @@ Welche präventive Maßnahme gehört zur Softwareentwicklung?
 ::: {.spacer-lg}
 :::
 
-::: {.callout-note appearance="simple" .fragment}
-Richtige Antwort: **A**
+::: {.callout-note appearance="simple" .fragment  fragment-index="1"}
+Richtige Antwort: **A**.
 :::
 
-# Backup
+# Backup  {background-image="Figuren/First_Computer_Bug_1945.jpg" background-opacity="0.3" background-color="black"}
 
 ## Wenn man in die Tiefe des Mikrocontrollers schauen muss {auto-animate=true}
 

@@ -1,0 +1,3 @@
+::: {.qr-bottom-right data-id="qr-code-fig1"}
+![**https://shorturl.at/loD8A**](Figuren/QR-Beispiel1){fig-alt="Link zum Beispiel 1" width="50%"}
+:::

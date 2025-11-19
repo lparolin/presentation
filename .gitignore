@@ -49,3 +49,5 @@ index.pdf
 
 **/build/
 temp_test_files/
+
+!*.cpp
