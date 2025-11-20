@@ -1,0 +1,45 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0" version="29.1.0">
+  <diagram name="Page-1" id="4Cc1wgdRaEBO4oP9-kmM">
+    <mxGraphModel dx="1034" dy="666" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="kZaOQK1sVgz0Ix9fTrEq-1" edge="1" parent="1" source="kZaOQK1sVgz0Ix9fTrEq-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="kZaOQK1sVgz0Ix9fTrEq-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kZaOQK1sVgz0Ix9fTrEq-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=#666666;fillColor=#f5f5f5;align=center;verticalAlign=middle;rounded=0;fontSize=21;fontColor=#333333;" value="Get landmark from env. model (sensor only)" vertex="1">
+          <mxGeometry height="70" width="190" x="70" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="kZaOQK1sVgz0Ix9fTrEq-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=#666666;fillColor=#f5f5f5;align=center;verticalAlign=middle;rounded=0;fontSize=21;fontColor=#333333;" value="Get landmarks from map" vertex="1">
+          <mxGeometry height="70" width="190" x="70" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="kZaOQK1sVgz0Ix9fTrEq-4" edge="1" parent="1" source="kZaOQK1sVgz0Ix9fTrEq-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="kZaOQK1sVgz0Ix9fTrEq-10">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="695" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kZaOQK1sVgz0Ix9fTrEq-5" edge="1" parent="1" source="kZaOQK1sVgz0Ix9fTrEq-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="kZaOQK1sVgz0Ix9fTrEq-11" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kZaOQK1sVgz0Ix9fTrEq-6" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=21;spacingTop=0;spacing=10;spacingLeft=10;spacingBottom=0;spacingRight=10;fillColor=#fff2cc;strokeColor=#d6b656;" value="Is distance &amp;lt; threshold?&amp;nbsp;" vertex="1">
+          <mxGeometry height="130" width="290" x="550" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="kZaOQK1sVgz0Ix9fTrEq-7" edge="1" parent="1" source="kZaOQK1sVgz0Ix9fTrEq-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="kZaOQK1sVgz0Ix9fTrEq-6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kZaOQK1sVgz0Ix9fTrEq-8" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=#666666;fillColor=#f5f5f5;align=center;verticalAlign=middle;rounded=0;fontSize=21;fontColor=#333333;" value="Compute &lt;i&gt;distance&lt;/i&gt;" vertex="1">
+          <mxGeometry height="70" width="190" x="319" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="kZaOQK1sVgz0Ix9fTrEq-9" edge="1" parent="1" source="kZaOQK1sVgz0Ix9fTrEq-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="kZaOQK1sVgz0Ix9fTrEq-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kZaOQK1sVgz0Ix9fTrEq-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=21;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Set landmarks to &lt;i&gt;detected&lt;/i&gt;" vertex="1">
+          <mxGeometry height="60" width="175" x="607.5" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="kZaOQK1sVgz0Ix9fTrEq-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=21;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Set landmark to &lt;i&gt;not-detected&lt;/i&gt;" vertex="1">
+          <mxGeometry height="85" width="160" x="890" y="242.5" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,8 +1,6 @@
 ---
-title: "Online Map Validation for Autonomous Driving"
-subtitle: "An application of Probabilistic Graphical Models"
-#title: "Safety-Critical Embedded Systems in Cyber-Physical Context"
-author: "Dr. Luca Parolini"
+title: "Implementing Probabilistic Graphical Models for Online Map Validation in Autonomous Driving Vehicles"
+# author: "Dr. Luca Parolini"
 format: 
   revealjs:
     theme: [default, styles.scss]
@@ -10,11 +8,12 @@ format:
     fig-align: left
     slide-number: true
     auto-animate: true
+    number-equations: true
     title-slide-attributes:
       data-background-image: "images/map_validation_bmw.png"  # Path to your image
       data-background-size: cover                   # Ensures full coverage
       data-background-position: center              # Optional: centers image
-      data-background-opacity: "0.6"
+      data-background-opacity: "0.3"
       data-background-color: "black" 
 
 
@@ -23,27 +22,55 @@ preview:
 
 ---
 
-## Online Map Validation {background-image="./images/map_validation_bmw_dark.png" .text-light .transparent-background .title-slide}
-### Ensuring Safety in DynamicEnvironments
+## 
 
-::: {.space-xl}
+
+
+::: {.spacer-xl}
 :::
 
-::: {.text-light}
-A work in collaboration with F. Drost, A. Fabris, and Dr. S. Schneider.
+::: {.spacer-md}
 :::
+
+::: {.columns}
+::: {.column width="50%"}
+A. Fabris, _L. Parolini_, S. Schneider and A. Cenedese, "**Use of probabilistic graphical methods for online map validation**", 2021 - [IEEE Xplore](https://ieeexplore.ieee.org/abstract/document/9669245)
+
+Second Workshop on Online Map Validation and Road Model Creation [**MaVRoC 2021**](https://map-validation.github.io/2021/), IEEE Intelligent Vehicles Symposium - 2021 (IV2021) Nagoya, Japan
+:::
+
+::: {.column width="50%"}
+![](images/mavroc_screenshot_2021.png){fig-align="left" width=100% fig-alt="MaVRoC 2021"}
+
+:::
+
+
+:::
+
+
+
+::: {.spacer-xl}
+:::
+
+::: {.spacer-xl}
+:::
+
+In collaboration with Dept. of Information Engineering, University of Padova, Padua, Italy.
+
 
 ## The role of Maps in Autonomous-Driving Vehicle 
 
+- Maps play a central role in Autonomous Driving, allowing trajectory adaptation to upcoming road and lane geometry.
+
+- The *field of view* (FoV) of maps is extremely large and it is **not** affected by traffic conditions or weather.
+
 ::: {.columns}
-::: {.column width="70%"}
-![Typical System Architecture for Autonomous Driving Vehicles.](images/InfoFlowAutomotive.drawio.svg){fig-align="left" width=100% fig-alt="An example SVG figure"}
+::: {.column width="50%"}
+![**Simplified Architecture for Autonomous Driving Vehicles.**](images/information_flow_autonomous_driving){fig-align="left" width=100% fig-alt="Simplified architecture for Autonomous Driving Vehicles."}
 :::
 :::
 
-Maps play a central role in Autonomous Driving, allowing trajectory adaptation to upcoming road and lane geometry.
 
-The *field of view* (FoV) of maps is extremely large and it is **not** affected by traffic conditions or weather.
 
 :::{.spacer-xs}
 :::
@@ -58,9 +85,9 @@ Relying on data from an outdated map may lead to uncomfortable, or even unsafe t
 Maps data must be verified **before** they are used for computing future trajectories.
 :::
 
-## Multiple Map Validation Approaches
+## Different Map Validation Approaches
 
-Depending on the specific application, different approaches to map validation can be considered. ^["Online map validation for autonomous driving", F. Drost, A. Fabris, L. *Parolini*, and S. Schneider, 2020]
+Depending on the specific application, different approaches to map validation can be considered. ^["F. Drost, A. Fabris, L. *Parolini*, and S. Schneider "Online map validation for autonomous driving", 2020]
 
 <table class="fragmented-table margin-top-mid bottom-border numbered-table top-border">
   <tr>
@@ -101,6 +128,41 @@ Depending on the specific application, different approaches to map validation ca
 In this talk we focus on the problems **1**, **2**, and __3__.
 :::
  
+## Proposed probabilistic framework {auto-animate="true"}
+
+
+::: {.columns}
+::: {.column width="50%" .mid-space}
+
+::: {.spacer-md}
+:::
+
+- Autonomous-driving vehicles are equipped with multiple sensors
+  - Each sensor observes a different part of the road
+
+- Different algorithms, combine data from selected sensors and provide an estimation of the map validity in given **areas**
+  - We call these algorithms _labelling systems_
+
+- A **correlation-based approach** fuses the results from the different algorithms^[Fabris _et al._ "Correlation-Based Approach to Online Map Validation", MaVRoC 2020, IEEE IV2020] across the different areas and provides a unified view
+
+::: {.spacer-lg}
+:::
+
+::: {.fragment}
+**In this work, we focus on a labelling system based on _Probabilistic Graphical Models_ (PGMs)**
+:::
+
+:::
+
+:::{.column width="50%"}
+
+![](images/prob_framework.png){fig-align="right" width=90% fig-alt="Proposed probabilistic framework"}
+
+
+![Example of map validation in multiple areas of the road model](images/map_validation_bmw){fig-align="right" width=90% fig-alt="Example of map validation based on correlation"}
+
+:::
+:::
 
 
 ## Use Probabilistic Graphical Model for Map Validation
@@ -108,39 +170,45 @@ In this talk we focus on the problems **1**, **2**, and __3__.
 At run-time we divide the portion of a map relevant for trajectory planning into multiple sections.
 
 - Every section is associated with a random variable $\mathcal{M}$ representing the validity of the map in that section.
+  - Every section is either: _Valid_, or _Invalid_
 - **The values taken by $\mathcal{M}$ are not directly measurable**.
+
 
 ::: {.r-stack style="position: relative; height: 100%;"}
 ::: {.fragment .fade-in-then-out .no-margin-bottom style="position: absolute; top: 0;"}
 
-Our observable variables are the *matches* between measured positions of landmarks and of lanes provided by sensors, and their expected position given by the map.
+Our observable variables are the **matches** between _measured positions of landmarks and of lanes_ provided by sensors, and their _expected positions_ given by the map.
 
+::: {.columns}
 ::: {.column width="45%" .small-text}
-Lane markings
-![](images/lane_marking_wide.png){fig-align="left" width=100% fig-alt="Example of lane marking" .no-margin-top}
+![Lane markings](images/lane_marking_wide.png){fig-align="left" width=100% fig-alt="Example of lane marking" .no-margin-top}
+
 :::
 
-::: {.column width="5%"}
-:::
 
 ::: {.column width="45%" .small-text}
-Land marks: Traffic lights, building edges, traffic signs.
-![](images/landmarks.png){fig-align="left" width=100% fig-alt="Example of landmarks" .no-margin-top}
+![Land marks: Traffic lights, building edges, traffic signs.](images/landmarks.png){fig-align="left" width=100% fig-alt="Example of landmarks" .no-margin-top}
+:::
 :::
 
 :::
 
 ::: {.fragment .fade-up style="position: absolute; top: 0;"}
-We propose the following PGM:
+We propose the following _Probabilistic Graphical Model_ (PGM). 
 
-::: {.column width="100%"}
-::: {.width-30}
+::: {.columns}
+::: {.column width="65%"}
+
 ```{dot}
 digraph MapValidity {
   rankdir=TB;
   fontname="Helvetica";
 
   Weather [shape=box, style=filled, fillcolor=lightblue];
+  Lidar [label="Lidar status"]
+  Camera [label="Camera status"]
+  Radar [label="Radar status"]
+
 
   Weather -> Lidar;
   Weather -> Camera;
@@ -150,7 +218,7 @@ digraph MapValidity {
   MapValidity[shape=box, style=filled, fillcolor=lightgrey, label="Map validity"];
   LandMarkAccuracy [label="Landmark accuracy"];
 
-  Localization;
+  Localization[label="Localization\naccuracy"]
 
   Camera -> LaneMarkingAccuracy;
   Camera -> LandMarkAccuracy;
@@ -174,45 +242,348 @@ digraph MapValidity {
 }
 
 ```
+
+
+
 :::
+::: {.column width="35%"}
+
+- Nodes represent random variables
+- Edges represent direct influences between random variables
+
+::: {.spacer-sm}
 :::
 
-::: {.column width="60%"}
-Here text
 ::: 
-
 :::
 :::
- 
+:::
 
-## Proposed PGM for Online Map Validation
 
-Based on expert judgment, we consider a more refined model of cause-effects which account also for:
+## Use Probabilistic Graphical Model for Map Validation
 
-- Weather affect on accuracy of sensor measurements;
-- Error correlation from camera in miss-detecting lane geometry and positions of landmarks;
-- Localization errors due to invalid map, or sensors errors.
+At run-time we divide the portion of a map relevant for trajectory planning into multiple sections.
+
+- Every section is associated with a random variable $\mathcal{M}$ representing the validity of the map in that section.
+  - Every section is either: _Valid_, or _Invalid_
+- **The values taken by $\mathcal{M}$ are not directly measurable**.
+
+
+We propose the following _Probabilistic Graphical Model_ (PGM). 
+
+::: {.columns}
+::: {.column width="65%"}
+```{dot}
+digraph MapValidity {
+  rankdir=TB;
+  fontname="Helvetica";
+
+  Weather [shape=box, style=filled, fillcolor=lightblue];
+  Lidar [label="Lidar status"]
+  Camera [label="Camera status"]
+  Radar [label="Radar status"]
+
+
+  Weather -> Lidar;
+  Weather -> Camera;
+  Weather -> Radar;
+
+  LaneMarkingAccuracy [label="Lane marking accuracy"];
+  MapValidity[shape=box, style=filled, fillcolor=lightgrey, label="Map validity"];
+  LandMarkAccuracy [label="Landmark accuracy"];
+
+  Localization;
+  MeasurableNodeLaneMarking [label="Measurable node", shape=plaintext, fontcolor=darkgreen,  fontsize=18];
+
+  Localization[label="Localization\naccuracy"]
+
+
+  Camera -> LaneMarkingAccuracy;
+  Camera -> LandMarkAccuracy;
+  Radar -> LandMarkAccuracy;
+  Lidar -> LandMarkAccuracy;
+
+  LaneMarkingMatch [shape=box, style=filled, fillcolor=lightblue, label="Lane marking match"];
+  LandMarkMatch [shape=box, style=filled, fillcolor=lightblue, label="Landmark match"];
+
+  LaneMarkingAccuracy -> Localization;
+  MapValidity -> Localization;
+  LandMarkAccuracy -> Localization;
+
+  LaneMarkingAccuracy -> LaneMarkingMatch;
+  MapValidity -> LaneMarkingMatch;
+  Localization -> LaneMarkingMatch;
+
+  LandMarkAccuracy -> LandMarkMatch;
+  MapValidity -> LandMarkMatch;
+  Localization -> LandMarkMatch;
+
+
+  // New node + arrow
+  MeasurableNodeMap [label="Measurable\lnode\l", shape=plaintext, fontcolor=darkgreen,  fontsize=18, fontname="Helvetica-Bold"];
+  MeasurableNodeLandMark [label="Measurable\lnode\l", shape=plaintext, fontcolor=darkgreen,  fontsize=18, fontname="Helvetica-Bold"];
+  MeasurableNodeLaneMarking [label="Measurable\lnode\l", shape=plaintext, fontcolor=darkgreen,  fontsize=18, fontname="Helvetica-Bold"];
+  
+   // Force same horizontal rank
+  { rank=same; MeasurableNodeMap; Weather }
+   // Force same horizontal rank
+  { rank=same; MeasurableNodeLandMark; MeasurableNodeLaneMarking, LaneMarkingMatch, LandMarkMatch }
+
+
+  MeasurableNodeMap -> Weather [color=darkgreen, penwidth=2];
+  MeasurableNodeLandMark -> LandMarkMatch
+  MeasurableNodeLaneMarking ->LaneMarkingMatch
+}
+
+```
+
+:::
+::: {.column width="35%"}
+
+- Nodes represent random variables
+- Edges represent direct influences between random variables
+
+::: {.spacer-sm}
+:::
+
+
+- _Weather_, _Lane marking match_, and _Landmark match_ are **measurable nodes**
+
+::: {.spacer-sm}
+:::
+
 
 ::: {.fragment}
-We consider the following model
 
-::: {.width-40}
+- All random variables are discrete
+:::
+:::
+:::
+
+
+## Examples of prior and conditional distributions {auto-animate="true"}
+
+::: {.columns}
+::: {.column width="30%" }
+
+:::{data-id="replaceme"}
+
+Prior distributions for **Weather** and **Map validity**
+
+:::{.small-text}
+Weather
+
+<table class="top-border bottom-border table-left .tiny-text">
+  <tr>
+    <td>**Value**</td>
+    <td>**Probability**</td>
+  </tr>
+  <tr>
+    <td>_Cooperative_</td>
+    <td>0,5</td>
+  </tr>
+  <tr>
+    <td>_Non-cooperative_</td>
+    <td>0,5</td>
+  </tr>
+  
+</table>
+
+:::{.spacer-lg}
+:::
+
+Map Validity
+
+<table class="top-border bottom-border table-left .tiny-text">
+  <tr>
+    <td>**Value**</td>
+    <td>**Probability**</td>
+  </tr>
+  <tr>
+    <td>_Valid_</td>
+    <td>0,8</td>
+  </tr>
+  <tr>
+    <td>_Invalid_</td>
+    <td>0,2</td>
+  </tr>
+  
+</table>
+
+:::
+:::
+:::
+
+:::{.column width="70%"}
+
 ```{dot}
 digraph MapValidity {
   rankdir=TB;
   fontname="Helvetica";
 
-  Weather [shape=box, style=filled, fillcolor=lightblue];
+  Weather [shape=box, style=filled, fillcolor=lightblue, color=darkred, penwidth=5, fontname="Helvetica-Bold"];
+  Lidar [label="Lidar status"]
+  Camera [label="Camera status"]
+  Radar [label="Radar status"]
+
 
   Weather -> Lidar;
   Weather -> Camera;
   Weather -> Radar;
 
   LaneMarkingAccuracy [label="Lane marking accuracy"];
-  MapValidity[shape=box, style=filled, fillcolor=lightgrey, label="Map validity"];
+  MapValidity[shape=box, style=filled, fillcolor=lightgrey, label="Map validity", color=darkred, penwidth=5, fontname="Helvetica-Bold"];
   LandMarkAccuracy [label="Landmark accuracy"];
 
   Localization;
+
+  Camera -> LaneMarkingAccuracy;
+  Camera -> LandMarkAccuracy;
+  Radar -> LandMarkAccuracy;
+  Lidar -> LandMarkAccuracy;
+
+  LaneMarkingMatch [shape=box, style=filled, fillcolor=lightblue, label="Lane marking match"];
+  LandMarkMatch [shape=box, style=filled, fillcolor=lightblue, label="Landmark match"];
+
+  Localization[label="Localization\naccuracy"]
+
+  LaneMarkingAccuracy -> Localization;
+  MapValidity -> Localization;
+  LandMarkAccuracy -> Localization;
+
+  LaneMarkingAccuracy -> LaneMarkingMatch;
+  MapValidity -> LaneMarkingMatch;
+  Localization -> LaneMarkingMatch;
+
+  LandMarkAccuracy -> LandMarkMatch;
+  MapValidity -> LandMarkMatch;
+  Localization -> LandMarkMatch;
+
+}
+
+```
+
+:::
+:::
+
+
+## Examples of prior and conditional distributions {auto-animate="true"}
+
+::: {.columns}
+::: {.column width="55%"}
+
+Conditional distributions for Lane marking and Landmark accuracy having high accuracy^[All parameter values available at [GitHub/lparolin/mavroc_2021](https://github.com/lparolin/mavroc_2021/blob/main/mavroc_2021.ipynb)]
+
+:::{data-id="replaceme"}
+
+:::{.small-text}
+<table class="top-border bottom-border table-left .tiny-text">
+  <tr>
+    <td>**Variable**</td>
+    <td>**Camera**</td>
+    <td>**Radar**</td>
+    <td>**Lidar**</td>
+    <td>**Probability**</td>
+  </tr>
+  <tr>
+    <td .vcenter rowspan="2" >Lane marking accuracy</td>
+    <td>Nominal</td>
+    <td>-</td>
+    <td>-</td>
+    <td>0,85</td>
+  </tr>
+  <tr>
+    <td>**Degraded**</td>
+    <td>-</td>
+    <td>-</td>
+    <td>0,3</td>
+  </tr>
+
+  <tr>
+    <td .vcenter rowspan="8" >Landmark accuracy</td>
+    <td>Nominal</td>
+    <td>Nominal</td>
+    <td>Nominal</td>
+    <td>0,95</td>
+  </tr>
+  <tr>
+    <td>**Degraded**</td>
+    <td>Nominal</td>
+    <td>Nominal</td>
+    <td>0,8</td>
+  </tr>
+  <tr>
+    <td>Nominal</td>
+    <td>**Degraded**</td>
+    <td>Nominal</td>
+    <td>0,8</td>
+  </tr>
+  <tr>
+    <td>**Degraded**</td>
+    <td>**Degraded**</td>
+    <td>Nominal</td>
+    <td>0,4</td>
+  </tr>
+  <tr>
+    <td>Nominal</td>
+    <td>Nominal</td>
+    <td>**Degraded**</td>
+    <td>0,7</td>
+  </tr>
+  <tr>
+    <td>**Degraded**</td>
+    <td>Nominal</td>
+    <td>**Degraded**</td>
+    <td>0,7</td>
+  </tr>
+  <tr>
+    <td>Nominal</td>
+    <td>**Degraded**</td>
+    <td>**Degraded**</td>
+    <td>0,5</td>
+  </tr>
+  <tr>
+    <td>**Degraded**</td>
+    <td>**Degraded**</td>
+    <td>**Degraded**</td>
+    <td>0,01</td>
+  </tr>
+
+</table>
+
+:::
+:::
+:::
+
+:::{.column width="45%"}
+
+:::{.spacer-sm}
+:::
+
+:::{.spacer-lg}
+:::
+
+
+```{dot}
+digraph MapValidity {
+  rankdir=TB;
+  fontname="Helvetica";
+
+  Weather [shape=box, style=filled, fillcolor=lightblue];
+  Lidar [label="Lidar status"]
+  Camera [label="Camera status"]
+  Radar [label="Radar status"]
+
+
+  Weather -> Lidar;
+  Weather -> Camera;
+  Weather -> Radar;
+
+  LaneMarkingAccuracy [label="Lane marking accuracy",  color=darkred, penwidth=5, fontname="Helvetica-Bold"];
+  MapValidity[shape=box, style=filled, fillcolor=lightgrey, label="Map validity"];
+  LandMarkAccuracy [label="Landmark accuracy", color=darkred, penwidth=5, fontname="Helvetica-Bold"];
+
+  Localization[label="Localization\naccuracy"];
 
   Camera -> LaneMarkingAccuracy;
   Camera -> LandMarkAccuracy;
@@ -233,17 +604,239 @@ digraph MapValidity {
   LandMarkAccuracy -> LandMarkMatch;
   MapValidity -> LandMarkMatch;
   Localization -> LandMarkMatch;
+
 }
 
 ```
+
 :::
 :::
-## Selection of nodes affecting match of lanes and landmark
 
-In the paper we decided to *observe* if lane marking and landmarks had a good match between data from the map and sensor data. 
 
-We also considered the effect of weather on sensor accuracy and the effect of incorrect localization in the probability of having poor matches in lanes and landmarks. 
 
+## Examples of prior and conditional distributions {auto-animate="true"}
+
+::: {.columns}
+::: {.column width="55%"}
+
+Conditional distributions for Localization having high accuracy^[All parameter values available at [GitHub/lparolin/mavroc_2021](https://github.com/lparolin/mavroc_2021/blob/main/mavroc_2021.ipynb)]
+
+:::{data-id="replaceme"}
+
+:::{.small-text}
+<table class="top-border bottom-border table-left .tiny-text">
+  <tr>
+    <td>**Variable**</td>
+    <td>**Lane marking accuracy**</td>
+    <td>**Map validity**</td>
+    <td>**Landmark accuracy is high**</td>
+    <td>**Probability**</td>
+  </tr>
+  
+  <tr>
+    <td .vcenter rowspan="8" >Localization accuracy</td>
+    <td>High</td>
+    <td>Valid</td>
+    <td>High</td>
+    <td>0,95</td>
+  </tr>
+  <tr>
+    <td>High</td>
+    <td>Valid</td>
+    <td>**Low**</td>
+    <td>0,7</td>
+  </tr>
+  <tr>
+    <td>High</td>
+    <td>**Invalid**</td>
+    <td>High</td>
+    <td>0,1</td>
+  </tr>
+  <tr>
+    <td>High</td>
+    <td>**Invalid**</td>
+    <td>**Low**</td>
+    <td>0,1</td>
+  </tr>
+  <tr>
+    <td>**Low**</td>
+    <td>Valid</td>
+    <td>High</td>
+    <td>0,8</td>
+  </tr>
+  <tr>
+    <td>**Low**</td>
+    <td>Valid</td>
+    <td>**Low**</td>
+    <td>0,2</td>
+  </tr>
+  <tr>
+    <td>**Low**</td>
+    <td>**Invalid**</td>
+    <td>High</td>
+    <td>0,1</td>
+  </tr>
+  <tr>
+    <td>**Low**</td>
+    <td>**Invalid**</td>
+    <td>**Low**</td>
+    <td>0,1</td>
+  </tr>
+
+</table>
+
+:::
+:::
+:::
+
+:::{.column width="45%"}
+
+:::{.spacer-sm}
+:::
+
+:::{.spacer-lg}
+:::
+
+
+```{dot}
+digraph MapValidity {
+  rankdir=TB;
+  fontname="Helvetica";
+
+  Weather [shape=box, style=filled, fillcolor=lightblue];
+  Lidar [label="Lidar status"]
+  Camera [label="Camera status"]
+  Radar [label="Radar status"]
+
+
+  Weather -> Lidar;
+  Weather -> Camera;
+  Weather -> Radar;
+
+  LaneMarkingAccuracy [label="Lane marking accuracy"];
+  MapValidity[shape=box, style=filled, fillcolor=lightgrey, label="Map validity"];
+  LandMarkAccuracy [label="Landmark accuracy"];
+
+  Localization[label="Localization\naccuracy", color=darkred, penwidth=5, fontname="Helvetica-Bold"];
+
+  Camera -> LaneMarkingAccuracy;
+  Camera -> LandMarkAccuracy;
+  Radar -> LandMarkAccuracy;
+  Lidar -> LandMarkAccuracy;
+
+  LaneMarkingMatch [shape=box, style=filled, fillcolor=lightblue, label="Lane marking match"];
+  LandMarkMatch [shape=box, style=filled, fillcolor=lightblue, label="Landmark match"];
+
+  LaneMarkingAccuracy -> Localization;
+  MapValidity -> Localization;
+  LandMarkAccuracy -> Localization;
+
+  LaneMarkingAccuracy -> LaneMarkingMatch;
+  MapValidity -> LaneMarkingMatch;
+  Localization -> LaneMarkingMatch;
+
+  LandMarkAccuracy -> LandMarkMatch;
+  MapValidity -> LandMarkMatch;
+  Localization -> LandMarkMatch;
+
+}
+
+```
+
+:::
+:::
+
+
+## Computation of posterior distribution of Map Validity
+
+For every area, and at every iteration we want to compute
+
+$$
+\begin{equation}
+P(M =\textrm{Valid}\mid W, S_{\mathrm{lane}}, S_{\mathrm{land}})
+=
+\frac{P(M, W, S_{\mathrm{lane}}, S_{\mathrm{land}})}
+     {P(W, S_{\mathrm{lane}}, S_{\mathrm{land}})},
+\label{eq:posterior}
+\end{equation}
+$$ {#eq-posterior-map}
+
+where 
+
+- $M$ represents the validity of map (valid, invalid)
+- $W$ represents the weather status (cooperative, Non-cooperative)
+- $S_{\mathrm{lane}}$ represents the matching of lane markings (detected, not-detected) and
+- $S_{\mathrm{land}}$ represents the matching of landmarks (detected, not-detected).
+
+:::{.fragment .fade-up}
+These probabilities can be obtained from the graphical model by marginalizing over the hidden variables.
+
+- Circa 1k FLOPs per area
+
+:::
+
+:::{.spacer-lg}
+:::
+
+:::{.fragment .fade-up}
+When all conditional probabilities are constant, then a look-up table approach can be used. 
+:::
+
+## Posterior probabilities of high accuracy for different observations {auto-animate="true"}
+
+![](images/posterior_hidden_variables.png){width=90% fig-alt="Posterior probability of high accuracy"}
+
+## Posterior probabilities of high accuracy for different observations {auto-animate="true"}
+
+![](images/posterior_map_validity.png){width=90% fig-alt="Posterior probability of high accuracy and map validity"}
+
+## From a probability distribution to a map classifier
+
+- The algorithm discussed till now, computes the posterior distribution of valid map, given a certain input from the measured nodes
+  - We still need a rule to decide if a map is to be _classified_ as valid based on the posterior distribution
+  - We focused on a simple classifier based on comparison against a threshold $\lambda$
+- A map is valid if the posterior probability of map valid is greater than $\lambda$
+
+![](images/posterior_map_validity.png){width=90% fig-alt="Posterior probability of high accuracy and map validity"}
+
+## Receiver operating characteristic (ROC) curve for the classifier
+
+
+::: {.columns}
+::: {.column width="45%" .mid-space}
+:::{.spacer-lg}
+:::
+
+- Pairs of _True Positive Rate_ (TPR), _False Positive Rate_ (FPR) for different values of $\lambda$
+  - TPR: Probability of declaring a map valid, when it is valid
+  - FPR: Probability of declaring a map valid, when it is **not** valid
+
+- The proposed approach is rather insensitive to the value of $\lambda$
+
+:::
+
+::: {.column width="5%" .mid-space}
+
+:::
+
+::: {.column width="50%"}
+
+![](images/roc_curve2.png){fig-alt="ROC Curve"}
+:::
+
+:::
+
+# Backup
+
+
+## Algorithm steps
+
+![**Steps for lane marking match.**](images/Information_flow_lane_marking.svg){width="80%" fig-alt="Information flow lane marking match"}
+
+![**Steps for landmark match.**](images/landmark_match.svg){width="80%" fig-alt="Information flow lane marking match"}
+
+
+<!-- 
 
 # Introduction to Probabilistic Graphical Methods
 
@@ -306,16 +899,6 @@ The probability of carrying the umbrella depends on the *realization* of the ran
 :::
 
 
-<!-- ::: {.column width=50% .math-compact .left .fragment .small}
-These are the set of probabilities we need to define:
-
-$$P(\textrm {Umbrella=Yes} | \textrm{Rain=Yes}) = 0.9 $$
-$$P(\textrm {Umbrella=Yes} | \textrm{Rain=No}) = 0.7 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=No}) = 0.01 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=Yes}) = 0.01 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=No}) = 0.99 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
-::: -->
 
 :::
 
@@ -443,7 +1026,7 @@ We can infer the following probability of rain, given our observation of wet clo
 :::
 
 
-:::
+::: -->
 
 <!-- ::: {.column width=50% .math-compact .left .fragment .small}
 These are the set of probabilities we need to define:
@@ -733,132 +1316,11 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("JS Functions loaded");
 
   addNumbersToTables();
-  fixSvgSizes();
+  // fixSvgSizes();
   addClassWhenFinalTrigger();
   applyDarkenBackground();
   // setupRevealAnimationsSmart();
   setupRevealTransitions();
 
-  ///////////////////////////////////
-  // (() => {
-  //   const pairs = {}; // baseId -> { srcEl, dstEl, srcRect }
-
-  //   // Find all pairs on page load
-  //   function findPairs() {
-  //     document.querySelectorAll('[id$="_src"]').forEach(srcEl => {
-  //       const baseId = srcEl.id.slice(0, -4);
-  //       const dstEl = document.getElementById(baseId + '_dst');
-  //       if (dstEl) {
-  //         pairs[baseId] = { srcEl, dstEl, srcRect: null };
-  //       }
-  //     });
-  //   }
-
-  //   // Measure src element's position and size (viewport relative)
-  //   function measureSrc(baseId) {
-  //     const pair = pairs[baseId];
-  //     if (!pair) return;
-
-  //     // Only measure if visible
-  //     if (pair.srcEl.offsetParent === null) return;
-
-  //     pair.srcRect = pair.srcEl.getBoundingClientRect();
-  //   }
-
-  //   // Animate from cached srcRect to dst element position
-  //   function animateToDst(baseId) {
-  //     const pair = pairs[baseId];
-  //     if (!pair || !pair.srcRect) return;
-
-  //     const dstRect = pair.dstEl.getBoundingClientRect();
-
-  //     // Hide destination during animation
-  //     pair.dstEl.style.visibility = 'hidden';
-
-  //     // Clone source element
-  //     const clone = pair.srcEl.cloneNode(true);
-
-  //     // Style clone for fixed positioning and no interference
-  //     Object.assign(clone.style, {
-  //       position: 'fixed',
-  //       top: `${pair.srcRect.top}px`,
-  //       left: `${pair.srcRect.left}px`,
-  //       width: `${pair.srcRect.width}px`,
-  //       height: `${pair.srcRect.height}px`,
-  //       margin: '0',
-  //       transformOrigin: 'top left',
-  //       transition: 'transform 0.6s ease, opacity 0.3s ease',
-  //       zIndex: 9999,
-  //       pointerEvents: 'none',
-  //       background: 'white', // Optional: ensure clone looks consistent
-  //       boxSizing: 'border-box',
-  //       opacity: '1',
-  //     });
-
-  //     document.body.appendChild(clone);
-
-  //     // Force repaint before animating
-  //     requestAnimationFrame(() => {
-  //       const dx = dstRect.left - pair.srcRect.left;
-  //       const dy = dstRect.top - pair.srcRect.top;
-  //       const scaleX = dstRect.width / pair.srcRect.width;
-  //       const scaleY = dstRect.height / pair.srcRect.height;
-
-  //       clone.style.transform = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
-  //     });
-
-  //     // Listen for transition end to clean up
-  //     clone.addEventListener('transitionend', (e) => {
-  //       if (e.propertyName === 'transform') {
-  //         // Show destination element
-  //         pair.dstEl.style.visibility = 'visible';
-
-  //         // Fade out the clone
-  //         clone.style.opacity = '0';
-  //       } else if (e.propertyName === 'opacity') {
-  //         // Remove clone after fade out
-  //         clone.remove();
-
-  //         // Clear cached srcRect so animation won't repeat incorrectly
-  //         pair.srcRect = null;
-  //       }
-  //     }, { once: true });
-  //   }
-
-  //   // Listen to slide changes to measure and animate
-  //   Reveal.addEventListener('slidechanged', (event) => {
-  //     const prevSlide = event.previousSlide;
-  //     const currSlide = event.currentSlide;
-
-  //     // Measure any src element on the previous slide (before it hides)
-  //     if (prevSlide) {
-  //       Object.entries(pairs).forEach(([baseId, pair]) => {
-  //         if (prevSlide.contains(pair.srcEl)) {
-  //           measureSrc(baseId);
-  //         }
-  //       });
-  //     }
-
-  //     // Animate any dst element on the new slide
-  //     if (currSlide) {
-  //       Object.entries(pairs).forEach(([baseId, pair]) => {
-  //         if (currSlide.contains(pair.dstEl)) {
-  //           animateToDst(baseId);
-  //         }
-  //       });
-  //     }
-  //   });
-
-  //   // Run on load to find pairs immediately
-  //   findPairs();
-
-  // })();
-  //////////////////////////////////
 });
-
-
-
-
 </script>
-
-

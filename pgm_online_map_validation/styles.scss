@@ -80,6 +80,10 @@ $example-background-color: mix(black, $body-bg, 2%); // Slightly darker than typ
   margin-top: 0.1em !important;
 }
 
+.mid-space ul li {
+  margin-bottom: 0.7em !important;
+}
+
 .margin-top-small {
   margin-top: 1.0em !important;
 }
@@ -105,10 +109,11 @@ $example-background-color: mix(black, $body-bg, 2%); // Slightly darker than typ
 }
 
 .reveal img {
-  padding: 5px;
+  // padding: 5px;
   // background-color: mix(black, $body-bg, 2%); // Slightly darker than typical slide background
-  background-color: $img-background-color;
-  margin: 1em auto; // Center image with spacing
+  // background-color: $img-background-color;
+  // margin: 1em auto; // Center image with spacing
+  box-shadow: 10px 10px 15px $img-background-color;
 }
 
 .reveal .example {
@@ -183,6 +188,9 @@ $height-spacer: (
   /* don't overflow slide */
   display: block;
   /* remove inline gaps */
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  text-align: left !important;
 }
 
 /* If Quarto or reveal wrap SVGs in an object or figure, ensure wrappers don't force a fixed size */
@@ -201,6 +209,10 @@ $height-spacer: (
 /* For Graphviz-generated SVGs: make group <g> determine visible bounds where possible */
 .reveal .slide svg>g {
   transform-origin: 0 0;
+}
+
+.large-text {
+  font-size: $large-font-size !important;
 }
 
 .small-text {
@@ -325,8 +337,13 @@ $vw-widths: 20, 40, 50, 60, 80, 90, 100;
   }
 }
 
+
 .no-margin-top {
   margin-top: 0 !important;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0 !important;
 }
 
 .no-margin-top-first-child {
@@ -354,4 +371,9 @@ $vw-widths: 20, 40, 50, 60, 80, 90, 100;
 .transition-clone * {
   animation: none !important;
   transition: none !important;
+}
+
+/* Only affect captions of right-aligned figures */
+.quarto-figure-right figcaption {
+  text-align: right;
 }
