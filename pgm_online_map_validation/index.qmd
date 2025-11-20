@@ -24,8 +24,6 @@ preview:
 
 ## 
 
-
-
 ::: {.spacer-xl}
 :::
 
@@ -34,9 +32,12 @@ preview:
 
 ::: {.columns}
 ::: {.column width="50%"}
-A. Fabris, _L. Parolini_, S. Schneider and A. Cenedese, "**Use of probabilistic graphical methods for online map validation**", 2021 - [IEEE Xplore](https://ieeexplore.ieee.org/abstract/document/9669245)
+A. Fabris, _L. Parolini_, S. Schneider and A. Cenedese, "**Use of probabilistic graphical methods for online map validation**", IEEE Intelligent Vehicles Symposium (IV2021), Nagoya, Japan, 2021.
 
-Second Workshop on Online Map Validation and Road Model Creation [**MaVRoC 2021**](https://map-validation.github.io/2021/), IEEE Intelligent Vehicles Symposium - 2021 (IV2021) Nagoya, Japan
+Presented at the Second Workshop on Online Map Validation and Road Model Creation.
+
+([**MaVRoC 2021**](https://map-validation.github.io/2021/)).
+
 :::
 
 ::: {.column width="50%"}
@@ -60,9 +61,9 @@ In collaboration with Dept. of Information Engineering, University of Padova, Pa
 
 ## The role of Maps in Autonomous-Driving Vehicle 
 
-- Maps play a central role in Autonomous Driving, allowing trajectory adaptation to upcoming road and lane geometry.
+- Maps play a central role in autonomous driving, enabling vehicles to adapt their trajectories to upcoming road and lane geometry.
 
-- The *field of view* (FoV) of maps is extremely large and it is **not** affected by traffic conditions or weather.
+- The  _Field of View_ (FoV) of maps is extremely large and remains unaffected by traffic conditions or weather.
 
 ::: {.columns}
 ::: {.column width="50%"}
@@ -140,16 +141,16 @@ In this talk we focus on the problems **1**, **2**, and __3__.
 - Autonomous-driving vehicles are equipped with multiple sensors
   - Each sensor observes a different part of the road
 
-- Different algorithms, combine data from selected sensors and provide an estimation of the map validity in given **areas**
+- Different algorithms combine data from selected sensors and provide an estimation of the map validity in given **areas**
   - We call these algorithms _labelling systems_
 
-- A **correlation-based approach** fuses the results from the different algorithms^[Fabris _et al._ "Correlation-Based Approach to Online Map Validation", MaVRoC 2020, IEEE IV2020] across the different areas and provides a unified view
+- A **correlation-based approach** fuses the results from the different algorithms^[Fabris _et al._ "Correlation-Based Approach to Online Map Validation", MaVRoC 2020, IEEE IV2020] across different areas, providing a unified view of map validity.
 
 ::: {.spacer-lg}
 :::
 
 ::: {.fragment}
-**In this work, we focus on a labelling system based on _Probabilistic Graphical Models_ (PGMs)**
+In this work, we focus on a labelling system built on **Probabilistic Graphical Models_ (PGMs)**
 :::
 
 :::
@@ -165,19 +166,19 @@ In this talk we focus on the problems **1**, **2**, and __3__.
 :::
 
 
-## Use Probabilistic Graphical Model for Map Validation
+## Using Probabilistic Graphical Model for Map Validation
 
-At run-time we divide the portion of a map relevant for trajectory planning into multiple sections.
+At run time, we divide the portion of a map relevant for trajectory planning into multiple sections.
 
 - Every section is associated with a random variable $\mathcal{M}$ representing the validity of the map in that section.
   - Every section is either: _Valid_, or _Invalid_
-- **The values taken by $\mathcal{M}$ are not directly measurable**.
+- **The values taken by $\mathcal{M}$ are not directly observable**.
 
 
 ::: {.r-stack style="position: relative; height: 100%;"}
 ::: {.fragment .fade-in-then-out .no-margin-bottom style="position: absolute; top: 0;"}
 
-Our observable variables are the **matches** between _measured positions of landmarks and of lanes_ provided by sensors, and their _expected positions_ given by the map.
+Our observable variables are the **matches** between sensor‑measured positions of landmarks and lanes, and their expected positions according to the map.
 
 ::: {.columns}
 ::: {.column width="45%" .small-text}
@@ -262,7 +263,7 @@ digraph MapValidity {
 
 ## Use Probabilistic Graphical Model for Map Validation
 
-At run-time we divide the portion of a map relevant for trajectory planning into multiple sections.
+At run time, we divide the portion of a map relevant for trajectory planning into multiple sections.
 
 - Every section is associated with a random variable $\mathcal{M}$ representing the validity of the map in that section.
   - Every section is either: _Valid_, or _Invalid_
@@ -355,7 +356,7 @@ digraph MapValidity {
 
 ::: {.fragment}
 
-- All random variables are discrete
+- All random variables are modelled as discrete.
 :::
 :::
 :::
@@ -368,7 +369,7 @@ digraph MapValidity {
 
 :::{data-id="replaceme"}
 
-Prior distributions for **Weather** and **Map validity**
+Prior distributions for **Weather** and **Map Validity**
 
 :::{.small-text}
 Weather
@@ -380,11 +381,11 @@ Weather
   </tr>
   <tr>
     <td>_Cooperative_</td>
-    <td>0,5</td>
+    <td>0.5</td>
   </tr>
   <tr>
     <td>_Non-cooperative_</td>
-    <td>0,5</td>
+    <td>0.5</td>
   </tr>
   
 </table>
@@ -401,11 +402,11 @@ Map Validity
   </tr>
   <tr>
     <td>_Valid_</td>
-    <td>0,8</td>
+    <td>0.8</td>
   </tr>
   <tr>
     <td>_Invalid_</td>
-    <td>0,2</td>
+    <td>0.2</td>
   </tr>
   
 </table>
@@ -490,13 +491,13 @@ Conditional distributions for Lane marking and Landmark accuracy having high acc
     <td>Nominal</td>
     <td>-</td>
     <td>-</td>
-    <td>0,85</td>
+    <td>0.85</td>
   </tr>
   <tr>
     <td>**Degraded**</td>
     <td>-</td>
     <td>-</td>
-    <td>0,3</td>
+    <td>0.3</td>
   </tr>
 
   <tr>
@@ -504,49 +505,49 @@ Conditional distributions for Lane marking and Landmark accuracy having high acc
     <td>Nominal</td>
     <td>Nominal</td>
     <td>Nominal</td>
-    <td>0,95</td>
+    <td>0.95</td>
   </tr>
   <tr>
     <td>**Degraded**</td>
     <td>Nominal</td>
     <td>Nominal</td>
-    <td>0,8</td>
+    <td>0.8</td>
   </tr>
   <tr>
     <td>Nominal</td>
     <td>**Degraded**</td>
     <td>Nominal</td>
-    <td>0,8</td>
+    <td>0.8</td>
   </tr>
   <tr>
     <td>**Degraded**</td>
     <td>**Degraded**</td>
     <td>Nominal</td>
-    <td>0,4</td>
+    <td>0.4</td>
   </tr>
   <tr>
     <td>Nominal</td>
     <td>Nominal</td>
     <td>**Degraded**</td>
-    <td>0,7</td>
+    <td>0.7</td>
   </tr>
   <tr>
     <td>**Degraded**</td>
     <td>Nominal</td>
     <td>**Degraded**</td>
-    <td>0,7</td>
+    <td>0.7</td>
   </tr>
   <tr>
     <td>Nominal</td>
     <td>**Degraded**</td>
     <td>**Degraded**</td>
-    <td>0,5</td>
+    <td>0.5</td>
   </tr>
   <tr>
     <td>**Degraded**</td>
     <td>**Degraded**</td>
     <td>**Degraded**</td>
-    <td>0,01</td>
+    <td>0.01</td>
   </tr>
 
 </table>
@@ -628,7 +629,7 @@ Conditional distributions for Localization having high accuracy^[All parameter v
   <tr>
     <td>**Variable**</td>
     <td>**Lane marking accuracy**</td>
-    <td>**Map validity**</td>
+    <td>**Map Validity**</td>
     <td>**Landmark accuracy is high**</td>
     <td>**Probability**</td>
   </tr>
@@ -638,49 +639,49 @@ Conditional distributions for Localization having high accuracy^[All parameter v
     <td>High</td>
     <td>Valid</td>
     <td>High</td>
-    <td>0,95</td>
+    <td>0.95</td>
   </tr>
   <tr>
     <td>High</td>
     <td>Valid</td>
     <td>**Low**</td>
-    <td>0,7</td>
+    <td>0.7</td>
   </tr>
   <tr>
     <td>High</td>
     <td>**Invalid**</td>
     <td>High</td>
-    <td>0,1</td>
+    <td>0.1</td>
   </tr>
   <tr>
     <td>High</td>
     <td>**Invalid**</td>
     <td>**Low**</td>
-    <td>0,1</td>
+    <td>0.1</td>
   </tr>
   <tr>
     <td>**Low**</td>
     <td>Valid</td>
     <td>High</td>
-    <td>0,8</td>
+    <td>0.8</td>
   </tr>
   <tr>
     <td>**Low**</td>
     <td>Valid</td>
     <td>**Low**</td>
-    <td>0,2</td>
+    <td>0.2</td>
   </tr>
   <tr>
     <td>**Low**</td>
     <td>**Invalid**</td>
     <td>High</td>
-    <td>0,1</td>
+    <td>0.1</td>
   </tr>
   <tr>
     <td>**Low**</td>
     <td>**Invalid**</td>
     <td>**Low**</td>
-    <td>0,1</td>
+    <td>0.1</td>
   </tr>
 
 </table>
@@ -779,25 +780,62 @@ These probabilities can be obtained from the graphical model by marginalizing ov
 :::
 
 :::{.fragment .fade-up}
-When all conditional probabilities are constant, then a look-up table approach can be used. 
+When all conditional probabilities are constant, then **a look-up table** approach can be used. 
+:::
+<!-- 
+## Posterior probabilities of high accuracy for different observations {auto-animate="true"}
+
+![](images/posterior_hidden_variables.png){width=90% fig-alt="Posterior probability of high accuracy"} -->
+
+## Posterior probabilities of high accuracy under different observations {auto-animate="true"}
+
+![](images/posterior_map_validity.png){width=90% fig-alt="Posterior probability of high accuracy and map validity"}
+
+# From a probability distribution to a classifier{background-image="images/map_validation_bmw_dark.png"  .transparent-background .text-light}
+
+
+## The proposed classifier
+- The algorithm discussed till now, computes the posterior distribution of valid map, given a certain input from the measured nodes
+- **We still need a rule to decide whether a map should be classified as valid, based on the posterior distribution**
+
+:::{.fragment}
+
+- **Proposed classifier**: a map is classified as valid if the posterior probability of being valid exceeds $\lambda$
+  - If $\lambda=0$, then a map is always classified as valid,
+  - If $\lambda=1$, then a map is never classified as valid.
 :::
 
-## Posterior probabilities of high accuracy for different observations {auto-animate="true"}
 
-![](images/posterior_hidden_variables.png){width=90% fig-alt="Posterior probability of high accuracy"}
-
-## Posterior probabilities of high accuracy for different observations {auto-animate="true"}
-
-![](images/posterior_map_validity.png){width=90% fig-alt="Posterior probability of high accuracy and map validity"}
-
-## From a probability distribution to a map classifier
+## The proposed classifier
 
 - The algorithm discussed till now, computes the posterior distribution of valid map, given a certain input from the measured nodes
-  - We still need a rule to decide if a map is to be _classified_ as valid based on the posterior distribution
-  - We focused on a simple classifier based on comparison against a threshold $\lambda$
-- A map is valid if the posterior probability of map valid is greater than $\lambda$
+- **We still need a rule to decide if a map is as valid based on the posterior distribution**
 
-![](images/posterior_map_validity.png){width=90% fig-alt="Posterior probability of high accuracy and map validity"}
+
+- **Proposed classifier**: a map is classified as valid if the posterior probability of being valid exceeds $\lambda$
+  - If $\lambda=0$, then a map is always classified as valid,
+  - If $\lambda=1$, then a map is never classified as valid.
+
+::: {.columns}
+
+:::{.column width="70%"}
+
+:::{data-id="lambda_plot"}
+![](images/map_valid_lambda_0_8.png){width=100% fig-alt="Posterior probability of high accuracy and map validity"}
+:::
+
+:::
+
+::: {.column width="30%"}
+
+:::{.spacer-xl}
+:::
+
+- When $\lambda=0.8$, then the map is classified as valid in these cases only
+
+:::
+
+:::
 
 ## Receiver operating characteristic (ROC) curve for the classifier
 
@@ -807,9 +845,16 @@ When all conditional probabilities are constant, then a look-up table approach c
 :::{.spacer-lg}
 :::
 
-- Pairs of _True Positive Rate_ (TPR), _False Positive Rate_ (FPR) for different values of $\lambda$
-  - TPR: Probability of declaring a map valid, when it is valid
+- Pairs of _False Positive Rate_ (FPR),  _True Positive Rate_ (TPR) for different values of $\lambda$
   - FPR: Probability of declaring a map valid, when it is **not** valid
+  - TPR: Probability of declaring a map valid, when it is valid
+
+- The pair (FPR=0.1; TPR=0.85) means: 
+  - an invalid map is classified as valid 10% of time,
+  - a valid map is classified as invalid 15% of time.
+
+:::{.spacer-sm}
+:::
 
 - The proposed approach is rather insensitive to the value of $\lambda$
 
@@ -826,8 +871,37 @@ When all conditional probabilities are constant, then a look-up table approach c
 
 :::
 
-# Backup
+## Conclusion and future research
 
+::: {.spacer-md}
+:::
+
+- Probabilistic Graphical Models (PGMs) can be effectively applied to online map validation
+  - By relying on discrete variables, most computations can be pre‑computed offline
+  
+::: {.spacer-sm}
+:::
+
+- Data from heterogeneous sources can be fused within a unified probabilistic framework
+  - The network provides the posterior distribution for all variables in the model
+  - Internal nodes retain a clear probabilistic interpretation
+
+::: {.spacer-sm}
+:::
+
+
+- Compared with deep‑learning techniques, PGMs require fewer data to tune their parameters
+  - Some of these data can be learned from experiments, others may require expert judgment
+
+::: {.spacer-lg}
+:::
+
+- Sensitivity to model parameters not investigated yet
+  - Comparison against alternative approaches, e.g., based on neural networks, remains pending
+
+# Questions? {background-image="images/map_validation_bmw_dark.png"  .transparent-background .text-light}
+
+# Backup
 
 ## Algorithm steps
 
@@ -836,208 +910,6 @@ When all conditional probabilities are constant, then a look-up table approach c
 ![**Steps for landmark match.**](images/landmark_match.svg){width="80%" fig-alt="Information flow lane marking match"}
 
 
-<!-- 
-
-# Introduction to Probabilistic Graphical Methods
-
-## Probabilistic Graphical Models - a Short Review
-
-Probabilistic Graphical Models rely on Graphs for modelling conditional dependencies between random variables.^[Daphne Koller and Nir Friedman. 2009. [Probabilistic Graphical Models: Principles and Techniques - Adaptive Computation and Machine Learning](https://mitpress.ublish.com/book/probabilistic-graphical-models). The MIT Press.]
-
-::: {.example .no-margin-top-first-child}
-**Example:**
-
-Suppose we are in a classroom without windows and want to understand if it is raining outside, or not.
-
-We can observe if the professor arrived in the classroom carrying an umbrella and if his/her clothes are wet. 
-
-:::{.fragment}
-
-Based on previous knowledge, we know that:
-
-- The professor tends to carry an umbrella when outside rains;
-- If the clothes are wet and the professors does not carry an umbrella, we can be pretty sure that outside is raining.
-:::
-
-::: {.fragment}
-Based on these observations we can *infer* if outside is raining, or not.
-:::
-
-::: {.fragment .fade-down}
-The information above can be represented by this PGM:
-
-::: {.column width="50%" id="umbrella_problem_src"}
-```{dot}
-digraph WeatherProblem {
-  rankdir=LR;
-  bgcolor="gray95";
-
-  Rain [label="Rain", fontname="Sans-Serif"];
-
-  Rain -> Umbrella;
-  Umbrella -> WetClothes;
-  Rain -> WetClothes;
-
-  Umbrella [shape=box, style=filled, fillcolor=lightblue, label="Umbrella", fontname="Sans-Serif"];
-  WetClothes [shape=box, style=filled, fillcolor=lightblue, label="Wet", fontname="Sans-Serif"];
-}
-
-```
-
-:::
-
-::: {.column width="5%"}
-:::
-
-
-::: {.column width="45%" id="text_pgm1_src"}
-*Vertices* of the graph represent random variables and *edges* represent conditional dependencies among the variables.
-
-The probability of carrying the umbrella depends on the *realization* of the random variable *Rain*.
-:::
-
-:::
-
-
-
-:::
-
-
-## Probabilistic Graphical Models - a Short Review
-
-Probabilistic Graphical Models rely on Graphs for modelling conditional dependencies between random variables.^[Daphne Koller and Nir Friedman. 2009. [Probabilistic Graphical Models: Principles and Techniques - Adaptive Computation and Machine Learning](https://mitpress.ublish.com/book/probabilistic-graphical-models). The MIT Press.]
-
-::: {.example .no-margin-top-first-child}
-**Example:**
-
-::: {.column width="50%"}
-::: {id="umbrella_problem_dst"}
-
-```{dot}
-digraph WeatherProblem {
-  rankdir=LR;
-  bgcolor="gray95";
-
-  Rain [label="Rain", fontname="Sans-Serif"];
-
-  Rain -> Umbrella;
-  Umbrella -> WetClothes;
-  Rain -> WetClothes;
-
-  Umbrella [shape=box, style=filled, fillcolor=lightblue, label="Umbrella", fontname="Sans-Serif"];
-  WetClothes [shape=box, style=filled, fillcolor=lightblue, label="Wet", fontname="Sans-Serif"];
-}
-
-```
-:::
-:::
-
-::: {.column width="3%"}
-:::
-
-::: {.column width="43%"}
-::: {style="margin-top:-40px"}
-We consider these a priori and conditional probabilities:
-
-::: {.tiny-text}
-<table class="top-border bottom-border table-left .tiny-text">
-  <tr>
-    <td>$\small P(\textrm{Rain=Yes})$</td>
-    <td>
-      <table class="table-left">
-        <tr>
-          <td>50%</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-  <td>
-    $\small P(\textrm{Umbrella=Yes}|\small\textrm{Rain})$
-  </td>
-  <td>
-    <table class="table-left">
-     <tr>
-       <th>Rain=Yes</th>
-       <th>Rain=No</th>
-     </tr>
-     <tr>
-       <td>90%</td>
-       <td>50%</td>
-     </tr>
-    </table>
-  </td>
-  </tr>
-  <tr>
-  <td>
-  $\small P(\textrm{Wet=Yes}|\\\small\phantom{P(}\textrm{Rain,Umbrella})$
-</td>
-  <td>
-  <table class="table-left">
-  <tr>
-    <th></th>
-    <th>Rain=Yes</th>
-    <th>Rain=No</th>
-  </tr>
-  <tr>
-    <th>Umbrella=Yes</th>
-    <td style="border-top: 1px solid">5%</td>
-    <td style="border-top: 1px solid">0.1%</td>
-  </tr>
-  <tr>
-    <th>Umbrella=No</th>
-    <td>99%</td>
-    <td>0.1%</td>
-  </tr>
-</table>
-</td>
-  </tr>
-  
-</table>
-
-:::
-:::
-:::
-
-::: {.spacer-sm}
-:::
-
-::: {.fragment}
-We can infer the following probability of rain, given our observation of wet clothes and umbrella:
-
-<table class="top-border bottom-border table-left .tiny-text">
-  <tr>
-    <th></th>
-    <th>Umbrella=Yes</th>
-    <th>Umbrella=No</th>
-  </tr>
-  <tr>
-    <th>Wet=Yes</th>
-    <td></td>  
-    <td></td>  
-  </tr>
-  <tr>
-    <th>Wet=No</th>
-    <td></td>  
-    <td></td>  
-  </tr>
-</table>
- 
-:::
-
-
-::: -->
-
-<!-- ::: {.column width=50% .math-compact .left .fragment .small}
-These are the set of probabilities we need to define:
-
-$$P(\textrm {Umbrella=Yes} | \textrm{Rain=Yes}) = 0.9 $$
-$$P(\textrm {Umbrella=Yes} | \textrm{Rain=No}) = 0.7 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=No}) = 0.01 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=No}, \textrm{Umbrella=Yes}) = 0.01 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=No}) = 0.99 $$
-$$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
-::: -->
 
 
 
@@ -1082,7 +954,7 @@ $$P(\textrm {Wet=Yes} | \textrm{Rain=Yes}, \textrm{Umbrella=Yes}) = 0.1 $$
       const offsetX = -bbox.x;
       const offsetY = -bbox.y;
 
-      // Set viewBox to start at 0,0
+      // Set viewBox to start at 0.0
       svg.setAttribute("viewBox", `0 0 ${bbox.width} ${bbox.height}`);
       svg.removeAttribute("width");
       svg.removeAttribute("height");
