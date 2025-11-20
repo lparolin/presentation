@@ -21,35 +21,6 @@ preview:
   watch-inputs: true
 ---
 
-## Von Bugs zu Debugging {auto-animate=true}
-
-### Historischer Überblick
-
-Der Begriff _Bug_ für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.
-
-::: {.incremental}
-
-- 1878: Thomas Edison beschreibt „kleine Fehler“ in seinen Erfindungen als _Bugs_.[^edison]
-- 1947: Mark II Aiken Relay Calculator – berühmter „Bug“ (Motte im Relais).[^mark2]
-
-:::
-
-:::{.columns}
-:::{.column width="60%"}
-![](Figuren/First_Computer_Bug_1947_smaller.png){fig-alt="Motte im Relais" width="100%"}
-:::
-:::{.column width="40%"}
-Motte zwischen den Kontakten am Relais Nr. 70, Panel F, des Mark II Aiken Relay Calculator (Harvard University, 1947).[^motte]
-
-:::
-:::
-
-{{< include _link_Main.qmd >}}
-
-
-[^edison]: Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.
-[^mark2]: Grace Hopper, _The First Bug_, 1986.
-[^motte]: Courtesy of the Naval Surface Warfare Center, Dahlgren, VA., 1988., Public Domain. [Link](https://de.wikipedia.org/wiki/Debuggen#/media/Datei:First_Computer_Bug,_1945.jpg)
 
 ## Von Bugs zu Debugging {auto-animate=true}
 
@@ -120,7 +91,6 @@ Einige Gemeinsamkeiten bestehen jedoch:
 Abbildung ist mit Adobe Firefly generiert.
 :::
 
-{{< include _link_Main.qmd >}}
 
 
 ## Reproduzierbarkeit von Defekten
@@ -269,7 +239,6 @@ bool applyControlRule(const InputParameter* motor_state)
 
 :::
 
-
 {{< include _link_Beispiel1.qmd >}}
 
 
@@ -381,11 +350,11 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 **Solche Fehler müssen bereits in der Entwicklungsphase entdeckt werden!**
 :::
 
-:::{.fragment .fade-out fragment-index="3"}
+<!-- :::{.fragment .fade-out fragment-index="3"}
 
 {{< include _link_Beispiel2.qmd >}}
 
-:::
+::: -->
 
 
 ## Präventive Maßnahmen
@@ -450,7 +419,7 @@ uint16_t computeHeatingTime(const uint8_t initialTemp,
 ```
 :::
 
-{{< include _link_Beispiel2.qmd >}}
+<!-- {{< include _link_Beispiel2.qmd >}} -->
 
 
 ## Präventive Maßnahmen {auto-animate=true}
@@ -483,7 +452,7 @@ bool computeHeatingTime(const uint8_t initialTemp,
 ```
 :::
 
-{{< include _link_Beispiel2.qmd >}}
+<!-- {{< include _link_Beispiel2.qmd >}} -->
 
 
 :::{.notes}
@@ -520,7 +489,7 @@ Damit bleibt die Berechnung stabil und nachvollziehbar.
 
 # Defektanalyse als Teil des Debugging‑Prozesses {background-image="Figuren/First_Computer_Bug_1945.jpg" background-opacity="0.3" background-color="black"}
 
-## Defekte infolge von Kommunikations- und Interpretationsfehlern {auto-animate=true}
+## Defekte infolge von Kommunikations- und Interpretationsfehlern {auto-animate=true footer=false}
 
 - Wir wollen ein Spurhaltewarnsystem (_Lane departure warning system_; LDWS) entwickeln.
 
@@ -552,7 +521,7 @@ Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwe
 
 :::
 
-## Defekte infolge von Kommunikations- und Interpretationsfehlern {auto-animate=true}
+## Defekte infolge von Kommunikations- und Interpretationsfehlern {auto-animate=true footer=false}
 
 :::{data-id="LDWS_Anf}
 
@@ -582,7 +551,7 @@ In einer späteren Testphase wird ein solcher Testreport erstellt:
 Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.
 :::
 
-## Defekte infolge von Kommunikations- und Interpretationsfehlern {auto-animate=true}
+## Defekte infolge von Kommunikations- und Interpretationsfehlern {auto-animate=true footer=false}
 
 ::: {data-id="test-fall-example" .tiny-text}
 
@@ -708,7 +677,6 @@ Welche präventive Maßnahme gehört zur Softwareentwicklung?
 :::
 
 - **B.** Debugging mit printf
-- **C.** Hardware-Register auslesen
 
 :::
 
@@ -720,6 +688,37 @@ Richtige Antwort: **A**.
 :::
 
 # Backup  {background-image="Figuren/First_Computer_Bug_1945.jpg" background-opacity="0.3" background-color="black"}
+
+## Von Bugs zu Debugging {auto-animate=true}
+
+### Historischer Überblick
+
+Der Begriff _Bug_ für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.
+
+::: {.incremental}
+
+- 1878: Thomas Edison beschreibt „kleine Fehler“ in seinen Erfindungen als _Bugs_.[^edison]
+- 1947: Mark II Aiken Relay Calculator – berühmter „Bug“ (Motte im Relais).[^mark2]
+
+:::
+
+:::{.columns}
+:::{.column width="60%"}
+![](Figuren/First_Computer_Bug_1947_smaller.png){fig-alt="Motte im Relais" width="100%"}
+:::
+:::{.column width="40%"}
+Motte zwischen den Kontakten am Relais Nr. 70, Panel F, des Mark II Aiken Relay Calculator (Harvard University, 1947).[^motte]
+
+:::
+:::
+
+{{< include _link_Main.qmd >}}
+
+
+[^edison]: Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.
+[^mark2]: Grace Hopper, _The First Bug_, 1986.
+[^motte]: Courtesy of the Naval Surface Warfare Center, Dahlgren, VA., 1988., Public Domain. [Link](https://de.wikipedia.org/wiki/Debuggen#/media/Datei:First_Computer_Bug,_1945.jpg)
+
 
 ## Wenn man in die Tiefe des Mikrocontrollers schauen muss {auto-animate=true}
 

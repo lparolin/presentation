@@ -95,7 +95,7 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto-5062a8d810c3dfbaac706e36d2f6bdb0.css">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto-b68c3e0dd610d751a6dbb188377d7741.css">
   <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -206,21 +206,6 @@ Dr.&nbsp;Luca Parolini
 </section>
 <section id="von-bugs-zu-debugging" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Von Bugs zu Debugging</h2>
-<h3 id="historischer-überblick">Historischer Überblick</h3>
-<p>Der Begriff <em>Bug</em> für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.</p>
-<ul>
-<li class="fragment">1878: Thomas Edison beschreibt „kleine Fehler“ in seinen Erfindungen als <em>Bugs</em>.<sup>1</sup></li>
-<li class="fragment">1947: Mark II Aiken Relay Calculator – berühmter „Bug“ (Motte im Relais).<sup>2</sup></li>
-</ul>
-<div class="columns">
-<div class="column" style="width:60%;">
-<p><img data-src="Figuren/First_Computer_Bug_1947_smaller.png" style="width:100.0%" alt="Motte im Relais"></p>
-</div><div class="column" style="width:40%;">
-<p>Motte zwischen den Kontakten am Relais Nr. 70, Panel F, des Mark II Aiken Relay Calculator (Harvard University, 1947).<sup>3</sup></p>
-</div></div>
-<aside><ol class="aside-footnotes"><li id="fn1"><p>Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.</p></li><li id="fn2"><p>Grace Hopper, <em>The First Bug</em>, 1986.</p></li><li id="fn3"><p>Courtesy of the Naval Surface Warfare Center, Dahlgren, VA., 1988., Public Domain. <a href="https://de.wikipedia.org/wiki/Debuggen#/media/Datei:First_Computer_Bug,_1945.jpg">Link</a></p></li></ol></aside></section>
-<section id="von-bugs-zu-debugging-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Von Bugs zu Debugging</h2>
 <h3 id="debugging-ist-nicht-gleicht-troubleshooting">Debugging ist nicht gleicht Troubleshooting</h3>
 <p>Der Begriff <em>Bug</em> für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.</p>
 <ul>
@@ -246,7 +231,15 @@ Dr.&nbsp;Luca Parolini
 </div>
 </div>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn4"><p>Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.</p></li><li id="fn5"><p>Grace Hopper, <em>The First Bug</em>, 1986.</p></li><li id="fn6"><p>David, J. Agans. “The 9 indispensable rules for finding even the most elusive software and hardware problems.” (2002).</p></li></ol></aside></section>
+<div class="qr-bottom-right" data-id="qr-code-main">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/main_QR.png" style="width:50.0%" alt="Main QR code"></p>
+<figcaption><strong>https://shorturl.at/EWK2C</strong></figcaption>
+</figure>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.</p></li><li id="fn2"><p>Grace Hopper, <em>The First Bug</em>, 1986.</p></li><li id="fn3"><p>David, J. Agans. “The 9 indispensable rules for finding even the most elusive software and hardware problems.” (2002).</p></li></ol></aside></section>
 <section id="vielfältigkeit-eingebetteter-systeme" class="slide level2">
 <h2>Vielfältigkeit eingebetteter Systeme</h2>
 <h3 id="von-sensoren-bis-zu-triebwerken">von Sensoren bis zu Triebwerken</h3>
@@ -332,7 +325,6 @@ Einige Gemeinsamkeiten bestehen jedoch:
 <div class="spacer-lg">
 
 </div>
-<div class="fragment">
 <div data-id="timing_analysis">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-code-line-numbers="|5"><pre class="sourceCode numberSource c number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode c hljs"><span id="cb1-1" class="hljs-ln-code"><a href=""></a><span class="dt">bool</span> applyControlRule<span class="op">(</span><span class="dt">const</span> InputParameter<span class="op">*</span> motor_state<span class="op">)</span></span>
 <span id="cb1-2" class="hljs-ln-code"><a href=""></a><span class="op">{</span></span>
@@ -342,7 +334,6 @@ Einige Gemeinsamkeiten bestehen jedoch:
 <span id="cb1-6" class="hljs-ln-code"><a href=""></a>    <span class="co">// Fehlerbehandlung und Übergabe der Regel</span></span>
 <span id="cb1-7" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</div>
 <div class="spacer-lg">
 
 </div>
@@ -351,42 +342,14 @@ Einige Gemeinsamkeiten bestehen jedoch:
 <li><strong>Wie können wir die Messungen durchführen?</strong></li>
 </ul>
 </div>
-<!--
-## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true}
-
-### Beispiel: Elektromotorregler
-
-Wir haben einen Regler für einen Elektromotor entwickelt.
-
-- Die Reglerfunktion ist alle **15 ms** aufgerufen und hat ein maximales Timing‑Budget von **2 ms**.
-- Wir müssen überprüfen wie lange unsere Funktion wirklich braucht um alle die Berechnungen abzuschließen.
-
-::: {.columns}
-:::{.column width="90%"}
-
-:::{.spacer-lg}
-:::
-
-:::{data-id="timing_analysis"}
-
-**Ansatz 1: Pin-Toggling**
-
-```c{code-line-numbers="5,7"}
-bool applyControlRule(const InputParameter* motor_state)
-{
-    bool is_rule_successfully_computed = false;
-    ControlRule control_rule;
-    gpio_set(GPIO_PIN_DEBUG, true);
-    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
-    gpio_set(GPIO_PIN_DEBUG, false);
-    // Fehlerbehandlung und Übergabe der Regel
-}
-```
-
-:::
-
-:::
-::: -->
+<div class="qr-bottom-right" data-id="qr-code-fig1">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/QR-Beispiel1.png" style="width:50.0%" alt="Link zum Beispiel 1"></p>
+<figcaption><strong>https://shorturl.at/loD8A</strong></figcaption>
+</figure>
+</div>
+</div>
 </section>
 <section id="messung-und-analyse-zeitkritischer-abläufe-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Messung und Analyse zeitkritischer Abläufe</h2>
@@ -406,7 +369,7 @@ bool applyControlRule(const InputParameter* motor_state)
 <span id="cb2-9" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div><div class="column" style="width:45%;">
-<div class="fragment">
+<div class="fragment" data-fragment-index="1">
 <p><strong>Messungen:</strong> <img data-src="Figuren/Timing_Diagram.svg" style="width:100.0%"></p>
 <div class="small-text">
 <ul>
@@ -419,7 +382,7 @@ bool applyControlRule(const InputParameter* motor_state)
 <div class="spacer-sm">
 
 </div>
-<div class="fragment">
+<div class="fragment" data-fragment-index="1">
 <ul>
 <li>Der Ansatz ermöglicht eine <strong>höhere Genauigkeit</strong> der Laufzeitmessung
 <ul>
@@ -438,28 +401,14 @@ bool applyControlRule(const InputParameter* motor_state)
 <li><strong>Welche Alternativen bieten sich an?</strong></li>
 </ul>
 </div>
-<!--
-## Instrumentierung und Tracing für Timing‑Analyse {auto-animate=true .center}
-
-### Beispiel: Elektromotorregler
-
-:::{data-id="timing_analysis"}
-
-**Ansatz 2: printf**
-
-```c{code-line-numbers="5,7"}
-bool applyControlRule(const InputParameter* motor_state)
-{
-    bool is_rule_successfully_computed = false;
-    ControlRule control_rule;
-    printf("applyControlRule - Start: %ld ms\n", get_time_ms());
-    is_rule_successfully_computed = computeControlRule(motor_state, &control_rule);
-    printf("applyControlRule - End: %ld ms\n", get_time_ms());
-    // Fehlerbehandlung und Übergabe der Regel
-}
-```
-
-::: -->
+<div class="qr-bottom-right" data-id="qr-code-fig1">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/QR-Beispiel1.png" style="width:50.0%" alt="Link zum Beispiel 1"></p>
+<figcaption><strong>https://shorturl.at/loD8A</strong></figcaption>
+</figure>
+</div>
+</div>
 </section>
 <section id="messung-und-analyse-zeitkritischer-abläufe-2" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Messung und Analyse zeitkritischer Abläufe</h2>
@@ -506,12 +455,20 @@ bool applyControlRule(const InputParameter* motor_state)
 </ul></li>
 </ul>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn7"><p>Diagnostic Log and Trace <a href="https://www.autosar.org/fileadmin/standards/R20-11/CP/AUTOSAR_SWS_DiagnosticLogAndTrace.pdf">DLT</a></p></li></ol></aside></section>
+<div class="qr-bottom-right" data-id="qr-code-fig1">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/QR-Beispiel1.png" style="width:50.0%" alt="Link zum Beispiel 1"></p>
+<figcaption><strong>https://shorturl.at/loD8A</strong></figcaption>
+</figure>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn4"><p>Diagnostic Log and Trace <a href="https://www.autosar.org/fileadmin/standards/R20-11/CP/AUTOSAR_SWS_DiagnosticLogAndTrace.pdf">DLT</a></p></li></ol></aside></section>
 <section id="präventive-maßnahmen" class="slide level2 center" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Präventive Maßnahmen</h2>
 <h3 id="eine-regelfunktion-für-die-warmwasserbereitung-einer-kaffeemaschine">Eine Regelfunktion für die Warmwasserbereitung einer Kaffeemaschine</h3>
 <div data-id="defensive_programming">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-code-line-numbers="|5"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb5-1" class="hljs-ln-code"><a href=""></a><span class="dt">uint16_t</span> computeHeatingTime<span class="op">(</span><span class="at">const</span> <span class="dt">uint8_t</span> initialTemp<span class="op">,</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb5-1" class="hljs-ln-code"><a href=""></a><span class="dt">uint16_t</span> computeHeatingTime<span class="op">(</span><span class="at">const</span> <span class="dt">uint8_t</span> initialTemp<span class="op">,</span></span>
 <span id="cb5-2" class="hljs-ln-code"><a href=""></a>                            <span class="at">const</span> <span class="dt">uint8_t</span> finalTemp<span class="op">)</span></span>
 <span id="cb5-3" class="hljs-ln-code"><a href=""></a><span class="op">{</span></span>
 <span id="cb5-4" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint8_t</span> conversion_factor <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// seconds per degree Celsius</span></span>
@@ -523,10 +480,10 @@ bool applyControlRule(const InputParameter* motor_state)
 <div class="spacer-md">
 
 </div>
-<div class="fragment">
+<div class="fragment" data-fragment-index="1">
 <ul>
 <li><p>Was passiert, wenn <code>initalTemp=96</code> und <code>finalTemp=95</code>?</p>
-<div class="fragment">
+<div class="fragment" data-fragment-index="2">
 <ul>
 <li>Bei <code>initialTemp=96</code> und <code>finalTemp=95</code> ergibt sich <code>time_sec=255</code></li>
 <li>Das entspricht <strong>4 Minuten und 15 Sekunden!</strong></li>
@@ -537,7 +494,7 @@ bool applyControlRule(const InputParameter* motor_state)
 <div class="spacer-md">
 
 </div>
-<div class="fragment">
+<div class="fragment fade-up" data-fragment-index="3">
 <div class="callout callout-note no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
@@ -546,6 +503,14 @@ bool applyControlRule(const InputParameter* motor_state)
 </div>
 </div>
 </div>
+<!-- :::{.fragment .fade-out fragment-index="3"}
+
+::: {.qr-bottom-right data-id="qr-code-fig2"}
+![**https://shorturl.at/iYD6E**](Figuren/QR-Beispiel2){fig-alt="Link zum Beispiel 2" width="50%"}
+:::
+
+
+::: -->
 </section>
 <section id="präventive-maßnahmen-1" class="slide level2">
 <h2>Präventive Maßnahmen</h2>
@@ -586,28 +551,46 @@ bool applyControlRule(const InputParameter* motor_state)
 <div class="spacer-sm">
 
 </div>
-<p>Eine mögliche Lösung, inspiriert von vertragsbasierter Programmierung (Design by Contract).</p>
 <div class="spacer-lg">
 
 </div>
 <div data-id="&quot;code_caffe_machine">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-code-line-numbers="|6-8"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb6-1" class="hljs-ln-code"><a href=""></a><span class="dt">bool</span> computeHeatingTime<span class="op">(</span><span class="at">const</span> <span class="dt">uint8_t</span> initialTemp<span class="op">,</span></span>
-<span id="cb6-2" class="hljs-ln-code"><a href=""></a>                        <span class="at">const</span> <span class="dt">uint8_t</span> finalTemp<span class="op">,</span></span>
-<span id="cb6-3" class="hljs-ln-code"><a href=""></a>                        <span class="dt">uint16_t</span><span class="op">*</span> heating_time<span class="op">)</span></span>
-<span id="cb6-4" class="hljs-ln-code"><a href=""></a><span class="op">{</span></span>
-<span id="cb6-5" class="hljs-ln-code"><a href=""></a>    <span class="co">// Vorbedingungen prüfen</span></span>
-<span id="cb6-6" class="hljs-ln-code"><a href=""></a>    <span class="cf">if</span> <span class="op">((</span>finalTemp <span class="op">&lt;</span> initialTemp<span class="op">)</span> <span class="op">||</span> <span class="op">(</span>heating_time <span class="op">==</span> NULL<span class="op">))</span> <span class="op">{</span></span>
-<span id="cb6-7" class="hljs-ln-code"><a href=""></a>        <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
-<span id="cb6-8" class="hljs-ln-code"><a href=""></a>    <span class="op">}</span></span>
-<span id="cb6-9" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb6-10" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint8_t</span> conversion_factor <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// Sekunden pro Grad Celsius</span></span>
-<span id="cb6-11" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint8_t</span> deltaT <span class="op">=</span> finalTemp <span class="op">-</span> initialTemp<span class="op">;</span></span>
-<span id="cb6-12" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint16_t</span> time_sec <span class="op">=</span> conversion_factor <span class="op">*</span> deltaT<span class="op">;</span></span>
-<span id="cb6-13" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb6-14" class="hljs-ln-code"><a href=""></a>    <span class="op">*</span>heating_time <span class="op">=</span> time_sec<span class="op">;</span> <span class="co">// Wert schreiben</span></span>
-<span id="cb6-15" class="hljs-ln-code"><a href=""></a>    <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span></span>
-<span id="cb6-16" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb6-1" class="hljs-ln-code"><a href=""></a><span class="dt">uint16_t</span> computeHeatingTime<span class="op">(</span><span class="at">const</span> <span class="dt">uint8_t</span> initialTemp<span class="op">,</span></span>
+<span id="cb6-2" class="hljs-ln-code"><a href=""></a>                            <span class="at">const</span> <span class="dt">uint8_t</span> finalTemp<span class="op">)</span></span>
+<span id="cb6-3" class="hljs-ln-code"><a href=""></a><span class="op">{</span></span>
+<span id="cb6-4" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint8_t</span> conversion_factor <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// seconds per degree Celsius</span></span>
+<span id="cb6-5" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint8_t</span> deltaT <span class="op">=</span> finalTemp <span class="op">-</span> initialTemp<span class="op">;</span></span>
+<span id="cb6-6" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint16_t</span> time_sec <span class="op">=</span> conversion_factor <span class="op">*</span> deltaT<span class="op">;</span></span>
+<span id="cb6-7" class="hljs-ln-code"><a href=""></a>    <span class="cf">return</span> time_sec<span class="op">;</span></span>
+<span id="cb6-8" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<!-- {{< include _link_Beispiel2.qmd >}} -->
+</section>
+<section id="präventive-maßnahmen-3" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Präventive Maßnahmen</h2>
+<div class="spacer-sm">
+
+</div>
+<p>Eine mögliche Lösung, inspiriert von vertragsbasierter Programmierung (Design by Contract).</p>
+<div data-id="&quot;code_caffe_machine">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-code-line-numbers="|6-8"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb7-1" class="hljs-ln-code"><a href=""></a><span class="dt">bool</span> computeHeatingTime<span class="op">(</span><span class="at">const</span> <span class="dt">uint8_t</span> initialTemp<span class="op">,</span></span>
+<span id="cb7-2" class="hljs-ln-code"><a href=""></a>                        <span class="at">const</span> <span class="dt">uint8_t</span> finalTemp<span class="op">,</span></span>
+<span id="cb7-3" class="hljs-ln-code"><a href=""></a>                        <span class="dt">uint16_t</span><span class="op">*</span> heating_time<span class="op">)</span></span>
+<span id="cb7-4" class="hljs-ln-code"><a href=""></a><span class="op">{</span></span>
+<span id="cb7-5" class="hljs-ln-code"><a href=""></a>    <span class="co">// Vorbedingungen prüfen</span></span>
+<span id="cb7-6" class="hljs-ln-code"><a href=""></a>    <span class="cf">if</span> <span class="op">((</span>finalTemp <span class="op">&lt;</span> initialTemp<span class="op">)</span> <span class="op">||</span> <span class="op">(</span>heating_time <span class="op">==</span> NULL<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb7-7" class="hljs-ln-code"><a href=""></a>        <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb7-8" class="hljs-ln-code"><a href=""></a>    <span class="op">}</span></span>
+<span id="cb7-9" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb7-10" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint8_t</span> conversion_factor <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// Sekunden pro Grad Celsius</span></span>
+<span id="cb7-11" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint8_t</span> deltaT <span class="op">=</span> finalTemp <span class="op">-</span> initialTemp<span class="op">;</span></span>
+<span id="cb7-12" class="hljs-ln-code"><a href=""></a>    <span class="at">const</span> <span class="dt">uint16_t</span> time_sec <span class="op">=</span> conversion_factor <span class="op">*</span> deltaT<span class="op">;</span></span>
+<span id="cb7-13" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb7-14" class="hljs-ln-code"><a href=""></a>    <span class="op">*</span>heating_time <span class="op">=</span> time_sec<span class="op">;</span> <span class="co">// Wert schreiben</span></span>
+<span id="cb7-15" class="hljs-ln-code"><a href=""></a>    <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb7-16" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<!-- {{< include _link_Beispiel2.qmd >}} -->
 <aside class="notes">
 <p>DbC beruht auf drei Bausteinen:</p>
 <p>Vorbedingungen (Preconditions) → Bedingungen, die der Aufrufer erfüllen muss, bevor die Funktion korrekt arbeiten kann.</p>
@@ -640,7 +623,7 @@ bool applyControlRule(const InputParameter* motor_state)
 <h1>Defektanalyse als Teil des Debugging‑Prozesses</h1>
 
 </section>
-<section id="defekte-infolge-von-kommunikations--und-interpretationsfehlern" class="slide level2" data-auto-animate="true">
+<section id="defekte-infolge-von-kommunikations--und-interpretationsfehlern" class="slide level2" data-auto-animate="true" data-footer="false">
 <h2 data-id="quarto-animate-title">Defekte infolge von Kommunikations- und Interpretationsfehlern</h2>
 <ul>
 <li>Wir wollen ein Spurhaltewarnsystem (<em>Lane departure warning system</em>; LDWS) entwickeln.</li>
@@ -683,7 +666,7 @@ bool applyControlRule(const InputParameter* motor_state)
           display:block!important;
       }</style></aside>
 </section>
-<section id="defekte-infolge-von-kommunikations--und-interpretationsfehlern-1" class="slide level2" data-auto-animate="true">
+<section id="defekte-infolge-von-kommunikations--und-interpretationsfehlern-1" class="slide level2" data-auto-animate="true" data-footer="false">
 <h2 data-id="quarto-animate-title">Defekte infolge von Kommunikations- und Interpretationsfehlern</h2>
 <div data-id="&quot;LDWS_Anf">
 <ul>
@@ -735,7 +718,7 @@ bool applyControlRule(const InputParameter* motor_state)
 <p>Alle Anforderungen und Testfälle sind fiktiv und dienen nur zu Illustrationszwecken.</p>
 </div>
 </section>
-<section id="defekte-infolge-von-kommunikations--und-interpretationsfehlern-2" class="slide level2" data-auto-animate="true">
+<section id="defekte-infolge-von-kommunikations--und-interpretationsfehlern-2" class="slide level2" data-auto-animate="true" data-footer="false">
 <h2 data-id="quarto-animate-title">Defekte infolge von Kommunikations- und Interpretationsfehlern</h2>
 <div class="tiny-text" data-id="test-fall-example">
 <table class="caption-top">
@@ -823,17 +806,21 @@ bool applyControlRule(const InputParameter* motor_state)
 <div class="mid-space">
 <ul>
 <li><strong>A.</strong> Pin-Toggling.</li>
+</ul>
+<div class="fragment highlight-blue" data-fragment-index="1">
+<ul>
 <li><strong>B.</strong> printf-Ausgaben.</li>
 </ul>
+</div>
 </div>
 <div class="spacer-lg">
 
 </div>
-<div class="fragment">
+<div class="fragment" data-fragment-index="1">
 <div class="callout callout-note no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
-<p>Richtige Antwort: <strong>B</strong></p>
+<p>Richtige Antwort: <strong>B</strong>.</p>
 </div>
 </div>
 </div>
@@ -851,17 +838,21 @@ bool applyControlRule(const InputParameter* motor_state)
 <div class="mid-space">
 <ul>
 <li><strong>A.</strong> Defekte werden <strong>simuliert</strong>, um sie nachzustellen.</li>
+</ul>
+<div class="fragment highlight-blue" data-fragment-index="1">
+<ul>
 <li><strong>B.</strong> Defekte werden <strong>stimuliert</strong>, um sie reproduzierbar sichtbar zu machen.</li>
 </ul>
+</div>
 </div>
 <div class="spacer-lg">
 
 </div>
-<div class="fragment">
+<div class="fragment" data-fragment-index="1">
 <div class="callout callout-note no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
-<p>Richtige Antwort: <strong>B</strong> – Defekte müssen <strong>stimuliert</strong> werden, niemals nur simuliert.</p>
+<p>Richtige Antwort: <strong>B</strong>.</p>
 </div>
 </div>
 </div>
@@ -877,30 +868,56 @@ bool applyControlRule(const InputParameter* motor_state)
 
 </div>
 <div class="mid-space">
+<div class="fragment highlight-blue" data-fragment-index="1">
 <ul>
 <li><strong>A.</strong> Statische Code-Analyse</li>
+</ul>
+</div>
+<ul>
 <li><strong>B.</strong> Debugging mit printf</li>
-<li><strong>C.</strong> Hardware-Register auslesen</li>
 </ul>
 </div>
 <div class="spacer-lg">
 
 </div>
-<div class="fragment">
+<div class="fragment" data-fragment-index="1">
 <div class="callout callout-note no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
-<p>Richtige Antwort: <strong>A</strong></p>
+<p>Richtige Antwort: <strong>A</strong>.</p>
 </div>
 </div>
 </div>
 </div>
 </section></section>
 <section>
-<section id="backup" class="title-slide slide level1 center">
+<section id="backup" class="title-slide slide level1 center" data-background-image="Figuren/First_Computer_Bug_1945.jpg" data-background-opacity="0.3" data-background-color="black">
 <h1>Backup</h1>
 
 </section>
+<section id="von-bugs-zu-debugging-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Von Bugs zu Debugging</h2>
+<h3 id="historischer-überblick">Historischer Überblick</h3>
+<p>Der Begriff <em>Bug</em> für technische Fehler lässt sich bis ins 19. Jahrhundert zurückverfolgen.</p>
+<ul>
+<li class="fragment">1878: Thomas Edison beschreibt „kleine Fehler“ in seinen Erfindungen als <em>Bugs</em>.<sup>1</sup></li>
+<li class="fragment">1947: Mark II Aiken Relay Calculator – berühmter „Bug“ (Motte im Relais).<sup>2</sup></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p><img data-src="Figuren/First_Computer_Bug_1947_smaller.png" style="width:100.0%" alt="Motte im Relais"></p>
+</div><div class="column" style="width:40%;">
+<p>Motte zwischen den Kontakten am Relais Nr. 70, Panel F, des Mark II Aiken Relay Calculator (Harvard University, 1947).<sup>3</sup></p>
+</div></div>
+<div class="qr-bottom-right" data-id="qr-code-main">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="Figuren/main_QR.png" style="width:50.0%" alt="Main QR code"></p>
+<figcaption><strong>https://shorturl.at/EWK2C</strong></figcaption>
+</figure>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn5"><p>Thomas Edison, Brief an William Orton, Präsident von Western Union, 13. März 1878.</p></li><li id="fn6"><p>Grace Hopper, <em>The First Bug</em>, 1986.</p></li><li id="fn7"><p>Courtesy of the Naval Surface Warfare Center, Dahlgren, VA., 1988., Public Domain. <a href="https://de.wikipedia.org/wiki/Debuggen#/media/Datei:First_Computer_Bug,_1945.jpg">Link</a></p></li></ol></aside></section>
 <section id="wenn-man-in-die-tiefe-des-mikrocontrollers-schauen-muss" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Wenn man in die Tiefe des Mikrocontrollers schauen muss</h2>
 <p>Manchmal ist es notwendig, Inhalte von Registern oder Speicher eines Mikrocontrollers auszulesen oder gezielt zu verändern.</p>
